@@ -2,6 +2,11 @@ import React, {useEffect} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
+
+const io = require("socket.io-client");
+const socket = io('http://192.249.18.171:80')
+socket.connect()
+
 function LandingPage(props) {
 
     useEffect( ()=> {
@@ -18,6 +23,10 @@ function LandingPage(props) {
             }
         })
     }
+
+    const roomCreate = () => {
+
+    }
  
     return (
         <div style={{
@@ -29,7 +38,7 @@ function LandingPage(props) {
             <div>
                 <div>title</div>
                 <input/>
-                <button>방개설</button>
+                <button onClick={roomCreate}>방개설</button>
             </div>
         </div>
     )
