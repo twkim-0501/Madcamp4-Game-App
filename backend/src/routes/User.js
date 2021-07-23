@@ -48,6 +48,7 @@ router.get('/logout', auth, (req,res)=>{
         {token: ""}
         , (err,user) => {
         if(err) return res.json({ok: false, err});
+        console.log("logout success");
         return res.status(200).send({
             ok: true
         })
@@ -59,6 +60,7 @@ router.get('/auth', auth , (req,res) => {
     res.status(200).json({
         _id: req.user._id,
         //role이 0이면 일반유저
+        isAuth: true,
         isAdmin: req.user.role === 0 ? false : true,
         email: req.user.email,
         name: req.user.name,
