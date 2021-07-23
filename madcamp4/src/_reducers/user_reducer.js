@@ -1,13 +1,12 @@
-import {
+import { 
     LOGIN_USER
-} from '../_actions/types'
+} from '../_actions/types';
 
 
-export default function (state={}, action) {
+export default function foo(state={}, action) {  // eslint-disable-next-line 
     switch (action.type) {
         case LOGIN_USER:
             return {...state, loginSuccess: action.payload}
-            break;
     
         default:
             return state;
