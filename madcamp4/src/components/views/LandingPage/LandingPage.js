@@ -1,17 +1,20 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
-
-const io = require("socket.io-client");
-const socket = io('http://192.249.18.171:80')
-socket.connect()
+import io from "socket.io-client"
+// const io = require("socket.io-client");
 
 function LandingPage(props) {
+    const [text, setText] = useState('')
+    
+    const socket = io('http://192.249.18.171:80')
+
 
     useEffect( ()=> {
+        
         axios.get('/api/hello')
-        .then(response => console.log(response.data))
+            .then(response => console.log(response.data))
     }, [])
 
     const onClickHandler= () => {
@@ -23,9 +26,15 @@ function LandingPage(props) {
             }
         })
     }
+    const onChange = (e) => {
+        setText(e.target.value);
+    }
 
-    const roomCreate = () => {
-
+    const submitHandler = () => {
+        console.log(text);
+        //socket으로 text 쏴주면 될듯
+        socket.emit('createRoom')
+        setText('');
     }
  
     return (
@@ -37,8 +46,8 @@ function LandingPage(props) {
             <button onClick={onClickHandler}> Logout </button>
             <div>
                 <div>title</div>
-                <input/>
-                <button onClick={roomCreate}>방개설</button>
+                <input placeholder="방 제목" onChange={onChange} value={text}/>
+                <button onClick={submitHandler}>방개설</button>
             </div>
         </div>
     )

@@ -2,6 +2,7 @@ var express = require('express');
 const path = require("path");
 const http = require('http');
 const socketIO = require('socket.io');
+const cors = require("cors");
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
@@ -14,18 +15,23 @@ const {User} = require("./src/models/User");
 
 //server instance
 const server = http.createServer(app);
+app.use(cors());
 
 // socketio 생성후 서버 인스턴스 사용
-const io = socketIO(server);
+const io = socketIO(server, {
+	cors: {
+		origin: '*'
+	}
+});
 
 // socketio 문법
-io.on('connection', socket => {
-	console.log("socket connect!", socket)
-	socket.on('send message', (item) => {
-		const msg = item.name + ' : ' + item.message;
-		console.log(msg);
-		io.emit('receive message', {name:item.name, message:item.message});
+io.on('connection', (socket) => {
+	console.log("socket connect!", socket.id)
+
+	socket.on('createRoom', () => {
+		console.log("createRoom");
 	});
+
     socket.on('disconnect', function () {
 		console.log('user disconnected: ', socket.id);
 	});
@@ -58,6 +64,6 @@ app.use('/api/user/', UserRouter);
 app.use('/api/gameroom/', GameroomRouter);
 
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(port+"에서 express 실행 중");
 })
