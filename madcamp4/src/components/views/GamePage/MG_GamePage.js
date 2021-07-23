@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import "./MG_GamePage.css"
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
+import socketIOClient from "socket.io-client";
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -14,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function MG_GamePage() {
-    
+    const socket = socketIOClient('/api');
     const [Posts, setPosts] = useState([])
     const totalitems = [-1,-2,-3,-4,-5,-6,-7,-8,-9]
     var players = [0,1,2,3,4];

@@ -1,5 +1,7 @@
 var express = require('express');
 const path = require("path");
+const http = require('http');
+const socketIO = require('socket.io');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require("mongoose");
@@ -9,6 +11,24 @@ const config = require('./config/key');
 const {auth} = require('./middleware/auth');
 
 const {User} = require("./src/models/User");
+
+//server instance
+const server = http.createServer(app);
+
+// socketio 생성후 서버 인스턴스 사용
+const io = socketIO(server);
+
+// socketio 문법
+io.on('connection', socket => {
+	socket.on('send message', (item) => {
+		const msg = item.name + ' : ' + item.message;
+		console.log(msg);
+		io.emit('receive message', {name:item.name, message:item.message});
+	});
+    socket.on('disconnect', function () {
+		console.log('user disconnected: ', socket.id);
+	});
+});
 
 //route
 const UserRouter = require('./src/routes/User');
