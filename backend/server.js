@@ -13,7 +13,6 @@ const {User} = require("./src/models/User");
 //route
 const UserRouter = require('./src/routes/User');
 
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true

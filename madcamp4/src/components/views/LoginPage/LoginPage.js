@@ -9,10 +9,11 @@ function LoginPage(props) {
     const [Password, setPassword] = useState("")
 
     const onEmailHandler = (event) => {
-        setEmail(event.currentTarget.Email)
+        //console.log(event.currentTarget.Email)
+        setEmail(event.currentTarget.value)
     }
     const onPasswordlHandler = (event) => {
-        setPassword(event.currentTarget.Password)
+        setPassword(event.currentTarget.value)
     }
     const onSubmitHandler = (event) => {
         event.preventDefault();
@@ -21,10 +22,12 @@ function LoginPage(props) {
             email : Email,
             password: Password
         }
+        //console.log(body);
 
         dispatch(loginUser(body))
         .then(response => {
             if (response.payload.loginSuccess) {
+                console.log("lgn success")
                 props.history.push('/')
             } else {
                 alert('Error')
