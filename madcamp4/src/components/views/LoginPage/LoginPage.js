@@ -48,6 +48,7 @@ function LoginPage(props) {
             email : Email,
             password: Password
         }
+        //console.log(body);
 
         dispatch(loginUser(body))
         .then(response => {
