@@ -2,7 +2,10 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
+import {useSelector} from 'react-redux';
 function LandingPage(props) {
+    const user = useSelector(state => state.user);
+
     const [text, setText] = useState('')
     useEffect( ()=> {
         axios.get('/api/hello')
@@ -22,6 +25,7 @@ function LandingPage(props) {
         setText(e.target.value);
     }
     const submitHandler = () => {
+        console.log(user.userData?._id)
         console.log(text);
         //socket으로 text 쏴주면 될듯
         setText('');
