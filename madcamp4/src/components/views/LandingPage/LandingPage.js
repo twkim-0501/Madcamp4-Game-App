@@ -24,7 +24,7 @@ function LandingPage(props) {
             display: 'flex', justifyContent: 'center', alignItems: 'center',
             width: '100%', height: '100vh'
         }}>
-            <h2>시작 페이지</h2> 
+            <h2>시작 페이지 (게임 목록을 볼 수 있는 화면) </h2> 
             <button onClick={onClickHandler}> Logout </button>
         </div>
     )
