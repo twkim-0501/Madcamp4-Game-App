@@ -32,6 +32,7 @@ io.on('connection', socket => {
 
 //route
 const UserRouter = require('./src/routes/User');
+const GameroomRouter = require('./src/routes/Gameroom');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -53,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/user/', UserRouter);
-
+app.use('/api/gameroom/', GameroomRouter);
 
 
 app.listen(port, () => {
