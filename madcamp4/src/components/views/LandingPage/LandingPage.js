@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
 function LandingPage(props) {
-
+    const [text, setText] = useState('')
     useEffect( ()=> {
         axios.get('/api/hello')
         .then(response => console.log(response.data))
@@ -18,6 +18,14 @@ function LandingPage(props) {
             }
         })
     }
+    const onChange = (e) => {
+        setText(e.target.value);
+    }
+    const submitHandler = () => {
+        console.log(text);
+        //socket으로 text 쏴주면 될듯
+        setText('');
+    }
  
     return (
         <div style={{
@@ -28,8 +36,8 @@ function LandingPage(props) {
             <button onClick={onClickHandler}> Logout </button>
             <div>
                 <div>title</div>
-                <input/>
-                <button>방개설</button>
+                <input placeholder="방 제목" onChange={onChange} value={text}/>
+                <button onClick={submitHandler}>방개설</button>
             </div>
         </div>
     )
