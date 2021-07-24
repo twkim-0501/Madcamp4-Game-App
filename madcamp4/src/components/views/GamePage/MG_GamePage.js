@@ -41,7 +41,6 @@ function MG_GamePage() {
         }
     }, [MyChips])
 
-    
     const Chip = () => {
         const [{ isDragging, canDrag }, drag] = useDrag({
             type: 'chip',
