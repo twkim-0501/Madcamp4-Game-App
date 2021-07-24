@@ -3,7 +3,7 @@ var current_num = 0;
 
 //roomInfo라는 json에 roomtitle, 그리고
 //userID에 개설자(User의 _id) 등을 넣어서 보냄
-function addRoom(roomInfo){
+function addRoom(roomInfo,callback){
     initplayers = [roomInfo.userID]
 
     const newRoom = new GameroomModel({
@@ -11,7 +11,9 @@ function addRoom(roomInfo){
         roomtitle: roomInfo.roomtitle,
         players: initplayers
     })
-    newRoom.save();
+    newRoom.save((err,res) => {
+        callback(res);
+    });
 }
 
 function getAll(callback){
