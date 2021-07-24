@@ -31,7 +31,7 @@ function LandingPage(props) {
         console.log(roomName);
         console.log(user.userData?._id)
         //socket으로 text 쏴주면 될듯
-        axios.post('api/gameroom/addRoom', {roomName: roomName, user: user.userData})
+        axios.post('/api/gameroom/addRoom', {roomName: roomName, user: user.userData})
         setRoomName('');
     }
  
@@ -45,7 +45,8 @@ function LandingPage(props) {
             <div>
                 <div>title</div>
                 <input placeholder="방 제목" onChange={onChange} value={roomName}/>
-                <a href="/gamepage" >
+                <a href="#" onclick=" location.href = '/gamepage?roonName=' + roomName; return false;">
+
                     <button onClick={submitHandler}>방개설</button>
                 </a>
                 
