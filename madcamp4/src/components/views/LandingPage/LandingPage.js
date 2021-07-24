@@ -8,12 +8,15 @@ import {useSelector} from 'react-redux'
 function LandingPage(props) {
     const user = useSelector(state => state.user)
     const [roomName, setRoomName] = useState('')
-    
-    useEffect(()=> {
-        axios.get('/api/hello')
-            .then(response => console.log(response.data))
-    }, [])
+    const [rooms, setRooms] = useState([])
 
+    useEffect(() => {
+        axios.get('/api/gameroom/getAll')
+        .then((res) => {
+            console.log(res.data);
+            setRooms(res.data);
+        })
+    }, [])
     const onClickHandler= () => {
         axios.get('api/user/logout')
         .then(response => {
@@ -31,8 +34,11 @@ function LandingPage(props) {
         console.log(roomName);
         console.log(user.userData?._id)
         //socket으로 text 쏴주면 될듯
-        axios.post('api/gameroom/addRoom', {roomName: roomName, user: user.userData})
+        axios.post('/api/gameroom/addRoom', {roomName: roomName, user: user.userData})
         setRoomName('');
+    }
+    const joinRoom = (e) => {
+        axios.post('/api/gameroom/joinRoom', {roomId: e.target.value, playerId: user.userData?._id})
     }
  
     return (
@@ -48,7 +54,16 @@ function LandingPage(props) {
                 <a href="/gamepage" >
                     <button onClick={submitHandler}>방개설</button>
                 </a>
-                
+                {
+                    rooms.map((room) => (
+                        <div>
+                            <span>방: </span>
+                            <a href="/gamepage" >
+                                <button onClick={joinRoom} value={room._id}>{room.roomTitle}</button>
+                            </a>
+                        </div>)
+                    )
+                }
             </div>
         </div>
     )
