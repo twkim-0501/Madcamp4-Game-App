@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import "./MG_GamePage.css"
+import {withRouter} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
+import {useLocation} from "react-router";
 import {useSelector} from 'react-redux'
 import axios from 'axios'
 
@@ -20,17 +22,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MG_GamePage() {
-    var socket;
+    // const location = useLocation();
+    // const [RoomId, setRoomId] = useState(location.state?.roomId)
+    
     const user = useSelector(state => state.user)
+    const [PlayerId, setPlayerId] = useState(user.userData?._id)
+    const [Socket, setSocket] = useState()
+    const [roomId, setRoomId] = useState()
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState([1, 2, 3, 4])
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
+    
 
     useEffect(() => {
-        socket = io('http://192.249.18.171:80')
-        socket.emit('enterRoom')
+        setSocket(io('http://192.249.18.171:80'))
+        console.log(PlayerId)
+        axios.post('/api/gameroom/findCurrentRoom', {user: PlayerId})
+            .then(response => {
+                console.log("i found room id", response.data)
+            })
     }, [])
 
     useEffect(() => {
@@ -111,7 +123,7 @@ function MG_GamePage() {
                                 )
                         }
                     </div>
-                    <div class="game-status">현재 마이너스 경매 블럭 상황들</div>
+                    <div class="game-status">{PlayerId}</div>
                     <div class="my-status">
                         {MyChips}
                         {
@@ -126,4 +138,4 @@ function MG_GamePage() {
     )
 }
 
-export default MG_GamePage
+export default withRouter(MG_GamePage)

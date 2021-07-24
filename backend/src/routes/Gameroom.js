@@ -11,14 +11,16 @@ router.get('/getAll', (req,res) => {
 })
 
 router.post('/addRoom', (req,res) => {
-    db.addRoom(req.body, ()=>{
-        res.status(200).send();
+    db.addRoom(req.body, (id)=>{
+        res.status(200).send(id);
     })
 })
 
-router.get('/findCurrentRoom', (req,res) => {
-    db.findCurrentRoom(req.body, (_id) => {
-        res.status(200).send(id);
+router.post('/findCurrentRoom', (req,res) => {
+    console.log(req.body)
+    db.findCurrentRoom(req.body.user, (_id) => {
+        console.log('find room', _id)
+        res.status(200).send(_id);
     })
 })
 

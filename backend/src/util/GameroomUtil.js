@@ -13,7 +13,8 @@ function addRoom(roomInfo,callback){
         players: initplayers
     })
     newRoom.save((err,res) => {
-        callback(res);
+        console.log("newroom id", newRoom._id)
+        callback(newRoom._id);
     });
 }
 
@@ -38,28 +39,33 @@ function joinRoom(joinInfo, callback){
     })
 }
 function findCurrentRoom(playerId, callback){
+    console.log("playerid", playerId)
     GameroomModel.find({}, (err,res) => {
         var currentRoom = res.filter(room => room.players.includes(playerId));
-        callback(currentRoom._id);
+        console.log("aaaaa", currentRoom);
+        //callback(currentRoom._id);
+        callback();
     })
 }
 function exitRoom(exitInfo, callback){
-    const {playerId} = exitInfo;
 
-    GameroomModel.find({}, (err,res) => {
-        var currentRoom = res.filter(room => room.players.includes(playerId));
-        var afterplayers = currentRoom.players.filter((player) => (player !== playerId));
-        if(currentRoom.players.includes(playerId)){
-            GameroomModel.findOneAndUpdate({_id: currentRoom._id}, {
-                players: afterplayers
-            },
-            (error) => {callback();});
-        }
-        else{
-            console.log("현재 게임 방에 존재하지 않습니다.");
-            callback();
-        }
-    })
+    callback();
+    // const {playerId} = exitInfo;
+
+    // GameroomModel.find({}, (err,res) => {
+    //     var currentRoom = res.filter(room => room.players.includes(playerId));
+    //     var afterplayers = currentRoom.players.filter((player) => (player !== playerId));
+    //     if(currentRoom.players.includes(playerId)){
+    //         GameroomModel.findOneAndUpdate({_id: currentRoom._id}, {
+    //             players: afterplayers
+    //         },
+    //         (error) => {callback();});
+    //     }
+    //     else{
+    //         console.log("현재 게임 방에 존재하지 않습니다.");
+    //         callback();
+    //     }
+    // })
     /*
     GameroomModel.findOne({_id: roomId}, (err, res) => {
         var afterplayers = res.players.filter((player) => (player !== playerId));
