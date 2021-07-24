@@ -34,6 +34,7 @@
     background-color: #efe886;
     display:flex;
     flex-direction: row;
+    padding-top: 10px;
 }
 .game-status{
     flex-grow: 1;
@@ -44,6 +45,8 @@
     background-color: #e0e0e0;
 }
 .opo-player{
+    
+    text-align: center;
     flex-grow: 1;
     display:flex;
     flex-direction: column;
@@ -67,10 +70,20 @@
     width: 75px;
     height: 50px;
 }
-.testBtn{
+.startBtn{
     position:absolute;
     left: 20px;
     bottom: 100px;
     width: 75px;
     height: 50px;
+}
+.roomTitle{
+    position:absolute;
+    left: 20px;
+    top: 40px;
+}
+.roomNumber{
+    position:absolute;
+    left: 20px;
+    top: 20px;
 }

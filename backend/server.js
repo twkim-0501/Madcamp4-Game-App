@@ -33,6 +33,15 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('playerCome', roomInfo.players)
 	});
 
+	socket.on('exitRoom', (roomInfo) => {
+		socket.broadcast.emit('playerLeave', roomInfo.players)
+		socket.leave(roomInfo._id)
+	});
+
+	socket.on('startClick', (roomInfo) => {
+		socket.to(roomInfo._id).emit('startGame')
+	});
+
     socket.on('disconnect', function () {
 		console.log('user disconnected: ', socket.id);
 	});

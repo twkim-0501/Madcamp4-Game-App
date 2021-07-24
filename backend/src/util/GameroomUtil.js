@@ -50,26 +50,26 @@ function findCurrentRoom(playerId, callback){
     else{
         callback()
     }
-    
 }
 function exitRoom(exitInfo, callback){
-
-    callback();
-    // const {playerId} = exitInfo;
-    // GameroomModel.findOne({_id: roomId}, (err, res) => {
-    //     var afterplayers = res.players.filter((player) => (player !== playerId));
-    //     console.log(afterplayers);
-    //     if(res.players.includes(playerId)){
-    //         GameroomModel.findOneAndUpdate({_id: roomId}, {
-    //             players: afterplayers
-    //         },
-    //         (error) => {callback();});
-    //     }
-    //     else{
-    //         console.log("현재 게임 방에 존재하지 않습니다.");
-    //         callback();
-    //     }
-    // })
+    const {playerId, roomId} = exitInfo;
+    GameroomModel.findOne({_id: roomId}, (err, res) => {
+        if(res.players == null){
+            callback();
+        }
+        var afterplayers = res.players.filter((player) => (player != playerId));
+        console.log(afterplayers);
+        if(res.players.includes(playerId)){
+            GameroomModel.findOneAndUpdate({_id: roomId}, {
+                players: afterplayers
+            },
+            (error) => {callback();});
+        }
+        else{
+            console.log("현재 게임 방에 존재하지 않습니다.");
+            callback();
+        }
+    })
 }
 
 //다른 파일에서 require로 불러와서 .addRoom 이런식으로 붙여서 사용 가능

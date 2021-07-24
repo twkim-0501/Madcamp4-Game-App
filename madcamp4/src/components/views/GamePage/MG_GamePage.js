@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.text.secondary,
     },
 }));
-
 function MG_GamePage() {
     // const location = useLocation();
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
@@ -33,7 +32,6 @@ function MG_GamePage() {
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
-    
 
     useEffect(() => {
         setSocket(io('http://192.249.18.171:80'))
@@ -46,7 +44,14 @@ function MG_GamePage() {
                 setPlayers(newPlayers)
             })
 
-            
+            Socket.on('playerLeave', (newPlayers) => {
+                console.log('player leave')
+                setPlayers(newPlayers)
+            })
+
+            Socket.on('startGame', () => {
+                console.log('Start Game!!!')
+            })
         }
         
     })
@@ -123,10 +128,18 @@ function MG_GamePage() {
             </div>
         )
     }
+
     const exitRoom = (e) => {
+        console.log("before exitRoom",playerId, roomInfo._id)
         axios.post('/api/gameroom/exitRoom',
-            {playerId: user.userData?._id}
-        )
+            {playerId: playerId, roomId: roomInfo._id}
+        ).then(() => {
+            Socket.emit('exitRoom', roomInfo)
+        })
+    }
+
+    const startClick = () => {
+        Socket.emit('startClick', roomInfo)
     }
 
     const testFunc = (e) => {
@@ -135,8 +148,16 @@ function MG_GamePage() {
 
     return (
         <div class="mainbox">
-            <button class="exitBtn" onClick={exitRoom}>나가기</button>
-            <button class="testBtn" onClick={testFunc} value={playerId}>테스트</button>
+            <a href="/">
+                <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            </a>
+            <button class="startBtn" onClick={startClick}>Game Start</button>
+ 
+            <div>
+                <div class="roomNumber">{"방 번호: "+ roomInfo?.roomIndex}</div>
+                <div class="roomTitle">{"방 제목: "+ roomInfo?.roomTitle}</div>
+            </div>
+            
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     <Table />
