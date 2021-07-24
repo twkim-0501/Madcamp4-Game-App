@@ -2,14 +2,20 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
+import io from "socket.io-client"
 import {useSelector} from 'react-redux';
+
 function LandingPage(props) {
     const user = useSelector(state => state.user);
 
     const [text, setText] = useState('')
-    useEffect( ()=> {
+    const [socket, setSocket] = useState()
+    
+
+    useEffect(()=> {
+        setSocket(io('http://192.249.18.171:80'))
         axios.get('/api/hello')
-        .then(response => console.log(response.data))
+            .then(response => console.log(response.data))
     }, [])
 
     const onClickHandler= () => {
@@ -24,10 +30,12 @@ function LandingPage(props) {
     const onChange = (e) => {
         setText(e.target.value);
     }
+
     const submitHandler = () => {
         console.log(user.userData?._id)
         console.log(text);
         //socket으로 text 쏴주면 될듯
+        axios.post('api/gameroom/addroom', )
         setText('');
     }
  
