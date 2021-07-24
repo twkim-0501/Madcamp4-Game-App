@@ -43,7 +43,7 @@ function findCurrentRoom(playerId, callback){
     if(playerId){
         GameroomModel.find({}, (err,res) => {
             var currentRoom = res.filter(room => room.players.includes(playerId));
-            console.log("aaaaa", currentRoom);
+            //console.log("aaaaa", currentRoom);
             callback(currentRoom[0]);
         })
     }
@@ -72,11 +72,19 @@ function exitRoom(exitInfo, callback){
     })
 }
 
+async function getPlayersInfo(roomInfo, callback){
+    const roomId = roomInfo._id;
+    var playerList = await GameroomModel.findOne({_id: roomId}).populate('players')
+    console.log("playerlist",playerList.players);
+    callback(playerList.players);
+}
+
 //다른 파일에서 require로 불러와서 .addRoom 이런식으로 붙여서 사용 가능
 module.exports = {
     addRoom,
     getAll,
     joinRoom,
     exitRoom,
-    findCurrentRoom
+    findCurrentRoom,
+    getPlayersInfo
 };

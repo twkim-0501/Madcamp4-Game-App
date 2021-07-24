@@ -40,6 +40,7 @@ router.post('/exitRoom', (req,res) => {
 })
 
 router.post('/getPlayersInfo', (req,res) => {
+    console.log(req.body)
     db.getPlayersInfo(req.body, (infos) => {
         res.status(200).send(infos);
     })

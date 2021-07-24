@@ -29,6 +29,7 @@ function MG_GamePage() {
     const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState(["waiting"])
+    //_id, name 등을 이용가능
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
@@ -52,8 +53,11 @@ function MG_GamePage() {
                 console.log("i found room id", response.data)
         
                 if (response.data) {
+                    axios.post('/api/gameroom/getPlayersInfo', response.data)
+                    .then(response => {
+                        setPlayers(response.data)
+                    })
                     setRoomInfo(response.data);
-                    setPlayers(response.data.players)
                     Socket.emit('enterRoom', response.data)
                 }
             })
