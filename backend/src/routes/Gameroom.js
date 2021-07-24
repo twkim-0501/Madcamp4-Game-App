@@ -18,7 +18,7 @@ router.post('/addRoom', (req,res) => {
 
 router.get('/findCurrentRoom', (req,res) => {
     db.findCurrentRoom(req.body, (_id) => {
-        res.status(200).send(id);
+        res.status(200).send(_id);
     })
 })
 
