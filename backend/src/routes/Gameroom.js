@@ -9,5 +9,10 @@ router.get('/getAll', (req,res) => {
         res.status(200).send(rooms);
     })
 })
+router.post('/addRoom', (req,res) => {
+    db.addRoom(req.body, ()=>{
+        res.status(200).send();
+    })
+})
 
 module.exports = router;

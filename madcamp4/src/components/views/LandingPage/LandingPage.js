@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
-import {useSelector} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
+import {useSelector} from 'react-redux'
 
 
 function LandingPage(props) {
@@ -31,7 +31,7 @@ function LandingPage(props) {
         console.log(roomName);
         console.log(user.userData?._id)
         //socket으로 text 쏴주면 될듯
-        axios.post('api/gameroom/addroom', {roomName: roomName, user: user})
+        axios.post('api/gameroom/addRoom', {roomName: roomName, user: user.userData})
         setRoomName('');
     }
  

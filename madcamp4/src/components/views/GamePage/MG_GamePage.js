@@ -18,12 +18,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MG_GamePage() {
-    const [Posts, setPosts] = useState([])
     var socket;
-    const totalitems = [-1,-2,-3,-4,-5,-6,-7,-8,-9]
-    var players = [0,1,2,3,4];
-    var variable1;
-
+    const [TotalItems, setTotalItems] = useState([])
+    const [Players, setPlayers] = useState([1, 2, 3, 4])
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
@@ -39,7 +36,6 @@ function MG_GamePage() {
         }
     }, [MyChips])
 
-    
     const Chip = () => {
         const [{ isDragging, canDrag }, drag] = useDrag({
             type: 'chip',
@@ -101,7 +97,7 @@ function MG_GamePage() {
                 <div class="rightbox">
                     <div class="oponent-status">
                         {
-                            players.map(player =>
+                            Players.map(player =>
                                     (<Oppo_player player={player}></Oppo_player>)
                                 )
                         }
