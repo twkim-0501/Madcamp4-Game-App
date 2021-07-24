@@ -5,7 +5,7 @@ var current_num = 0;
 //userID에 개설자(User의 _id) 등을 넣어서 보냄
 function addRoom(roomInfo,callback){
     console.log(roomInfo)
-    initplayers = [roomInfo.user._id]
+    initplayers = [roomInfo.user._id, ]
 
     const newRoom = new GameroomModel({
         roomIndex: current_num++,

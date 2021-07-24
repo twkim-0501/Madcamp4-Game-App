@@ -37,13 +37,24 @@ function MG_GamePage() {
     useEffect(() => {
         setSocket(io('http://192.249.18.171:80'))
     }, [])
+    
     useEffect(() => {
         if (Socket) {
             Socket.on('playerCome', (newPlayers) => {
                 console.log('new player come')
                 setPlayers(newPlayers)
             })
+
+            Socket.on('playerLeave', (newPlayers) => {
+                console.log('player leave')
+                setPlayers(newPlayers)
+            })
+
+            Socket.on('startGame', () => {
+                console.log('Start Game!!!')
+            })
         }
+        
     })
 
     useEffect(() => {
@@ -68,6 +79,7 @@ function MG_GamePage() {
             setDragable(false)
         }
     }, [MyChips])
+
 
     const Chip = () => {
         const [{ isDragging, canDrag }, drag] = useDrag({
@@ -120,11 +132,18 @@ function MG_GamePage() {
             </div>
         )
     }
+
     const exitRoom = (e) => {
         console.log("before exitRoom",playerId, roomInfo._id)
         axios.post('/api/gameroom/exitRoom',
             {playerId: playerId, roomId: roomInfo._id}
-        )
+        ).then(() => {
+            Socket.emit('exitRoom', roomInfo)
+        })
+    }
+
+    const startClick = () => {
+        Socket.emit('startClick', roomInfo)
     }
 
     const testFunc = (e) => {
@@ -136,6 +155,7 @@ function MG_GamePage() {
             <a href="/">
                 <button class="exitBtn" onClick={exitRoom}>나가기</button>
             </a>
+            <button class="startBtn" onClick={startClick}>Game Start</button>
  
             <div>
                 <div class="roomNumber">{"방 번호: "+ roomInfo?.roomIndex}</div>
@@ -150,7 +170,7 @@ function MG_GamePage() {
                     <div class="oponent-status">
                         {
                             Players.map(player =>
-                                    (<Oppo_player player={player}></Oppo_player>)
+                                    (<Oppo_player player={player.name}></Oppo_player>)
                                 )
                         }
                     </div>

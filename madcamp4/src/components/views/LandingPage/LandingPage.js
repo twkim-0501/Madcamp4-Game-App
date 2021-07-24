@@ -10,7 +10,6 @@ import {useHistory} from "react-router";
 function LandingPage(props) {
     const user = useSelector(state => state.user)
     const [roomName, setRoomName] = useState('')
-    // const [Socket, setSocket] = useState()
     const [rooms, setRooms] = useState([])
     const history = useHistory();
 
@@ -21,7 +20,6 @@ function LandingPage(props) {
             setRooms(res.data);
         })
 
-        // setSocket(io('http://192.249.18.171:80'))
     }, [])
 
     const onClickHandler= () => {
@@ -43,33 +41,11 @@ function LandingPage(props) {
         console.log(user.userData?._id)
         //socket으로 text 쏴주면 될듯
         axios.post('/api/gameroom/addRoom', {roomName: roomName, user: user.userData})
-            // .then((response) => {
-            //     console.log('enterRoom', response.data)
-            //     Socket.emit('enterRoom', response.data)
-            //     Socket.on('goRoom', (roomId) => {
-            //         console.log("goRoom", roomId)
-            //         props.history.push({
-            //             pathname: "/gamepage",
-            //             state: {roomId: roomId}
-            //         })
-            //     })
-            // })
         setRoomName('');
     }
 
     const joinRoom = (e) => {
         axios.post('/api/gameroom/joinRoom', {roomId: e.target.value, playerId: user.userData?._id})
-            // .then(() => {
-            //     console.log('enterRoom', e.target.value)
-            //     Socket.emit('enterRoom', e.target.value)
-            //     Socket.on('goRoom', (roomId) => {
-            //         console.log("goRoom", roomId)
-            //         props.history.push({
-            //             pathname: "/gamepage",
-            //             state: {roomId: roomId}
-            //         })
-            //     })
-            // })
     }
  
     
