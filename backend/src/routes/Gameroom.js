@@ -16,9 +16,24 @@ router.post('/addRoom', (req,res) => {
     })
 })
 
-router.post('/joinRoom', (req,res) => {
+router.post('/findCurrentRoom', (req,res) => {
     console.log(req.body)
+    db.findCurrentRoom(req.body.user, (_id) => {
+        console.log('find room', _id)
+        res.status(200).send(_id);
+    })
+})
+
+router.post('/joinRoom', (req,res) => {
+    //console.log(req.body)
     db.joinRoom(req.body, ()=> {
+        res.status(200).send();
+    })
+})
+
+router.post('/exitRoom', (req,res) => {
+    //console.log(req.body)
+    db.exitRoom(req.body, ()=> {
         res.status(200).send();
     })
 })
