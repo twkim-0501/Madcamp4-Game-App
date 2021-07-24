@@ -20,10 +20,12 @@ function App() {
     <div>
 
       <Switch>
-        <Route exact path="/" component={ Auth(LandingPage, null) } />
+        <Route exact path="/" component={ Auth(LandingPage, true) } />
         <Route exact path="/login" component={Auth(LoginPage, false)} />
         <Route exact path="/register" component={Auth(RegisterPage, false)} />
-        <Route exact path="/gamepage" component={MG_GamePage}/>
+        <Route exact path="/gamepage">
+          <MG_GamePage/>
+        </Route>
       </Switch>
       
     </div>

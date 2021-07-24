@@ -5,6 +5,7 @@ import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
+import {useLocation} from "react-router";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,16 +19,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MG_GamePage() {
-    var socket;
+    // const location = useLocation();
+    // const [RoomId, setRoomId] = useState(location.state?.roomId)
+    const [Socket, setSocket] = useState()
+    const [roomId, setRoomId] = useState()
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState([1, 2, 3, 4])
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
+    
 
     useEffect(() => {
-        socket = io('http://192.249.18.171:80')
-        socket.emit('enterRoom')
+        setSocket(io('http://192.249.18.171:80'))
+        // get room id, set players
     }, [])
 
     useEffect(() => {
