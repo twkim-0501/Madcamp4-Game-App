@@ -24,13 +24,12 @@ const useStyles = makeStyles((theme) => ({
 function MG_GamePage() {
     // const location = useLocation();
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
-    
     const user = useSelector(state => state.user)
-    const [PlayerId, setPlayerId] = useState()
+    const playerId = user.userData?._id
     const [Socket, setSocket] = useState()
-    const [roomId, setRoomId] = useState()
+    const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
-    const [Players, setPlayers] = useState([1, 2, 3, 4])
+    const [Players, setPlayers] = useState(["waiting..."])
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
@@ -38,12 +37,31 @@ function MG_GamePage() {
 
     useEffect(() => {
         setSocket(io('http://192.249.18.171:80'))
-        console.log('js jy', user.userData);
-        setPlayerId(user.userData?._id)
-        console.log(PlayerId)
-        axios.post('/api/gameroom/findCurrentRoom', {user: user.userData})
+    }, [])
+    
+    useEffect(() => {
+        if (Socket) {
+            Socket.on('playerCome', (newPlayers) => {
+                console.log('new player come')
+                setPlayers(newPlayers)
+            })
+
+            
+        }
+        
+    })
+
+    useEffect(() => {
+        //console.log("useEffectid", playerId);
+        axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
                 console.log("i found room id", response.data)
+        
+                if (response.data) {
+                    setRoomInfo(response.data);
+                    setPlayers(response.data.players)
+                    Socket.emit('enterRoom', response.data)
+                }
             })
     }, [user])
 
@@ -52,6 +70,7 @@ function MG_GamePage() {
             setDragable(false)
         }
     }, [MyChips])
+
 
     const Chip = () => {
         const [{ isDragging, canDrag }, drag] = useDrag({
@@ -110,9 +129,14 @@ function MG_GamePage() {
         )
     }
 
+    const testFunc = (e) => {
+        console.log(e.target.value)
+    }
+
     return (
         <div class="mainbox">
             <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            <button class="testBtn" onClick={testFunc} value={playerId}>테스트</button>
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     <Table />
@@ -125,7 +149,7 @@ function MG_GamePage() {
                                 )
                         }
                     </div>
-                    <div class="game-status">{PlayerId}</div>
+                    <div class="game-status">{playerId}</div>
                     <div class="my-status">
                         {MyChips}
                         {
