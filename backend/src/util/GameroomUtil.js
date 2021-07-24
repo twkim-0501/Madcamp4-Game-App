@@ -7,8 +7,8 @@ function addRoom(roomInfo,callback){
     initplayers = [roomInfo.userID]
 
     const newRoom = new GameroomModel({
-        roomindex: current_num++,
-        roomtitle: roomInfo.roomtitle,
+        roomIndex: current_num++,
+        roomTitle: roomInfo.roomName,
         players: initplayers
     })
     newRoom.save((err,res) => {
@@ -20,6 +20,14 @@ function getAll(callback){
     GameroomModel.find({}, (err, res) =>{
         callback(res)
     });
+}
+
+function joinRoom(joinInfo, callback){
+    const {roomId, playerId} = joinInfo;
+    GameroomModel.findOneAndUpdate({_id: roomId}, {
+        players: [...players, playerId]
+    },
+    (error) => {callback();});
 }
 
 //다른 파일에서 require로 불러와서 .addRoom 이런식으로 붙여서 사용 가능

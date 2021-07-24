@@ -9,8 +9,15 @@ router.get('/getAll', (req,res) => {
         res.status(200).send(rooms);
     })
 })
-router.post('addroom', (req,res) => {
+
+router.post('/addRoom', (req,res) => {
     db.addRoom(req.body, ()=>{
+        res.status(200).send();
+    })
+})
+
+router.post('/joinRoom', (req,res) => {
+    db.joinRoom(req.body, ()=> {
         res.status(200).send();
     })
 })
