@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import "./MG_GamePage.css"
+import {withRouter} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
+import {useLocation} from "react-router";
 import {useSelector} from 'react-redux'
 import axios from 'axios'
 
@@ -20,18 +22,29 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function MG_GamePage() {
-    var socket;
+    // const location = useLocation();
+    // const [RoomId, setRoomId] = useState(location.state?.roomId)
     const user = useSelector(state => state.user)
+    const playerId = user.userData?._id
+    const [Socket, setSocket] = useState()
+    const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState([1, 2, 3, 4])
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
+    
 
     useEffect(() => {
-        socket = io('http://192.249.18.171:80')
-        socket.emit('enterRoom')
-    }, [])
+        //setSocket(io('http://192.249.18.171:80'))
+
+        //console.log("useEffectid", playerId);
+        axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
+            .then(response => {
+                console.log("i found room id", response.data)
+                setRoomInfo(response.data);
+            })
+    }, [user])
 
     useEffect(() => {
         if (MyChips <= 0) {
@@ -96,9 +109,14 @@ function MG_GamePage() {
         )
     }
 
+    const testFunc = (e) => {
+        console.log(e.target.value)
+    }
+
     return (
         <div class="mainbox">
             <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            <button class="testBtn" onClick={testFunc} value={playerId}>테스트</button>
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     <Table />
@@ -111,7 +129,7 @@ function MG_GamePage() {
                                 )
                         }
                     </div>
-                    <div class="game-status">현재 마이너스 경매 블럭 상황들</div>
+                    <div class="game-status">{playerId}</div>
                     <div class="my-status">
                         {MyChips}
                         {
@@ -126,4 +144,4 @@ function MG_GamePage() {
     )
 }
 
-export default MG_GamePage
+export default withRouter(MG_GamePage)

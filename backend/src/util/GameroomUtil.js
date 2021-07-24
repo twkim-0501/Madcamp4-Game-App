@@ -13,7 +13,8 @@ function addRoom(roomInfo,callback){
         players: initplayers
     })
     newRoom.save((err,res) => {
-        callback(res);
+        console.log("newroom id", newRoom._id)
+        callback(newRoom._id);
     });
 }
 
@@ -38,43 +39,37 @@ function joinRoom(joinInfo, callback){
     })
 }
 function findCurrentRoom(playerId, callback){
-    GameroomModel.find({}, (err,res) => {
-        var currentRoom = res.filter(room => room.players.includes(playerId));
-        callback(currentRoom._id);
-    })
+    //console.log("playerid", playerId)
+    if(playerId){
+        GameroomModel.find({}, (err,res) => {
+            var currentRoom = res.filter(room => room.players.includes(playerId));
+            console.log("aaaaa", currentRoom);
+            callback(currentRoom[0]);
+        })
+    }
+    else{
+        callback()
+    }
+    
 }
 function exitRoom(exitInfo, callback){
-    const {playerId} = exitInfo;
 
-    GameroomModel.find({}, (err,res) => {
-        var currentRoom = res.filter(room => room.players.includes(playerId));
-        var afterplayers = currentRoom.players.filter((player) => (player !== playerId));
-        if(currentRoom.players.includes(playerId)){
-            GameroomModel.findOneAndUpdate({_id: currentRoom._id}, {
-                players: afterplayers
-            },
-            (error) => {callback();});
-        }
-        else{
-            console.log("현재 게임 방에 존재하지 않습니다.");
-            callback();
-        }
-    })
-    /*
-    GameroomModel.findOne({_id: roomId}, (err, res) => {
-        var afterplayers = res.players.filter((player) => (player !== playerId));
-        console.log(afterplayers);
-        if(res.players.includes(playerId)){
-            GameroomModel.findOneAndUpdate({_id: roomId}, {
-                players: afterplayers
-            },
-            (error) => {callback();});
-        }
-        else{
-            console.log("현재 게임 방에 존재하지 않습니다.");
-            callback();
-        }
-    })*/
+    callback();
+    // const {playerId} = exitInfo;
+    // GameroomModel.findOne({_id: roomId}, (err, res) => {
+    //     var afterplayers = res.players.filter((player) => (player !== playerId));
+    //     console.log(afterplayers);
+    //     if(res.players.includes(playerId)){
+    //         GameroomModel.findOneAndUpdate({_id: roomId}, {
+    //             players: afterplayers
+    //         },
+    //         (error) => {callback();});
+    //     }
+    //     else{
+    //         console.log("현재 게임 방에 존재하지 않습니다.");
+    //         callback();
+    //     }
+    // })
 }
 
 //다른 파일에서 require로 불러와서 .addRoom 이런식으로 붙여서 사용 가능
