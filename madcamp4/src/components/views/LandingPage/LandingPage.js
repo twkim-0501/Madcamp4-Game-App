@@ -5,15 +5,13 @@ import "./LandingPage.css"
 import io from "socket.io-client"
 // const io = require("socket.io-client");
 
-// var socket = io('http://192.249.18.171:80');
+
 
 function LandingPage(props) {
     const [text, setText] = useState('')
-    const [socket, setSocket] = useState()
     
 
     useEffect(()=> {
-        setSocket(io('http://192.249.18.171:80'))
         axios.get('/api/hello')
             .then(response => console.log(response.data))
     }, [])
@@ -48,7 +46,10 @@ function LandingPage(props) {
             <div>
                 <div>title</div>
                 <input placeholder="방 제목" onChange={onChange} value={text}/>
-                <button onClick={submitHandler}>방개설</button>
+                <a href="/gamepage" >
+                    <button onClick={submitHandler}>방개설</button>
+                </a>
+                
             </div>
         </div>
     )
