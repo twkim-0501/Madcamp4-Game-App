@@ -29,8 +29,10 @@ function MG_GamePage() {
     const [Dragable, setDragable] = useState(true)
 
     useEffect(() => {
+        /*
         setSocket(io('http://192.249.18.171:80'))
         Socket.emit('enterRoom')
+        */
     }, [])
 
     useEffect(() => {
