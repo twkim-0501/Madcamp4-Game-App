@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
+import {useSelector} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
 import io from "socket.io-client"
@@ -8,9 +9,9 @@ import io from "socket.io-client"
 
 
 function LandingPage(props) {
-    const [text, setText] = useState('')
+    const user = useSelector(state => state.user)
+    const [roomName, setRoomName] = useState('')
     
-
     useEffect(()=> {
         axios.get('/api/hello')
             .then(response => console.log(response.data))
@@ -26,14 +27,14 @@ function LandingPage(props) {
         })
     }
     const onChange = (e) => {
-        setText(e.target.value);
+        setRoomName(e.target.value);
     }
 
     const submitHandler = () => {
-        console.log(text);
+        console.log(roomName);
         //socket으로 text 쏴주면 될듯
-        axios.post('api/gameroom/addroom', )
-        setText('');
+        axios.post('api/gameroom/addroom', {roomName: roomName, user: user})
+        setRoomName('');
     }
  
     return (
@@ -45,7 +46,7 @@ function LandingPage(props) {
             <button onClick={onClickHandler}> Logout </button>
             <div>
                 <div>title</div>
-                <input placeholder="방 제목" onChange={onChange} value={text}/>
+                <input placeholder="방 제목" onChange={onChange} value={roomName}/>
                 <a href="/gamepage" >
                     <button onClick={submitHandler}>방개설</button>
                 </a>

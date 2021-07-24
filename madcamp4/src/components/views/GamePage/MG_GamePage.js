@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MG_GamePage() {
     const [Posts, setPosts] = useState([])
-    const [socket, setSocket] = useState(io('http://192.249.18.171:80'))
+    const [Socket, setSocket] = useState()
     const totalitems = [-1,-2,-3,-4,-5,-6,-7,-8,-9]
     var players = [0,1,2,3,4];
     var variable1;
@@ -29,11 +29,17 @@ function MG_GamePage() {
     const [Dragable, setDragable] = useState(true)
 
     useEffect(() => {
+        setSocket(io('http://192.249.18.171:80'))
+        Socket.emit('enterRoom')
+    }, [])
+
+    useEffect(() => {
         if (MyChips <= 0) {
             setDragable(false)
         }
     }, [MyChips])
 
+    
     const Chip = () => {
         const [{ isDragging, canDrag }, drag] = useDrag({
             type: 'chip',
