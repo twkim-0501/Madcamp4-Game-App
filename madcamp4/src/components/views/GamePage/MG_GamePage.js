@@ -104,8 +104,9 @@ function MG_GamePage() {
         )
     }
     const exitRoom = (e) => {
+        console.log("before exitRoom",playerId, roomInfo._id)
         axios.post('/api/gameroom/exitRoom',
-            {playerId: user.userData?._id}
+            {playerId: playerId, roomId: roomInfo._id}
         )
     }
 
@@ -115,7 +116,9 @@ function MG_GamePage() {
 
     return (
         <div class="mainbox">
-            <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            <a href="/">
+                <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            </a>
             <button class="testBtn" onClick={testFunc} value={playerId}>테스트</button>
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
