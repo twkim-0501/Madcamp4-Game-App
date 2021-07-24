@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.text.secondary,
     },
 }));
-
 function MG_GamePage() {
     // const location = useLocation();
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
@@ -29,20 +28,34 @@ function MG_GamePage() {
     const [Socket, setSocket] = useState()
     const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
-    const [Players, setPlayers] = useState([1, 2, 3, 4])
+    const [Players, setPlayers] = useState(["waiting"])
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
-    
 
     useEffect(() => {
-        //setSocket(io('http://192.249.18.171:80'))
+        setSocket(io('http://192.249.18.171:80'))
+    }, [])
+    useEffect(() => {
+        if (Socket) {
+            Socket.on('playerCome', (newPlayers) => {
+                console.log('new player come')
+                setPlayers(newPlayers)
+            })
+        }
+    })
 
+    useEffect(() => {
         //console.log("useEffectid", playerId);
         axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
                 console.log("i found room id", response.data)
-                setRoomInfo(response.data);
+        
+                if (response.data) {
+                    setRoomInfo(response.data);
+                    setPlayers(response.data.players)
+                    Socket.emit('enterRoom', response.data)
+                }
             })
     }, [user])
 
@@ -104,8 +117,9 @@ function MG_GamePage() {
         )
     }
     const exitRoom = (e) => {
+        console.log("before exitRoom",playerId, roomInfo._id)
         axios.post('/api/gameroom/exitRoom',
-            {playerId: user.userData?._id}
+            {playerId: playerId, roomId: roomInfo._id}
         )
     }
 
@@ -115,8 +129,15 @@ function MG_GamePage() {
 
     return (
         <div class="mainbox">
-            <button class="exitBtn" onClick={exitRoom}>나가기</button>
-            <button class="testBtn" onClick={testFunc} value={playerId}>테스트</button>
+            <a href="/">
+                <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            </a>
+ 
+            <div>
+                <div class="roomNumber">{"방 번호: "+ roomInfo?.roomIndex}</div>
+                <div class="roomTitle">{"방 제목: "+ roomInfo?.roomTitle}</div>
+            </div>
+            
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     <Table />
