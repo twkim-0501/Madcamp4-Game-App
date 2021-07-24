@@ -2,8 +2,8 @@
 const mongoose = require("mongoose");
 const User = require("./User");
 const GameroomSchema = new mongoose.Schema({
-    roomindex: Number,
-    roomtitle: String,
+    roomIndex: Number,
+    roomTitle: String,
     players: [{type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }]

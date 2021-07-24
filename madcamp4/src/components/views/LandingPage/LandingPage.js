@@ -2,15 +2,12 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
-import io from "socket.io-client"
-// const io = require("socket.io-client");
-import {useSelector} from 'react-redux';
+import {useSelector} from 'react-redux'
 
 
 function LandingPage(props) {
     const user = useSelector(state => state.user)
     const [roomName, setRoomName] = useState('')
-    const [socket, setSocket] = useState()
     
     useEffect(()=> {
         axios.get('/api/hello')
@@ -34,7 +31,7 @@ function LandingPage(props) {
         console.log(roomName);
         console.log(user.userData?._id)
         //socket으로 text 쏴주면 될듯
-        axios.post('api/gameroom/addroom', {roomName: roomName, user: user})
+        axios.post('api/gameroom/addRoom', {roomName: roomName, user: user.userData})
         setRoomName('');
     }
  
