@@ -28,8 +28,8 @@ const io = socketIO(server, {
 io.on('connection', (socket) => {
 	console.log("socket connect!", socket.id)
 
-	socket.on('createRoom', () => {
-		console.log("createRoom");
+	socket.on('enterRoom', () => {
+		console.log("enterRoom");
 	});
 
     socket.on('disconnect', function () {
