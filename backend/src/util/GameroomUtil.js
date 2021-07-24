@@ -50,10 +50,8 @@ function findCurrentRoom(playerId, callback){
     else{
         callback()
     }
-    
 }
 function exitRoom(exitInfo, callback){
-
     const {playerId, roomId} = exitInfo;
     GameroomModel.findOne({_id: roomId}, (err, res) => {
         if(res.players == null){
