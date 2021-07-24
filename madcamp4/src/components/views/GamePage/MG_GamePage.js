@@ -26,7 +26,7 @@ function MG_GamePage() {
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
     
     const user = useSelector(state => state.user)
-    const [PlayerId, setPlayerId] = useState(user.userData?._id)
+    const [PlayerId, setPlayerId] = useState()
     const [Socket, setSocket] = useState()
     const [roomId, setRoomId] = useState()
     const [TotalItems, setTotalItems] = useState([])
@@ -38,12 +38,14 @@ function MG_GamePage() {
 
     useEffect(() => {
         setSocket(io('http://192.249.18.171:80'))
+        console.log('js jy', user.userData);
+        setPlayerId(user.userData?._id)
         console.log(PlayerId)
-        axios.post('/api/gameroom/findCurrentRoom', {user: PlayerId})
+        axios.post('/api/gameroom/findCurrentRoom', {user: user.userData})
             .then(response => {
                 console.log("i found room id", response.data)
             })
-    }, [])
+    }, [user])
 
     useEffect(() => {
         if (MyChips <= 0) {
