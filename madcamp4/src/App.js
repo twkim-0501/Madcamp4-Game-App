@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -15,6 +15,7 @@ import MG_GamePage from "./components/views/GamePage/MG_GamePage";
 
 
 function App() {
+
   return (
     <Router>
       <div>

@@ -67,3 +67,10 @@
     width: 75px;
     height: 50px;
 }
+.testBtn{
+    position:absolute;
+    left: 20px;
+    bottom: 100px;
+    width: 75px;
+    height: 50px;
+}

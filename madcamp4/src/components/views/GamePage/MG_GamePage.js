@@ -24,11 +24,10 @@ const useStyles = makeStyles((theme) => ({
 function MG_GamePage() {
     // const location = useLocation();
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
-    
     const user = useSelector(state => state.user)
-    const [PlayerId, setPlayerId] = useState(user.userData?._id)
+    const playerId = user.userData?._id
     const [Socket, setSocket] = useState()
-    const [roomId, setRoomId] = useState()
+    const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState([1, 2, 3, 4])
     const [MyChips, setMyChips] = useState(10)
@@ -37,13 +36,15 @@ function MG_GamePage() {
     
 
     useEffect(() => {
-        setSocket(io('http://192.249.18.171:80'))
-        console.log(PlayerId)
-        axios.post('/api/gameroom/findCurrentRoom', {user: PlayerId})
+        //setSocket(io('http://192.249.18.171:80'))
+
+        //console.log("useEffectid", playerId);
+        axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
                 console.log("i found room id", response.data)
+                setRoomInfo(response.data);
             })
-    }, [])
+    }, [user])
 
     useEffect(() => {
         if (MyChips <= 0) {
@@ -108,9 +109,14 @@ function MG_GamePage() {
         )
     }
 
+    const testFunc = (e) => {
+        console.log(e.target.value)
+    }
+
     return (
         <div class="mainbox">
             <button class="exitBtn" onClick={exitRoom}>나가기</button>
+            <button class="testBtn" onClick={testFunc} value={playerId}>테스트</button>
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     <Table />
@@ -123,7 +129,7 @@ function MG_GamePage() {
                                 )
                         }
                     </div>
-                    <div class="game-status">{PlayerId}</div>
+                    <div class="game-status">{playerId}</div>
                     <div class="my-status">
                         {MyChips}
                         {
