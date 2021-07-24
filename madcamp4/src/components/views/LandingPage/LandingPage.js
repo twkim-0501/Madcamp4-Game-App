@@ -3,11 +3,11 @@ import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
 import io from "socket.io-client"
-// const io = require("socket.io-client");
-
-// var socket = io('http://192.249.18.171:80');
+import {useSelector} from 'react-redux';
 
 function LandingPage(props) {
+    const user = useSelector(state => state.user);
+
     const [text, setText] = useState('')
     const [socket, setSocket] = useState()
     
@@ -32,6 +32,7 @@ function LandingPage(props) {
     }
 
     const submitHandler = () => {
+        console.log(user.userData?._id)
         console.log(text);
         //socket으로 text 쏴주면 될듯
         axios.post('api/gameroom/addroom', )
