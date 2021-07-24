@@ -5,6 +5,8 @@ import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
+import {useSelector} from 'react-redux'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MG_GamePage() {
     var socket;
+    const user = useSelector(state => state.user)
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState([1, 2, 3, 4])
     const [MyChips, setMyChips] = useState(10)
@@ -87,9 +90,15 @@ function MG_GamePage() {
             </div>
         )
     }
+    const exitRoom = (e) => {
+        axios.post('/api/gameroom/exitRoom',
+            {playerId: user.userData?._id}
+        )
+    }
 
     return (
         <div class="mainbox">
+            <button class="exitBtn" onClick={exitRoom}>나가기</button>
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     <Table />
