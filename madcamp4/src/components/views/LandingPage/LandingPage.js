@@ -3,15 +3,11 @@ import axios from 'axios'
 import {useSelector} from 'react-redux'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
-import io from "socket.io-client"
-// const io = require("socket.io-client");
-import {useSelector} from 'react-redux';
 
 
 function LandingPage(props) {
     const user = useSelector(state => state.user)
     const [roomName, setRoomName] = useState('')
-    const [socket, setSocket] = useState()
     
     useEffect(()=> {
         axios.get('/api/hello')

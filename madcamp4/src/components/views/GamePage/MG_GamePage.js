@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 function MG_GamePage() {
     const [Posts, setPosts] = useState([])
-    const [Socket, setSocket] = useState()
+    var socket;
     const totalitems = [-1,-2,-3,-4,-5,-6,-7,-8,-9]
     var players = [0,1,2,3,4];
     var variable1;
@@ -29,8 +29,8 @@ function MG_GamePage() {
     const [Dragable, setDragable] = useState(true)
 
     useEffect(() => {
-        setSocket(io('http://192.249.18.171:80'))
-        Socket.emit('enterRoom')
+        socket = io('http://192.249.18.171:80')
+        socket.emit('enterRoom')
     }, [])
 
     useEffect(() => {
