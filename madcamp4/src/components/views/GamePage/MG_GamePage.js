@@ -50,8 +50,8 @@ function MG_GamePage() {
                 setPlayers(newPlayers)
             })
 
-            Socket.on('startGame', () => {
-                console.log('Start Game!!!')
+            Socket.on('startGame', (str) => {
+                console.log('Start Game!!!', str)
             })
         }
         
@@ -138,6 +138,7 @@ function MG_GamePage() {
         axios.post('/api/gameroom/exitRoom',
             {playerId: playerId, roomId: roomInfo._id}
         ).then(() => {
+            console.log('exitRoom')
             Socket.emit('exitRoom', roomInfo)
         })
     }
