@@ -28,18 +28,21 @@ const io = socketIO(server, {
 io.on('connection', (socket) => {
 	console.log("socket connect!", socket.id)
 
-	socket.on('enterRoom', (roomInfo) => {
+	socket.on('enterRoom', (roomInfo, usersInfo) => {
+		console.log('enterRoom')
 		socket.join(roomInfo._id)
-		socket.broadcast.emit('playerCome', roomInfo.players)
+		socket.broadcast.emit('playerCome', usersInfo)
 	});
 
 	socket.on('exitRoom', (roomInfo) => {
+		console.log("exit!")
 		socket.broadcast.emit('playerLeave', roomInfo.players)
 		socket.leave(roomInfo._id)
 	});
 
 	socket.on('startClick', (roomInfo) => {
-		socket.to(roomInfo._id).emit('startGame')
+		console.log('startClick')
+		io.to(roomInfo._id).emit('startGame', "ss")
 	});
 
     socket.on('disconnect', function () {
