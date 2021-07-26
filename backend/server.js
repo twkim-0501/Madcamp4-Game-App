@@ -24,31 +24,8 @@ const io = socketIO(server, {
 	}
 });
 
-// socketio 문법
-io.on('connection', (socket) => {
-	console.log("socket connect!", socket.id)
+require('./socket.js')(io);
 
-	socket.on('enterRoom', (roomInfo, usersInfo) => {
-		console.log('enterRoom')
-		socket.join(roomInfo._id)
-		socket.broadcast.emit('playerCome', usersInfo)
-	});
-
-	socket.on('exitRoom', (roomInfo, usersInfo) => {
-		console.log("exit!")
-		socket.broadcast.emit('playerLeave', usersInfo)
-		socket.leave(roomInfo._id)
-	});
-
-	socket.on('startClick', (roomInfo) => {
-		console.log('startClick')
-		io.to(roomInfo._id).emit('startGame', "ss")
-	});
-
-    socket.on('disconnect', function () {
-		console.log('user disconnected: ', socket.id);
-	});
-});
 
 //route
 const UserRouter = require('./src/routes/User');

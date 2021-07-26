@@ -29,17 +29,19 @@ function MG_GamePage() {
     const playerName = user.userData?.name
     const [Socket, setSocket] = useState()
     const [roomInfo, setRoomInfo] = useState()
-    const [TotalItems, setTotalItems] = useState([])
+    const [Items, setItems] = useState("Wait...")
     const [Players, setPlayers] = useState(["waiting"])
-    //_id, name 등을 이용가능
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
+    const [Playing, setPlaying] = useState(false)
+    
 
     useEffect(() => {
         // setSocket(io('http://192.249.18.179:80'))
         setSocket(io('http://192.249.18.171:80'))
     }, [])
+
     
     useEffect(() => {
         if (Socket) {
@@ -58,14 +60,16 @@ function MG_GamePage() {
                 }
             })
 
-            Socket.on('startGame', (str) => {
-                console.log('Start Game!!!', str)
+            Socket.on('startGame', (data) => {
+                // 알람창 잠깐 뜨기
+                console.log('Start Game!!!', data.items)
+                setPlaying(true)
+                setItems(data.items)
             })
         }
     })
 
     useEffect(() => {
-        //console.log("useEffectid", playerId);
         axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
                 var tempRoomInfo = response.data
@@ -199,17 +203,27 @@ function MG_GamePage() {
                                 <Oppo_player player={player?.name}></Oppo_player> :
                                 null
                             )
+                            
                         }
+                        {/* {
+                            Dragable
+                            ? <Chip />
+                            : <FixedChip /> 
+                        } */}
                     </div>
-                    <div class="game-status">{playerId}</div>
+                    <div class="game-status">{Items}</div>
                     <div class="my-status">
                         <div>{"Player "+playerName}</div>
+                        <div>
                         {MyChips}
                         {
                             Dragable
                             ? <Chip />
                             : <FixedChip /> 
                         }
+                        </div>
+
+                        
                     </div>
                 </div>
             </DndProvider>
