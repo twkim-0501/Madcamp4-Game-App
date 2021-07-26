@@ -5,23 +5,24 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: stretch;
-    align-content: space-around;
+    align-content: space-between;
     flex-wrap: nowrap;
 }
 .leftbox{
     flex-grow: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #e0e0e0;
+    text-align: center;
+    align-items: stretch;
 }
-.table{
-    background-color:#86ef94;
-    width:300px;
-    height:300px;
-    border-radius:150px;
-    text-align:center;
-    font-size:12px;
-    line-height:300px;
+.middlebox{
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .rightbox{
     flex-grow: 1;
@@ -29,11 +30,20 @@
     flex-direction: column;
     justify-content: space-between;
 }
+.table{
+    background-color:#86ef94;
+    width:200px;
+    height:200px;
+    text-align:center;
+    font-size:12px;
+}
 .oponent-status{
-    flex-grow: 2;
-    background-color: #efe886;
-    display:flex;
-    flex-direction: row;
+    flex-grow: 1;
+    display: flex;
+    background-color: #e0e0e0;
+    text-align: center;
+    flex-direction: column;
+    align-items: stretch;
 }
 .game-status{
     flex-grow: 1;
@@ -41,15 +51,15 @@
 }
 .my-status{
     flex-grow: 2;
-    padding-top: 10px;
     background-color: #e0e0e0;
     text-align: center;
+    flex-direction: column;
 }
 .opo-player{
     padding-top: 10px;
     text-align: center;
     flex-grow: 1;
-    display:flex;
+    display:block;
     flex-direction: column;
 }
 .opo-player:hover{
@@ -108,4 +118,9 @@
 
 .opo-player:hover .closeicon{
     opacity: 1;
+}
+
+.hexTable{
+    width: 440px;
+    height: 440px;
 }

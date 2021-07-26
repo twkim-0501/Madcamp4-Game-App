@@ -9,6 +9,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import {useLocation, useHistory} from "react-router";
 import {useSelector} from 'react-redux'
 import axios from 'axios'
+import Hexagon from 'react-hexagon'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -75,13 +76,13 @@ function MG_GamePage() {
                 console.log("i found room Info", response.data)
                 if (response.data) {
                     axios.post('/api/gameroom/getPlayersInfo', response.data)
-                    .then(response => {
-                        console.log("detail playersInfo", response.data)
-                        if(response.data){
-                            setPlayers(response.data)
-                            Socket.emit('enterRoom', tempRoomInfo, response.data)
-                        }
-                    })
+                        .then(response => {
+                            console.log("detail playersInfo", response.data)
+                            if(response.data){
+                                setPlayers(response.data)
+                                Socket.emit('enterRoom', tempRoomInfo, response.data)
+                            }
+                        })
                     setRoomInfo(response.data);
                     
                 }
@@ -147,7 +148,6 @@ function MG_GamePage() {
         return (
             <div className='chip' ref={drag} style={{ opacity }}>
                 {canDrag? "true" : "false"}
-                {/* We will move this item */}
             </div>
         )
     }
@@ -171,11 +171,16 @@ function MG_GamePage() {
         })
 
         return (
-            <div class="table" ref={drop}>
+            <div ref={drop}>
+                <Hexagon className='hexTable'>
                 {Bet}
+                </Hexagon>
             </div>
+                
+                
         )
     }
+
 
 
     return (
@@ -190,37 +195,41 @@ function MG_GamePage() {
             
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
+                    {
+                        Players.map((player, index) =>
+                            (index % 2 == 0) 
+                            ? <Oppo_player player={player?.name} index={index}></Oppo_player>
+                            : null
+                        )
+                    }
+                </div>
+
+                <div class="middlebox">
                     <Table />
                 </div>
+
                 <div class="rightbox">
                     <div class="oponent-status">
                         {
                             Players.map((player, index) =>
-                                (player?._id != playerId) ?
-                                <Oppo_player player={player?.name} index={index}></Oppo_player>
+                                (index % 2 == 1) 
+                                ? <div>
+                                    {player?.name}
+                                    <Oppo_player player={player?.name} index={index}></Oppo_player>
+                                    {(player?._id == playerId) 
+                                    ? <div>
+                                        {Playing ? MyChips : null}
+                                        {
+                                            Dragable
+                                            ? <Chip />
+                                            : <FixedChip /> 
+                                        } 
+                                    </div>
+                                    : null}
+                                </div>
                                 : null
                             )
-                            
                         }
-                        {/* {
-                            Dragable
-                            ? <Chip />
-                            : <FixedChip /> 
-                        } */}
-                    </div>
-                    <div class="game-status">{Items}</div>
-                    <div class="my-status">
-                        <div>{"Player "+playerName}</div>
-                        <div>
-                        {Playing ? MyChips : null}
-                        {
-                            Dragable
-                            ? <Chip />
-                            : <FixedChip /> 
-                        }
-                        </div>
-
-                        
                     </div>
                 </div>
             </DndProvider>

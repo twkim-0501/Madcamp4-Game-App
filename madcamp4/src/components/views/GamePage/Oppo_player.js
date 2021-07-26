@@ -15,10 +15,9 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 function Oppo_player(props) {
-  const {player, index, userChips} = props;
+  const {player, index} = props;
 
   const [Posts, setPosts] = useState([])
-  const [userchips, setUserchips] = useState(userChips)
 
   useEffect(() => {
   }, [])
@@ -27,13 +26,7 @@ function Oppo_player(props) {
       <div class="opo-player">
         <div>
           {"Player "+player}
-          {
-            userChips 
-            ? userChips.map((num, idx) => 
-                (index == idx) ? num : null
-              )
-            : null
-          }
+          
           <CloseIcon class="closeicon"/>
         </div>
         
