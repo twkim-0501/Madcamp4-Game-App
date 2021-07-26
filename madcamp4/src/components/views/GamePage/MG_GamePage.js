@@ -25,6 +25,7 @@ function MG_GamePage() {
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
     const user = useSelector(state => state.user)
     const playerId = user.userData?._id
+    const playerName = user.userData?.name
     const [Socket, setSocket] = useState()
     const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
@@ -35,6 +36,7 @@ function MG_GamePage() {
     const [Dragable, setDragable] = useState(true)
 
     useEffect(() => {
+        // setSocket(io('http://192.249.18.179:80'))
         setSocket(io('http://192.249.18.171:80'))
     }, [])
     
@@ -42,7 +44,10 @@ function MG_GamePage() {
         if (Socket) {
             Socket.on('playerCome', (newPlayers) => {
                 console.log('new player come')
-                setPlayers(newPlayers)
+                if(newPlayers){
+                    setPlayers(newPlayers)
+                }
+                
             })
 
             Socket.on('playerLeave', (newPlayers) => {
@@ -54,22 +59,25 @@ function MG_GamePage() {
                 console.log('Start Game!!!', str)
             })
         }
-        
     })
 
     useEffect(() => {
         //console.log("useEffectid", playerId);
         axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
-                console.log("i found room id", response.data)
-        
+                var tempRoomInfo = response.data
+                console.log("i found room Info", response.data)
                 if (response.data) {
                     axios.post('/api/gameroom/getPlayersInfo', response.data)
                     .then(response => {
-                        setPlayers(response.data)
+                        console.log("detail playersInfo", response.data)
+                        if(response.data){
+                            setPlayers(response.data)
+                            Socket.emit('enterRoom', tempRoomInfo,response.data)
+                        }
                     })
                     setRoomInfo(response.data);
-                    Socket.emit('enterRoom', response.data)
+                    
                 }
             })
     }, [user])
@@ -171,12 +179,15 @@ function MG_GamePage() {
                     <div class="oponent-status">
                         {
                             Players.map(player =>
-                                    (<Oppo_player player={player.name}></Oppo_player>)
-                                )
+                                (player?._id != playerId) ?
+                                <Oppo_player player={player?.name}></Oppo_player> :
+                                null
+                            )
                         }
                     </div>
                     <div class="game-status">{playerId}</div>
                     <div class="my-status">
+                        <div>{"Player "+playerName}</div>
                         {MyChips}
                         {
                             Dragable

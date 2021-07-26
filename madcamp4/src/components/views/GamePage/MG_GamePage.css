@@ -34,7 +34,6 @@
     background-color: #efe886;
     display:flex;
     flex-direction: row;
-    padding-top: 10px;
 }
 .game-status{
     flex-grow: 1;
@@ -42,14 +41,23 @@
 }
 .my-status{
     flex-grow: 2;
+    padding-top: 10px;
     background-color: #e0e0e0;
+    text-align: center;
 }
 .opo-player{
-    
+    padding-top: 10px;
     text-align: center;
     flex-grow: 1;
     display:flex;
     flex-direction: column;
+}
+.opo-player:hover{
+    background-color: antiquewhite;
+}
+
+.opo-player + .opo-player {
+    border-left: 0.7px solid #868e96;
 }
 
 .chip {
@@ -86,4 +94,18 @@
     position:absolute;
     left: 20px;
     top: 20px;
+}
+
+.closeicon{
+    position: block;
+    opacity: 0;
+    float: right;
+    width: 20px;
+    height: 20px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+
+.opo-player:hover .closeicon{
+    opacity: 1;
 }
