@@ -6,7 +6,7 @@ import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {useLocation} from "react-router";
+import {useLocation, useHistory} from "react-router";
 import {useSelector} from 'react-redux'
 import axios from 'axios'
 
@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 function MG_GamePage() {
+    const history = useHistory();
     // const location = useLocation();
     // const [RoomId, setRoomId] = useState(location.state?.roomId)
     const user = useSelector(state => state.user)
@@ -105,6 +106,7 @@ function MG_GamePage() {
                     if(response.data){
                         Socket.emit('exitRoom', tempRoomInfo, response.data)
                     }
+                    history.push('/')
                 })
             }
             
@@ -175,9 +177,9 @@ function MG_GamePage() {
 
     return (
         <div class="mainbox">
-            <a href="/">
+            {/* <a href="/"> */}
                 <button class="exitBtn" onClick={exitRoom}>나가기</button>
-            </a>
+            {/* </a> */}
             <button class="startBtn" onClick={startClick}>Game Start</button>
  
             <div>
