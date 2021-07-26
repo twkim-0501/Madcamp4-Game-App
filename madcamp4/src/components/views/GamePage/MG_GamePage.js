@@ -75,7 +75,7 @@ function MG_GamePage() {
                         console.log("detail playersInfo", response.data)
                         if(response.data){
                             setPlayers(response.data)
-                            Socket.emit('enterRoom', tempRoomInfo,response.data)
+                            Socket.emit('enterRoom', tempRoomInfo, response.data)
                         }
                     })
                     setRoomInfo(response.data);
@@ -89,6 +89,35 @@ function MG_GamePage() {
             setDragable(false)
         }
     }, [MyChips])
+
+
+    const exitRoom = (e) => {
+        console.log("before exitRoom", playerId, roomInfo._id)
+        axios.post('/api/gameroom/exitRoom',
+            {playerId: playerId, roomId: roomInfo._id}
+        ).then((response) => {
+            var tempRoomInfo = response.data
+            console.log('exitRoom')
+            if (response.data) {
+                axios.post('/api/gameroom/getPlayersInfo', response.data)
+                .then(response => {
+                    console.log("detail playersInfo", response.data)
+                    if(response.data){
+                        Socket.emit('exitRoom', tempRoomInfo, response.data)
+                    }
+                })
+            }
+            
+        })
+    }
+
+    const startClick = () => {
+        Socket.emit('startClick', roomInfo)
+    }
+
+    const testFunc = (e) => {
+        console.log(e.target.value)
+    }
 
 
     const Chip = () => {
@@ -143,29 +172,6 @@ function MG_GamePage() {
         )
     }
 
-    const exitRoom = (e) => {
-        console.log("before exitRoom",playerId, roomInfo._id)
-        axios.post('/api/gameroom/exitRoom',
-            {playerId: playerId, roomId: roomInfo._id}
-        ).then(() => {
-            console.log('exitRoom')
-            axios.post('/api/gameroom/getPlayersInfo', roomInfo)
-                .then(response => {
-                    console.log("detail playersInfo", response.data)
-                    if(response.data){
-                        Socket.emit('exitRoom', roomInfo, response.data)
-                    }
-                })
-        })
-    }
-
-    const startClick = () => {
-        Socket.emit('startClick', roomInfo)
-    }
-
-    const testFunc = (e) => {
-        console.log(e.target.value)
-    }
 
     return (
         <div class="mainbox">
