@@ -4,7 +4,7 @@ var current_num = 0;
 //roomInfo라는 json에 roomtitle, 그리고
 //userID에 개설자(User의 _id) 등을 넣어서 보냄
 function addRoom(roomInfo,callback){
-    console.log(roomInfo)
+   //console.log(roomInfo)
     initplayers = [roomInfo.user._id, ]
 
     const newRoom = new GameroomModel({
@@ -13,7 +13,7 @@ function addRoom(roomInfo,callback){
         players: initplayers
     })
     newRoom.save((err,res) => {
-        console.log("newroom id", newRoom._id)
+        //console.log("newroom id", newRoom._id)
         callback(newRoom._id);
     });
 }
@@ -27,6 +27,9 @@ function getAll(callback){
 function joinRoom(joinInfo, callback){
     const {roomId, playerId} = joinInfo;
     GameroomModel.findOne({_id: roomId}, (err,res) => {
+        if(res.players == null){
+            callback();
+        }
         if(res.players.includes(playerId)){
             callback();
         }
@@ -39,7 +42,7 @@ function joinRoom(joinInfo, callback){
     })
 }
 function findCurrentRoom(playerId, callback){
-    //console.log("playerid", playerId)
+    console.log("playerid", playerId)
     if(playerId){
         GameroomModel.find({}, (err,res) => {
             var currentRoom = res.filter(room => room.players.includes(playerId));
@@ -53,12 +56,10 @@ function findCurrentRoom(playerId, callback){
 }
 function exitRoom(exitInfo, callback){
     const {playerId, roomId} = exitInfo;
+    console.log("exitInfo",exitInfo)
     GameroomModel.findOne({_id: roomId}, (err, res) => {
-        if(res.players == null){
-            callback();
-        }
         var afterplayers = res.players.filter((player) => (player != playerId));
-        console.log(afterplayers);
+        //console.log(afterplayers);
         if(res.players.includes(playerId)){
             GameroomModel.findOneAndUpdate({_id: roomId}, {
                 players: afterplayers
@@ -75,7 +76,7 @@ function exitRoom(exitInfo, callback){
 async function getPlayersInfo(roomInfo, callback){
     const roomId = roomInfo._id;
     var playerList = await GameroomModel.findOne({_id: roomId}).populate('players')
-    console.log("playerlist",playerList.players);
+    //console.log("playerlist",playerList.players);
     callback(playerList.players);
 }
 

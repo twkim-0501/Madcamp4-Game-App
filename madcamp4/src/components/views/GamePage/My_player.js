@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import "./MG_GamePage.css"
+import StarIcon from '@material-ui/icons/Star';
 import { makeStyles } from '@material-ui/core/styles';
 
 
 function My_player(props) {
-    const {playerName, MyChips, Chip, FixedChip, Dragable} = props;
+    const {playerName, playerId, MyChips, Chip, FixedChip, Dragable, host} = props;
     useEffect(() => {
     }, [])
   
     return (
         <div class="my-status">
-            <div>{"Player "+playerName}</div>
+            <div>
+                {
+                    host?._id == playerId ?
+                    <span class="staricon">
+                        <StarIcon style={{color: 'yellow'}}/>
+                    </span> :
+                    null
+                }
+                {"Player "+playerName}
+            </div>
             <div>{MyChips}</div>
             <div>
             {
