@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./MG_GamePage.css"
 import { makeStyles } from '@material-ui/core/styles';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,13 +22,17 @@ function Oppo_player(props) {
 
   return (
       <div class="opo-player">
-        <div>{"player "+player}</div>
+        <div>
+          {"Player "+player}
+          <CloseIcon class="closeicon"/>
+        </div>
+        
         <div>
           {
             
           }
         </div>
-        <div></div>
+        
       </div>
   )
 }
