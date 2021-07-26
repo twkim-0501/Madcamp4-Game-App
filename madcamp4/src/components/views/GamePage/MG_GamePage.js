@@ -42,7 +42,10 @@ function MG_GamePage() {
         if (Socket) {
             Socket.on('playerCome', (newPlayers) => {
                 console.log('new player come')
-                setPlayers(newPlayers)
+                if(newPlayers){
+                    setPlayers(newPlayers)
+                }
+                
             })
 
             Socket.on('playerLeave', (newPlayers) => {
@@ -54,22 +57,25 @@ function MG_GamePage() {
                 console.log('Start Game!!!')
             })
         }
-        
     })
 
     useEffect(() => {
         //console.log("useEffectid", playerId);
         axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
+                var tempRoomInfo = response.data
                 console.log("i found room id", response.data)
-        
                 if (response.data) {
+
                     axios.post('/api/gameroom/getPlayersInfo', response.data)
                     .then(response => {
-                        setPlayers(response.data)
+                        if(response.data){
+                            setPlayers(response.data)
+                            Socket.emit('enterRoom', tempRoomInfo,response.data)
+                        }
                     })
                     setRoomInfo(response.data);
-                    Socket.emit('enterRoom', response.data)
+                    
                 }
             })
     }, [user])
@@ -170,7 +176,7 @@ function MG_GamePage() {
                     <div class="oponent-status">
                         {
                             Players.map(player =>
-                                    (<Oppo_player player={player.name}></Oppo_player>)
+                                    (<Oppo_player player={player?.name}></Oppo_player>)
                                 )
                         }
                     </div>
