@@ -30,7 +30,7 @@
     justify-content: space-between;
 }
 .oponent-status{
-    flex-grow: 2;
+    flex-grow: 1.5;
     background-color: #efe886;
     display:flex;
     flex-direction: row;
@@ -40,7 +40,7 @@
     background-color: aqua;
 }
 .my-status{
-    flex-grow: 2;
+    flex-grow: 1;
     padding-top: 10px;
     background-color: #e0e0e0;
     text-align: center;

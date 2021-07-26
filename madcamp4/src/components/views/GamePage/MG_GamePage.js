@@ -3,6 +3,7 @@ import "./MG_GamePage.css"
 import {withRouter} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
+import My_player from './My_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -31,15 +32,24 @@ function MG_GamePage() {
     const [roomInfo, setRoomInfo] = useState()
     const [TotalItems, setTotalItems] = useState([])
     const [Players, setPlayers] = useState(["waiting"])
+    const [host, setHost] = useState()
     //_id, name 등을 이용가능
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
+ 
 
     useEffect(() => {
         // setSocket(io('http://192.249.18.179:80'))
         setSocket(io('http://192.249.18.171:80'))
     }, [])
+
+    useEffect(() => {
+        if(Players != null){
+            console.log(Players[0])
+            setHost(Players[0])
+        }
+    }, [Players])
     
     useEffect(() => {
         if (Socket) {
@@ -196,20 +206,14 @@ function MG_GamePage() {
                         {
                             Players.map(player =>
                                 (player?._id != playerId) ?
-                                <Oppo_player player={player?.name}></Oppo_player> :
+                                <Oppo_player player={player}></Oppo_player> :
                                 null
                             )
                         }
                     </div>
                     <div class="game-status">{playerId}</div>
                     <div class="my-status">
-                        <div>{"Player "+playerName}</div>
-                        {MyChips}
-                        {
-                            Dragable
-                            ? <Chip />
-                            : <FixedChip /> 
-                        }
+                        <My_player playerName={playerName} MyChips={MyChips} Chip={Chip} FixedChip={FixedChip} Dragable={Dragable}/>
                     </div>
                 </div>
             </DndProvider>

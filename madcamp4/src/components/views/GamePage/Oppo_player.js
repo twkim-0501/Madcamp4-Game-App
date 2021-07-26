@@ -23,7 +23,7 @@ function Oppo_player(props) {
   return (
       <div class="opo-player">
         <div>
-          {"Player "+player}
+          {"Player "+player?.name}
           <CloseIcon class="closeicon"/>
         </div>
         
