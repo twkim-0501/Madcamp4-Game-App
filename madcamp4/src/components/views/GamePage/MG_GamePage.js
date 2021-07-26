@@ -49,8 +49,7 @@ function MG_GamePage() {
                 console.log('new player come')
                 if(newPlayers){
                     setPlayers(newPlayers)
-                }
-                
+                }                
             })
 
             Socket.on('playerLeave', (newPlayers) => {
@@ -181,9 +180,7 @@ function MG_GamePage() {
 
     return (
         <div class="mainbox">
-            {/* <a href="/"> */}
-                <button class="exitBtn" onClick={exitRoom}>나가기</button>
-            {/* </a> */}
+            <button class="exitBtn" onClick={exitRoom}>나가기</button>
             <button class="startBtn" onClick={startClick}>Game Start</button>
  
             <div>
@@ -198,10 +195,10 @@ function MG_GamePage() {
                 <div class="rightbox">
                     <div class="oponent-status">
                         {
-                            Players.map(player =>
+                            Players.map((player, index) =>
                                 (player?._id != playerId) ?
-                                <Oppo_player player={player?.name}></Oppo_player> :
-                                null
+                                <Oppo_player player={player?.name} index={index}></Oppo_player>
+                                : null
                             )
                             
                         }
@@ -215,7 +212,7 @@ function MG_GamePage() {
                     <div class="my-status">
                         <div>{"Player "+playerName}</div>
                         <div>
-                        {MyChips}
+                        {Playing ? MyChips : null}
                         {
                             Dragable
                             ? <Chip />

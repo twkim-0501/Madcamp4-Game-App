@@ -36,8 +36,7 @@ module.exports = function(io) {
         socket.on('startClick', (roomInfo) => {
             console.log('startClick')
             io.to(roomInfo._id).emit('startGame', {
-                items: items
-
+                items: items,
             })
         });
     
