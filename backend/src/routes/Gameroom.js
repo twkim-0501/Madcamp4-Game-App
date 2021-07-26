@@ -34,8 +34,8 @@ router.post('/joinRoom', (req,res) => {
 
 router.post('/exitRoom', (req,res) => {
     //console.log(req.body)
-    db.exitRoom(req.body, ()=> {
-        res.status(200).send();
+    db.exitRoom(req.body, (_id)=> {
+        res.status(200).send(_id);
     })
 })
 

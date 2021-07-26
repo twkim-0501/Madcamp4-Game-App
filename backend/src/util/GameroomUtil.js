@@ -63,7 +63,7 @@ function exitRoom(exitInfo, callback){
             GameroomModel.findOneAndUpdate({_id: roomId}, {
                 players: afterplayers
             },
-            (error) => {callback();});
+            (err, res) => {callback(res);});
         }
         else{
             console.log("현재 게임 방에 존재하지 않습니다.");
