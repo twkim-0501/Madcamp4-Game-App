@@ -3,10 +3,11 @@ import "./MG_GamePage.css"
 import {withRouter} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
+import My_player from './My_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {useLocation} from "react-router";
+import {useLocation, useHistory} from "react-router";
 import {useSelector} from 'react-redux'
 import axios from 'axios'
 
@@ -20,51 +21,74 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.text.secondary,
     },
 }));
+
+let Socket
 function MG_GamePage() {
-    // const location = useLocation();
-    // const [RoomId, setRoomId] = useState(location.state?.roomId)
+    const history = useHistory();
     const user = useSelector(state => state.user)
     const playerId = user.userData?._id
     const playerName = user.userData?.name
-    const [Socket, setSocket] = useState()
+    // const [Socket, setSocket] = useState()
     const [roomInfo, setRoomInfo] = useState()
-    const [TotalItems, setTotalItems] = useState([])
+    const [Items, setItems] = useState("Wait...")
     const [Players, setPlayers] = useState(["waiting"])
-    //_id, name 등을 이용가능
+    const [host, setHost] = useState()
     const [MyChips, setMyChips] = useState(10)
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
-
-    useEffect(() => {
-        // setSocket(io('http://192.249.18.179:80'))
-        setSocket(io('http://192.249.18.171:80'))
-    }, [])
+    const [Playing, setPlaying] = useState(false)
     
     useEffect(() => {
-        if (Socket) {
-            Socket.on('playerCome', (newPlayers) => {
-                console.log('new player come')
-                if(newPlayers){
-                    setPlayers(newPlayers)
-                }
-                
-            })
+        Socket = io('http://192.249.18.179:80')
+        //Socket = io('http://192.249.18.171:80')
+        Socket.on('playerCome', (newPlayers) => {
+            console.log('new player come')
+            if(newPlayers){
+                setPlayers(newPlayers)
+            }
+        })
 
-            Socket.on('playerLeave', (newPlayers) => {
-                console.log('player leave')
-                if(newPlayers){
-                    setPlayers(newPlayers)
-                }
+        Socket.on('playerLeave', (newPlayers) => {
+            console.log('player leave')
+            if(newPlayers){
+                setPlayers(newPlayers)
+            }
+        })
+        Socket.on('startGame', (data) => {
+            // 알람창 잠깐 뜨기
+            console.log('Start Game!!!', data.items)
+            setPlaying(true)
+            setItems(data.items)
+        })
+        Socket.on('unexpectedLeave', (leaveId) => {
+            axios.post('/api/gameroom/findCurrentRoom', {user: leaveId})
+            .then(res => {
+                console.log("undexpectedcheck",leaveId, res.data);
+                axios.post('/api/gameroom/exitRoom',
+                {playerId: leaveId, roomId: res.data})
+                .then(res => {
+                    if(res.data){
+                        axios.post('/api/gameroom/getPlayersInfo', res.data)
+                        .then(res => {
+                            setPlayers(res.data)
+                })
+                    }
+                })
             })
+            //console.log(leaveId, roomInfo);
+            
+        } )
+    }, [])
 
-            Socket.on('startGame', (str) => {
-                console.log('Start Game!!!', str)
-            })
+    //player 업데이트
+    useEffect(() => {
+        if(Players != null){
+            //console.log(Players[0])
+            setHost(Players[0])
         }
-    })
+    }, [Players])
 
     useEffect(() => {
-        //console.log("useEffectid", playerId);
         axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(response => {
                 var tempRoomInfo = response.data
@@ -75,7 +99,7 @@ function MG_GamePage() {
                         console.log("detail playersInfo", response.data)
                         if(response.data){
                             setPlayers(response.data)
-                            Socket.emit('enterRoom', tempRoomInfo,response.data)
+                            Socket.emit('enterRoom', tempRoomInfo, response.data, playerId)
                         }
                     })
                     setRoomInfo(response.data);
@@ -89,6 +113,32 @@ function MG_GamePage() {
             setDragable(false)
         }
     }, [MyChips])
+
+    const exitRoom = (e) => {
+        //console.log("before exitRoom", playerId, roomInfo._id)
+        axios.post('/api/gameroom/exitRoom',
+            {playerId: playerId, roomId: roomInfo._id}
+        ).then((response) => {
+            var tempRoomInfo = response.data
+            console.log('exitRoom')
+            if (response.data) {
+                axios.post('/api/gameroom/getPlayersInfo', response.data)
+                .then(response => {
+                    //console.log("detail playersInfo", response.data)
+                    if(response.data){
+                        Socket.emit('exitRoom', tempRoomInfo, response.data)
+                    }
+                    history.push('/')
+                })
+            }
+            
+        })
+    }
+
+    const startClick = () => {
+        Socket.emit('startClick', roomInfo)
+        Ordering()
+    }
 
 
     const Chip = () => {
@@ -143,36 +193,22 @@ function MG_GamePage() {
         )
     }
 
-    const exitRoom = (e) => {
-        console.log("before exitRoom",playerId, roomInfo._id)
-        axios.post('/api/gameroom/exitRoom',
-            {playerId: playerId, roomId: roomInfo._id}
-        ).then(() => {
-            console.log('exitRoom')
-            axios.post('/api/gameroom/getPlayersInfo', roomInfo)
-                .then(response => {
-                    console.log("detail playersInfo", response.data)
-                    if(response.data){
-                        Socket.emit('exitRoom', roomInfo, response.data)
-                    }
-                })
-        })
-    }
-
-    const startClick = () => {
-        Socket.emit('startClick', roomInfo)
-    }
-
-    const testFunc = (e) => {
-        console.log(e.target.value)
+    const Ordering = () => {
+        var ResultOrder = Players.sort(() => Math.random() - 0.5);
+        console.log(ResultOrder)
     }
 
     return (
         <div class="mainbox">
-            <a href="/">
+            {/* <a href="/"> */}
                 <button class="exitBtn" onClick={exitRoom}>나가기</button>
-            </a>
-            <button class="startBtn" onClick={startClick}>Game Start</button>
+            {/* </a> */}
+            {
+                (playerId == host?._id) ?
+                <button class="startBtn" onClick={startClick}>Game Start</button> :
+                null
+            }
+            
  
             <div>
                 <div class="roomNumber">{"방 번호: "+ roomInfo?.roomIndex}</div>
@@ -188,20 +224,17 @@ function MG_GamePage() {
                         {
                             Players.map(player =>
                                 (player?._id != playerId) ?
-                                <Oppo_player player={player?.name}></Oppo_player> :
+                                <Oppo_player player={player} host={host}></Oppo_player> :
                                 null
                             )
+                            
                         }
                     </div>
-                    <div class="game-status">{playerId}</div>
+                    <div class="game-status">{Items}</div>
                     <div class="my-status">
-                        <div>{"Player "+playerName}</div>
-                        {MyChips}
-                        {
-                            Dragable
-                            ? <Chip />
-                            : <FixedChip /> 
-                        }
+                        <My_player playerName={playerName} playerId={playerId}
+                        MyChips={MyChips} Chip={Chip} FixedChip={FixedChip} 
+                        Dragable={Dragable} host={host}/>
                     </div>
                 </div>
             </DndProvider>
