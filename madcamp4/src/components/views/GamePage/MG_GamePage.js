@@ -52,7 +52,9 @@ function MG_GamePage() {
 
             Socket.on('playerLeave', (newPlayers) => {
                 console.log('player leave')
-                setPlayers(newPlayers)
+                if(newPlayers){
+                    setPlayers(newPlayers)
+                }
             })
 
             Socket.on('startGame', (str) => {
@@ -147,7 +149,13 @@ function MG_GamePage() {
             {playerId: playerId, roomId: roomInfo._id}
         ).then(() => {
             console.log('exitRoom')
-            Socket.emit('exitRoom', roomInfo)
+            axios.post('/api/gameroom/getPlayersInfo', roomInfo)
+                .then(response => {
+                    console.log("detail playersInfo", response.data)
+                    if(response.data){
+                        Socket.emit('exitRoom', roomInfo, response.data)
+                    }
+                })
         })
     }
 

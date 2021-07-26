@@ -34,9 +34,9 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('playerCome', usersInfo)
 	});
 
-	socket.on('exitRoom', (roomInfo) => {
+	socket.on('exitRoom', (roomInfo, usersInfo) => {
 		console.log("exit!")
-		socket.broadcast.emit('playerLeave', roomInfo.players)
+		socket.broadcast.emit('playerLeave', usersInfo)
 		socket.leave(roomInfo._id)
 	});
 
