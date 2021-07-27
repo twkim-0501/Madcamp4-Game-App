@@ -31,6 +31,9 @@ const userSchema = mongoose.Schema({
     },
     tokenExp: {
         type: Number
+    },
+    nowSocket: {
+        type: String
     }
 })
 

@@ -150,7 +150,7 @@ const CarouserContainer = styled(Relative)`
   position: absolute;
 
   cursor: pointer;
-  margin-top: 90px;
+  margin-top: 80px;
 
   top: 50%;
   z-index: 1;
