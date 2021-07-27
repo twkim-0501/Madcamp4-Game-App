@@ -1,4 +1,9 @@
-.mainbox{
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #fef8f8;
+}
+
+.mainbox {
     display: flex;
     width: 100%;
     height: 100vh;
@@ -8,7 +13,8 @@
     align-content: space-between;
     flex-wrap: nowrap;
 }
-.leftbox{
+
+.leftbox {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -16,31 +22,34 @@
     text-align: center;
     background-color: #dddddd;
 }
-.middlebox{
+
+.middlebox {
     flex-grow: 3;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: center;
     background-color: #dddddd;
+    align-items: center;
 }
-.rightbox{
+
+.rightbox {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     text-align: center;
-    align-items: stretch;
     background-color: #dddddd;
 }
-.table{
-    background-color:#86ef94;
-    width:200px;
-    height:200px;
-    text-align:center;
-    font-size:12px;
+
+.table {
+    background-color: #86ef94;
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    font-size: 12px;
 }
-.oponent-status{
+
+.oponent-status {
     flex-grow: 1;
     display: flex;
     background-color: #e0e0e0;
@@ -48,55 +57,77 @@
     flex-direction: column;
     align-items: stretch;
 }
-.game-status{
+
+.game-status {
     flex-grow: 1;
     background-color: aqua;
 }
-.my-status{
+
+.my-status {
     flex-grow: 2;
     background-color: #e0e0e0;
     text-align: center;
     flex-direction: column;
 }
-.opo-player-right{
+
+.opo-player-right {
     background-color: #ffffff;
     text-align: center;
     flex-grow: 1;
-    display:block;
+    display: block;
     flex-direction: column;
     border-radius: 20px 0% 0% 20px;
     margin-left: 15px;
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
-.opo-player-left{
+
+.opo-player-left {
     background-color: #ffffff;
     text-align: center;
     flex-grow: 1;
-    display:block;
+    display: block;
     flex-direction: column;
     border-radius: 0% 20px 20px 0%;
     margin-right: 15px;
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
-.opo-player-right:hover{
+
+.opo-player-right:hover {
     background-color: #f0f0f0;
 }
-.opo-player-right:first-child{
+
+.opo-player-right:first-child {
     margin-top: 30px;
     margin-bottom: 30px;
 }
-.opo-player-right + .opo-player-right {
+
+.opo-player-right+.opo-player-right {
     margin-bottom: 30px;
 }
-.opo-player-left:hover{
+
+.opo-player-left:hover {
     background-color: #f0f0f0;
 }
-.opo-player-left:first-child{
+
+.opo-player-left:first-child {
     margin-top: 30px;
     margin-bottom: 30px;
 }
-.opo-player-left + .opo-player-left {
+
+.opo-player-left+.opo-player-left {
     margin-bottom: 30px;
+}
+
+.cardShow {
+    background-color: #4aad4a;
+    width: 340px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    flex-grow: 1;
+    border-radius: 80px;
+    border:15px solid #a95555;
+    /* box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.2); */
 }
 
 .chip {
@@ -108,33 +139,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
-}
-.exitBtn{
-    /* position:absolute;
-    left: 1000px;
-    bottom: 20px; */
-    width: 75px;
-    height: 50px; 
-    /* flex-grow: 1; */
-}
-.startBtn{
-    /* position:absolute;
-    left: 100px;
-    bottom: 20px;*/
-    width: 75px;
-    height: 50px; 
-    /* flex-grow: 1; */
-}
-.roomTitle{
-    position:absolute;
-    left: 20px;
-    top: 40px;
-}
-.roomNumber{
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }
 
-.closeicon{
+.exitBtn {
+    position: absolute;
+    left: 1100px;
+    bottom: 30px;
+    width: 75px;
+    height: 50px;
+    flex-grow: 1;
+}
+
+.startBtn {
+    position: absolute;
+    left: 1100px;
+    bottom: 100px;
+    width: 75px;
+    height: 50px;
+    flex-grow: 1;
+}
+
+.roomTitle {
+    position: absolute;
+    top: 5px;
+}
+
+.closeicon {
     position: block;
     opacity: 0;
     float: right;
@@ -144,11 +175,12 @@
     cursor: pointer;
 }
 
-.opo-player:hover .closeicon{
+.opo-player:hover .closeicon {
     opacity: 1;
 }
 
-.hexTable{
+.hexTable {
     width: 440px;
     height: 440px;
+    background-image: #ff0000;
 }
