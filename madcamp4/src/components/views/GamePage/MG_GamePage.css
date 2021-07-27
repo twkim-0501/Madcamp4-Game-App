@@ -13,9 +13,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #e0e0e0;
     text-align: center;
-    align-items: stretch;
+    background-color: #dddddd;
 }
 .middlebox{
     flex-grow: 3;
@@ -23,15 +22,16 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    background-color: #dddddd;
 }
 .rightbox{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: #e0e0e0;
     text-align: center;
     align-items: stretch;
+    background-color: #dddddd;
 }
 .table{
     background-color:#86ef94;
@@ -58,19 +58,45 @@
     text-align: center;
     flex-direction: column;
 }
-.opo-player{
-    padding-top: 10px;
+.opo-player-right{
+    background-color: #ffffff;
     text-align: center;
     flex-grow: 1;
     display:block;
     flex-direction: column;
+    border-radius: 20px 0% 0% 20px;
+    margin-left: 15px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
-.opo-player:hover{
-    background-color: antiquewhite;
+.opo-player-left{
+    background-color: #ffffff;
+    text-align: center;
+    flex-grow: 1;
+    display:block;
+    flex-direction: column;
+    border-radius: 0% 20px 20px 0%;
+    margin-right: 15px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
-
-.opo-player + .opo-player {
-    border-left: 0.7px solid #868e96;
+.opo-player-right:hover{
+    background-color: #f0f0f0;
+}
+.opo-player-right:first-child{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.opo-player-right + .opo-player-right {
+    margin-bottom: 30px;
+}
+.opo-player-left:hover{
+    background-color: #f0f0f0;
+}
+.opo-player-left:first-child{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.opo-player-left + .opo-player-left {
+    margin-bottom: 30px;
 }
 
 .chip {
@@ -106,9 +132,6 @@
     top: 40px;
 }
 .roomNumber{
-    position:absolute;
-    left: 20px;
-    top: 20px;
 }
 
 .closeicon{

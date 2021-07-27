@@ -15,46 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Oppo_player(props) {
-  const { player, myId, MyChips, Playing } = props;
-
-  const [Posts, setPosts] = useState([])
-
-  useEffect(() => {
-  }, [])
-
-  //   const Chip = () => {
-  //     const [{ isDragging, canDrag }, drag] = useDrag({
-  //         type: 'chip',
-  //         item: { name: 'chip' },
-  //         end: (item, monitor) => {
-  //             const dropResult = monitor.getDropResult()
-  //             if (dropResult && dropResult.name === 'table') {
-  //                 setMyChips(MyChips - 1)
-  //                 setBet(Bet + 1)
-  //             }
-  //         },
-  //         collect: (monitor) => ({
-  //             isDragging: monitor.isDragging(),
-  //             canDrag: monitor.canDrag()
-  //         }),
-  //     });
-
-  //     const opacity = isDragging ? 0.4 : 1;
-
-  //     return (
-  //         <div className='chip' ref={drag} style={{ opacity }}>
-  //             {canDrag? "true" : "false"}
-  //         </div>
-  //     )
-  // }
-
-  // const FixedChip = () => {
-  //     return (
-  //         <div className='chip'>
-  //             fix
-  //         </div>
-  //     )
-  // }
+  const { player } = props;
 
   return (
     <div>

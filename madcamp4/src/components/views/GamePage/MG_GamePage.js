@@ -10,6 +10,8 @@ import { useLocation, useHistory } from "react-router";
 import { useSelector } from 'react-redux'
 import axios from 'axios'
 import Hexagon from 'react-hexagon'
+import Card from '@material-ui/core/Card';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
 }));
+
 function MG_GamePage() {
     const history = useHistory();
     // const location = useLocation();
@@ -36,6 +39,8 @@ function MG_GamePage() {
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
     const [Playing, setPlaying] = useState(false)
+
+    const waiting = [0, 1, 2, 3, 4, 5]
 
 
     useEffect(() => {
@@ -179,60 +184,62 @@ function MG_GamePage() {
 
     return (
         <div class="mainbox">
-            <div>
-                <div class="roomNumber">{"방 번호: " + roomInfo?.roomIndex}</div>
-                <div class="roomTitle">{"방 제목: " + roomInfo?.roomTitle}</div>
-            </div>
 
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     {
-                        Players.map((player, index) =>
+                        waiting.map((index) =>
                             (index % 2 == 0)
-                                ? <div class="opo-player">
-                                    <Oppo_player player={player} />
-                                    {
-                                        (player?._id == playerId)
-                                            ? <div>
-                                                {Playing ? MyChips : null}
-                                                {Playing
-                                                    ? Dragable ? <Chip /> : <FixedChip />
-                                                    : null}
-                                            </div>
-                                            : null
-                                    }
-                                </div>
+                                ? (Players[index] != null)
+                                    ? <div class="opo-player-left">
+                                        <Oppo_player player={Players[index]} />
+                                        {
+                                            (Players[index]?._id == playerId)
+                                                ? <div>
+                                                    {Playing ? MyChips : null}
+                                                    {Playing
+                                                        ? Dragable ? <Chip /> : <FixedChip />
+                                                        : null}
+                                                </div>
+                                                : null
+                                        }
+                                    </div>
+                                    : <div class="opo-player-left">
+                                        waiting
+                                    </div>
                                 : null
                         )
                     }
                 </div>
 
                 <div class="middlebox">
+                    <div class="roomNumber">{"방 번호: " + roomInfo?.roomIndex}</div>
                     <button class="startBtn" onClick={startClick}>Game Start</button>
                     <Table />
                     <button class="exitBtn" onClick={exitRoom}>나가기</button>
-                    
                 </div>
 
                 <div class="rightbox">
                     {
-                        Players.map((player, index) =>
+                        waiting.map((index) =>
                             (index % 2 == 1)
-                                ? <div class="opo-player">
-                                    <Oppo_player player={player} />
-                                    {
-                                        (player?._id == playerId)
-                                            ? <div>
-                                                {Playing ? MyChips : null}
-                                                {
-                                                    Dragable
-                                                        ? <Chip />
-                                                        : <FixedChip />
-                                                }
-                                            </div>
-                                            : null
-                                    }
-                                </div>
+                                ? (Players[index] != null)
+                                    ? <div class="opo-player-right">
+                                        <Oppo_player player={Players[index]} />
+                                        {
+                                            (Players[index]?._id == playerId)
+                                                ? <div>
+                                                    {Playing ? MyChips : null}
+                                                    {Playing
+                                                        ? Dragable ? <Chip /> : <FixedChip />
+                                                        : null}
+                                                </div>
+                                                : null
+                                        }
+                                    </div>
+                                    : <div class="opo-player-right">
+                                        waiting
+                                    </div>
                                 : null
                         )
                     }
