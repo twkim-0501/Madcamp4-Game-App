@@ -27,7 +27,26 @@
     <title>React App</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!-- <div class="container">
+      <div class="content">
+          <h1> The Next <br> Dimension </h1>
+          <p> Journey into the next dimension with this crazy particle effect. </p>
+      </div>
+    </div>
+    <canvas class="webgl"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js" integrity="sha512-UxP+UhJaGRWuMG2YC6LPWYpFQnsSgnor0VUF3BHdD83PS/pOpN+FYbZmrYN+ISX8jnvgVUciqP/fILOXDjZSwg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/CSSRulePlugin.min.js" integrity="sha512-SuKlyVGK9c7adN5I0qO0zZt1KAXK9WpUguwgH16A3s8Wvrc1X3mum4PS9bI7223Y2v5KBzx3qTCdlVymgF0uWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const content = CSSRulePlugin.getRule('.content:before')
+        const h1 = document.querySelector('h1')
+        const p = document.querySelector('p')
+        const t1 = gsap.timeline()
+
+        t1.from(content, { delay:.5, duration: 4, cssRule: {scaleX:0}})
+        t1.to(h1, {duration:2, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%', y:'30px'}, "-=3") 
+        t1.to(p, {duration:4, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%', y:'30px'}, "-=2") 
+
+    </script> -->
     <div id="root"></div>
     <!--
       This HTML file is a template.

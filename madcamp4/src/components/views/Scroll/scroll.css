@@ -1,0 +1,54 @@
+
+.outer {
+  background-color: white;
+  font-size: 2rem;
+  width:20rem;
+  height: 30rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.inner {
+    text-align: right;
+    padding-right: 30px;
+    padding-top: 30px;
+    padding-bottom: 7px;
+    font-family: "cardfont";
+}
+
+.spade {
+    text-align: right;
+    margin-right: 24px;
+}
+
+.username {
+    text-align: center;
+    padding: 20px;
+    font-family: "cardfont";
+}
+
+.gameicon {
+    text-align: center;
+    padding: 20px;
+}
+
+.people {
+    text-align: center;
+    padding: 20px;
+    font-family: "cardfont";
+}
+
+.spade2 {
+    text-align: right;
+    padding-right: 23px;
+    transform: rotate(180deg);
+}
+
+.end {
+    text-align: right;
+    padding-bottom: 10px;
+    padding-right: 30px;
+    transform: rotate(180deg);
+    font-family: "cardfont";
+}
+

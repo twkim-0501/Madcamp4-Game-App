@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
+import "./LandingPage.css"
+// import {useSelector} from 'react-redux'
+// import io from "socket.io-client";
+// import {useHistory} from "react-router";
+
 
 function LandingPage(props) {
 
@@ -18,7 +23,7 @@ function LandingPage(props) {
             }
         })
     }
- 
+
     return (
         <div style={{
             display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -27,6 +32,7 @@ function LandingPage(props) {
             <h2>시작 페이지 (게임 목록을 볼 수 있는 화면) </h2> 
             <button onClick={onClickHandler}> Logout </button>
         </div>
+    
     )
 }
 
