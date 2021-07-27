@@ -5,21 +5,23 @@ import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
 import My_player from './My_player';
 import io from "socket.io-client";
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useSelector } from 'react-redux'
-import axios from 'axios'
-import Hexagon from 'react-hexagon'
+import { useLocation, useHistory } from "react-router";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import Hexagon from "react-hexagon";
+import Card from "@material-ui/core/Card";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-    },
-    paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+  },
 }));
 
 let Socket
@@ -41,6 +43,7 @@ function MG_GamePage() {
     const [playerBids, setPlayerBids] = useState([])
     const [BidStatus, setBidStatus] = useState([])//플레이어별 유효 bid 총합과 index
     
+    const waiting = [0, 1, 2, 3, 4, 5];
     useEffect(() => {
 
         Socket = io('http://192.249.18.179:80')
@@ -245,27 +248,7 @@ function MG_GamePage() {
             </div>
         )
     }
-
-    const Table = () => {
-        const [{ canDrop, isOver }, drop] = useDrop({
-            accept: 'chip',
-            drop: () => ({ name: 'table' }),
-            collect: (monitor) => ({
-                isOver: monitor.isOver(),
-                canDrop: monitor.canDrop()
-            })
-        })
-
-        return (
-            <div ref={drop}>
-                <Hexagon className='hexTable'>
-                    {Bet}
-                </Hexagon>
-            </div>
-        )
-    }
-
-
+  
     const NackChalClick = () => {
         /*다음턴으로 바뀜, Bet의 칩을 다가져가고 내 chip 오름, 상품도 가져감.
         */
@@ -320,104 +303,115 @@ function MG_GamePage() {
     }
     // const whoIsWinner
 
+    const Table = () => {
+        const [{ canDrop, isOver }, drop] = useDrop({
+          accept: "chip",
+          drop: () => ({ name: "table" }),
+          collect: (monitor) => ({
+            isOver: monitor.isOver(),
+            canDrop: monitor.canDrop(),
+          }),
+        });
+    
+        return (
+          <div class="cardShow" ref={drop}>
+            {/* <Hexagon className='hexTable' style={{stroke: '#000000'}} /> */}
+            -3
+          </div>
+        );
+      };
 
 
 
+  
 
-    return (
-        <div class="mainbox">
-            <div>
-                <div class="roomNumber">{"방 번호: " + roomInfo?.roomIndex}</div>
-                <div class="roomTitle">{"방 제목: " + roomInfo?.roomTitle}</div>
-            </div>
-
-            <DndProvider backend={HTML5Backend}>
-                <div class="leftbox">
+  return (
+    <div class="mainbox">
+      <DndProvider backend={HTML5Backend}>
+        <div class="leftbox">
+          {waiting.map((index) =>
+            index % 2 == 0 ? (
+              Players[index] != null ? (
+                <div class="opo-player-left">
+                  <Oppo_player 
+                        player={Players[index]} host= {host} playerBids={playerBids}
+                            BidStatus={BidStatus} Playing={Playing}
+                            myIndex = {index}
+                    />
                     {
-                        Players.map((player, index) =>
-                            (index % 2 == 0)
-                                ? <div class="opo-player">
-                                    <Oppo_player 
-                                        player={player} host= {host} playerBids={playerBids}
-                                         BidStatus={BidStatus} Playing={Playing}
-                                         myIndex = {index}
-                                    />
-                                    {
-                                        (player?._id == playerId)
-                                            ? <div>
-                                                {Playing ? Chips[myIndex] : null}
-                                                {Playing && (curTurn==myIndex)
-                                                    ? Dragable ? <Chip /> : <FixedChip />
-                                                    : null}
-                                            </div>
-                                            : null
-                                    }
-                                </div>
-                                : null
-                        )
+                        (Players[index]?._id == playerId)
+                            ? <div>
+                                {Playing ? Chips[myIndex] : null}
+                                {Playing && (curTurn==myIndex)
+                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    : null}
+                            </div>
+                            : null
                     }
                 </div>
-
-                <div class="middlebox">
-                    <button class="startBtn" onClick={startClick}>Game Start</button>
-                    {
-                        Playing ?
-                        <div>
-                            <div>{"현재 입찰 상품: " + curBid}</div>
-                            {
-                                curTurn==myIndex ?
-                                <button class="nackchalBtn" onClick={NackChalClick}>NackChalHagy</button> :
-                                null
-                            }
-                        </div> :
-                        null
-                    }
-
-                    
-                    
-                    <Table />
-                    <a href='/'>
-                        <button class="exitBtn">나가기</button>
-                    </a>
-                    <div>{"Bet: "+Bet}</div>
-                    {
-                        Playing ?
-                        <div>{"Current Turn: "+ Players[curTurn]?.name}</div> :
-                        null
-                    }
-                    
-                    
-                    
-                </div>
-
-                <div class="rightbox">
-                    {
-                        Players.map((player, index) =>
-                            (index % 2 == 1)
-                                ? <div class="opo-player">
-                                    <Oppo_player 
-                                        player={player} host= {host} playerBids={playerBids}
-                                         BidStatus={BidStatus} Playing={Playing}
-                                         myIndex = {index}
-                                    />
-                                    {
-                                        (player?._id == playerId)
-                                            ? <div>
-                                                {Playing ? Chips[myIndex] : null}
-                                                {Playing && (curTurn==myIndex)
-                                                    ? Dragable ? <Chip /> : <FixedChip />
-                                                    : null}
-                                            </div>
-                                            : null
-                                    }
-                                </div>
-                                : null
-                        )
-                    }
-                </div>
-            </DndProvider>
+              ) : (
+                <div class="opo-player-left">waiting</div>
+              )
+            ) : null
+          )}
         </div>
-    )
-}
 
-export default withRouter(MG_GamePage)
+        <div class="middlebox">
+            <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div>
+            <button class="startBtn" onClick={startClick}>Game Start</button>
+            {
+                Playing ?
+                <div>
+                    <div>{"현재 입찰 상품: " + curBid}</div>
+                    {
+                        curTurn==myIndex ?
+                        <button class="nackchalBtn" onClick={NackChalClick}>NackChalHagy</button> :
+                        null
+                    }
+                </div> :
+                null
+            }
+            <Table />
+            <a href='/'>
+                <button class="exitBtn">나가기</button>
+            </a>
+            <div>{"Bet: "+Bet}</div>
+            {
+                Playing ?
+                <div>{"Current Turn: "+ Players[curTurn]?.name}</div> :
+                null
+            }
+        </div>
+
+        <div class="rightbox">
+          {waiting.map((index) =>
+            index % 2 == 1 ? (
+              Players[index] != null ? (
+                <div class="opo-player-right">
+                  <Oppo_player 
+                        player={Players[index]} host= {host} playerBids={playerBids}
+                            BidStatus={BidStatus} Playing={Playing}
+                            myIndex = {index}
+                    />
+                    {
+                        (Players[index]?._id == playerId)
+                            ? <div>
+                                {Playing ? Chips[myIndex] : null}
+                                {Playing && (curTurn==myIndex)
+                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    : null}
+                            </div>
+                            : null
+                    }
+                </div>
+              ) : (
+                <div class="opo-player-right">waiting</div>
+              )
+            ) : null
+          )}
+        </div>
+      </DndProvider>
+    </div>
+  );
+}
+export default withRouter(MG_GamePage);
