@@ -165,6 +165,14 @@ function MG_GamePage() {
         
     }, [Chips])
     useEffect(() => {
+        if(curTurn == myIndex && Chips[myIndex]==0 ){
+            alert("칩이 없어 강제 낙찰됨!")
+            setTimeout(function(){
+                NackChalClick();
+            },3000)
+        }
+    },[curTurn])
+    useEffect(() => {
         if(Items.length < 1){
             setPlaying(false)
             //alert("게임 종료")
@@ -172,12 +180,7 @@ function MG_GamePage() {
             Socket.emit('FinishGame', false, scores, playerName )
             return;
         }
-        if(curTurn == myIndex && Chips[myIndex]==0 ){
-            alert("칩이 없어 강제 낙찰됨!")
-            setTimeout(function(){
-                NackChalClick();
-            },3000)
-        }
+        
     }, [Items])
 
     const startClick = () => {
@@ -213,6 +216,7 @@ function MG_GamePage() {
                 if (dropResult && dropResult.name === 'table') {
                     //chip array 갱신
                     Chips.splice(myIndex, 1, Chips[myIndex] - 1);
+                    
                     console.log(Chips)
                     setChips(Chips)
                     setBet(Bet + 1)
@@ -255,6 +259,9 @@ function MG_GamePage() {
         Chips.splice(myIndex, 1, Chips[myIndex] + Bet);
         setBet(0)
         setChips(Chips)
+        if(Chips[myIndex]>0){
+            setDragable(true)
+        }
         setCurTurn(myIndex)
         Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex})
         //낙찰 아이템 가져오기
@@ -272,6 +279,7 @@ function MG_GamePage() {
         var nackchalItem = tempItems.pop()
         setCurBid(nackchalItem)
         //setItems(tempItems)
+        
         Socket.emit('nackchal', {playerBids: playerBids, curBid: nackchalItem, Items: tempItems, BidStatus: BidStatus})
 
     }
