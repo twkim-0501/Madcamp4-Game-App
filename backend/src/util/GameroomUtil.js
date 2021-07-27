@@ -46,7 +46,7 @@ function findCurrentRoom(playerId, callback){
     if(playerId){
         GameroomModel.find({}, (err,res) => {
             var currentRoom = res.filter(room => room.players.includes(playerId));
-            //console.log("aaaaa", currentRoom);
+            console.log("aaaaa", currentRoom);
             callback(currentRoom[0]);
         })
     }
@@ -57,7 +57,10 @@ function findCurrentRoom(playerId, callback){
 function exitRoom(exitInfo, callback){
     const {playerId, roomId} = exitInfo;
     console.log("exitInfo",exitInfo)
-    GameroomModel.findOne({_id: roomId}, (err, res) => {
+    GameroomModel.findOne({_id: roomId._id}, (err, res) => {
+        if(res == null){
+            callback()
+        }
         var afterplayers = res.players.filter((player) => (player != playerId));
         //console.log(afterplayers);
         if(res.players.includes(playerId)){

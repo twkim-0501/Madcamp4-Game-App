@@ -61,9 +61,15 @@ function MG_GamePage() {
             setItems(data.items)
         })
         Socket.on('unexpectedLeave', (leaveId) => {
-            axios.post('/api/gameroom/findCurrentRoom', {user: leaveId})
+            if(playerId == null){
+                return;
+            }
+            axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
             .then(res => {
                 console.log("undexpectedcheck",leaveId, res.data);
+                if(res.data==null){
+                    return;
+                }
                 axios.post('/api/gameroom/exitRoom',
                 {playerId: leaveId, roomId: res.data})
                 .then(res => {
@@ -195,7 +201,9 @@ function MG_GamePage() {
 
     const Ordering = () => {
         var ResultOrder = Players.sort(() => Math.random() - 0.5);
-        console.log(ResultOrder)
+        var FirstPlayer = Math.floor(Math.random() * Players.length)
+        //첫 순서 보여주기
+        console.log("start ordering", FirstPlayer);
     }
 
     return (
