@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import "./MG_GamePage.css"
-import {withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {useLocation, useHistory} from "react-router";
-import {useSelector} from 'react-redux'
+import { useLocation, useHistory } from "react-router";
+import { useSelector } from 'react-redux'
 import axios from 'axios'
 import Hexagon from 'react-hexagon'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-      flexGrow: 1,
+        flexGrow: 1,
     },
     paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
     },
 }));
 function MG_GamePage() {
@@ -36,26 +36,26 @@ function MG_GamePage() {
     const [Bet, setBet] = useState(0)
     const [Dragable, setDragable] = useState(true)
     const [Playing, setPlaying] = useState(false)
-    
+
 
     useEffect(() => {
         // setSocket(io('http://192.249.18.179:80'))
         setSocket(io('http://192.249.18.171:80'))
     }, [])
 
-    
+
     useEffect(() => {
         if (Socket) {
             Socket.on('playerCome', (newPlayers) => {
                 console.log('new player come')
-                if(newPlayers){
+                if (newPlayers) {
                     setPlayers(newPlayers)
-                }                
+                }
             })
 
             Socket.on('playerLeave', (newPlayers) => {
                 console.log('player leave')
-                if(newPlayers){
+                if (newPlayers) {
                     setPlayers(newPlayers)
                 }
             })
@@ -70,7 +70,7 @@ function MG_GamePage() {
     })
 
     useEffect(() => {
-        axios.post('/api/gameroom/findCurrentRoom', {user: playerId})
+        axios.post('/api/gameroom/findCurrentRoom', { user: playerId })
             .then(response => {
                 var tempRoomInfo = response.data
                 console.log("i found room Info", response.data)
@@ -78,13 +78,13 @@ function MG_GamePage() {
                     axios.post('/api/gameroom/getPlayersInfo', response.data)
                         .then(response => {
                             console.log("detail playersInfo", response.data)
-                            if(response.data){
+                            if (response.data) {
                                 setPlayers(response.data)
                                 Socket.emit('enterRoom', tempRoomInfo, response.data)
                             }
                         })
                     setRoomInfo(response.data);
-                    
+
                 }
             })
     }, [user])
@@ -99,32 +99,27 @@ function MG_GamePage() {
     const exitRoom = (e) => {
         console.log("before exitRoom", playerId, roomInfo._id)
         axios.post('/api/gameroom/exitRoom',
-            {playerId: playerId, roomId: roomInfo._id}
+            { playerId: playerId, roomId: roomInfo._id }
         ).then((response) => {
             var tempRoomInfo = response.data
             console.log('exitRoom')
             if (response.data) {
                 axios.post('/api/gameroom/getPlayersInfo', response.data)
-                .then(response => {
-                    console.log("detail playersInfo", response.data)
-                    if(response.data){
-                        Socket.emit('exitRoom', tempRoomInfo, response.data)
-                    }
-                    history.push('/')
-                })
+                    .then(response => {
+                        console.log("detail playersInfo", response.data)
+                        if (response.data) {
+                            Socket.emit('exitRoom', tempRoomInfo, response.data)
+                        }
+                        history.push('/')
+                    })
             }
-            
+
         })
     }
 
     const startClick = () => {
         Socket.emit('startClick', roomInfo)
     }
-
-    const testFunc = (e) => {
-        console.log(e.target.value)
-    }
-
 
     const Chip = () => {
         const [{ isDragging, canDrag }, drag] = useDrag({
@@ -147,7 +142,7 @@ function MG_GamePage() {
 
         return (
             <div className='chip' ref={drag} style={{ opacity }}>
-                {canDrag? "true" : "false"}
+                {canDrag ? "true" : "false"}
             </div>
         )
     }
@@ -173,64 +168,74 @@ function MG_GamePage() {
         return (
             <div ref={drop}>
                 <Hexagon className='hexTable'>
-                {Bet}
+                    {Bet}
                 </Hexagon>
             </div>
-                
-                
         )
     }
 
 
 
+
     return (
         <div class="mainbox">
-            <button class="exitBtn" onClick={exitRoom}>나가기</button>
-            <button class="startBtn" onClick={startClick}>Game Start</button>
- 
             <div>
-                <div class="roomNumber">{"방 번호: "+ roomInfo?.roomIndex}</div>
-                <div class="roomTitle">{"방 제목: "+ roomInfo?.roomTitle}</div>
+                <div class="roomNumber">{"방 번호: " + roomInfo?.roomIndex}</div>
+                <div class="roomTitle">{"방 제목: " + roomInfo?.roomTitle}</div>
             </div>
-            
+
             <DndProvider backend={HTML5Backend}>
                 <div class="leftbox">
                     {
                         Players.map((player, index) =>
-                            (index % 2 == 0) 
-                            ? <Oppo_player player={player?.name} index={index}></Oppo_player>
-                            : null
+                            (index % 2 == 0)
+                                ? <div class="opo-player">
+                                    <Oppo_player player={player} />
+                                    {
+                                        (player?._id == playerId)
+                                            ? <div>
+                                                {Playing ? MyChips : null}
+                                                {Playing
+                                                    ? Dragable ? <Chip /> : <FixedChip />
+                                                    : null}
+                                            </div>
+                                            : null
+                                    }
+                                </div>
+                                : null
                         )
                     }
                 </div>
 
                 <div class="middlebox">
+                    <button class="startBtn" onClick={startClick}>Game Start</button>
                     <Table />
+                    <button class="exitBtn" onClick={exitRoom}>나가기</button>
+                    
                 </div>
 
                 <div class="rightbox">
-                    <div class="oponent-status">
-                        {
-                            Players.map((player, index) =>
-                                (index % 2 == 1) 
-                                ? <div>
-                                    {player?.name}
-                                    <Oppo_player player={player?.name} index={index}></Oppo_player>
-                                    {(player?._id == playerId) 
-                                    ? <div>
-                                        {Playing ? MyChips : null}
-                                        {
-                                            Dragable
-                                            ? <Chip />
-                                            : <FixedChip /> 
-                                        } 
-                                    </div>
-                                    : null}
+                    {
+                        Players.map((player, index) =>
+                            (index % 2 == 1)
+                                ? <div class="opo-player">
+                                    <Oppo_player player={player} />
+                                    {
+                                        (player?._id == playerId)
+                                            ? <div>
+                                                {Playing ? MyChips : null}
+                                                {
+                                                    Dragable
+                                                        ? <Chip />
+                                                        : <FixedChip />
+                                                }
+                                            </div>
+                                            : null
+                                    }
                                 </div>
                                 : null
-                            )
-                        }
-                    </div>
+                        )
+                    }
                 </div>
             </DndProvider>
         </div>
