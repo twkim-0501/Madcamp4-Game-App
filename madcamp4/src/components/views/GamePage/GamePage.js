@@ -13,9 +13,6 @@ import pingSound from "./resources/ping.mp3"
 import earthImg from "./resources/white.jpeg"
 import { withRouter } from "react-router-dom"
 import "./GamePage.css"
-import { Html } from "@react-three/drei"
-import axios from "axios"
-
 
 // Create a store ...
 var clamp = require('lodash.clamp');

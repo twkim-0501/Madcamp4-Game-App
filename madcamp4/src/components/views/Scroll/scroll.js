@@ -1,9 +1,11 @@
 import styled from 'styled-components'
-import React from "react"
+import React, { useState } from "react"
 import { withRouter } from "react-router-dom";
+import ReactCardFlip from 'react-card-flip';
 import "./scroll.css"
 import spade from './spade.png'
 import gameicon from './cube.png'
+import { useSpring, a } from '@react-spring/web'
 
 const H1 = styled.h1`
   text-align: center;
@@ -25,16 +27,9 @@ const HorizontalCenter = styled(Flex)`
   align-items:center;
   margin-left: auto;
   margin-right: auto;
-
-  max-width: 70rem;
+  max-width: 64rem;
 `
 
-const Container = styled.div`
-  height: stretch;
-  width: 100%;
-  background: #000;
-  align-content:center;
-`
 
 // const Item = styled.div`
 //   color: white;
@@ -148,21 +143,22 @@ const CarouserContainer = styled(Relative)`
  const CarouselItem = styled.div`
   flex: 0 0 auto;
 
-  margin-left: 1rem;
+  margin-left: 1.5rem;
 `
 
  const CarouselButton = styled.button`
   position: absolute;
 
   cursor: pointer;
+  margin-top: 90px;
 
   top: 50%;
   z-index: 1;
 
   transition: transform 0.1s ease-in-out;
 
-  background: white;
-  border-radius: 15px;
+  background: black;
+  border-radius: 30px;
   border: none;
   padding: 0.5rem;
 `
@@ -196,6 +192,7 @@ const CarouserContainer = styled(Relative)`
 
   // offset for children spacing
   margin-left: -1rem;
+  margin-top: 170px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -206,7 +203,7 @@ const CarouserContainer = styled(Relative)`
   }
 `
 
-const ArrowLeft = ({size = 30, color = '#000000'}) => (
+const ArrowLeft = ({size = 40, color = '#fff'}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -223,7 +220,7 @@ const ArrowLeft = ({size = 30, color = '#000000'}) => (
 )
 
 
-const ArrowRight = ({size = 30, color = '#000000'}) => (
+const ArrowRight = ({size = 40, color = '#fff'}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -272,52 +269,62 @@ function Carousel({children}) {
 
 const colors = [
   { name: "Tobby", people: 6, id: 'A'},
-  { name: "Tobby", people: 6, id: 1},
+  { name: "Hello", people: 6, id: 1},
   { name: "Tobby", people: 6, id: 2},
   { name: "Tobby", people: 6, id: 3},
   { name: "Tobby", people: 6, id: 4},
-
-//   { col:'#e74c3c', name: "B", people: 6},
-//   { col:'#16a085', name: "H"},
-//   { col:'#2980b9', name: "H"},
-//   { col:'#8e44ad', name: "H"},
-//   { col:'#2c3e50', name: "H"},
-//   { col:'#2c3e50', name: "H"},
+  { name: "Tobby", people: 6, id: 4},
+  { name: "Tobby", people: 6, id: 4},
+  { name: "Tobby", people: 6, id: 4},
+  { name: "Tobby", people: 6, id: 4},
 ]
 
-const colorsArray = colors.map((color) => (
-  <div class="outer"
-    style={{background: 'white', borderRadius: '20px', opacity: 0.9, color: 'black'}}
-    key={color.col}
-  >
-     <span class="inner" > {color.id} </span>
-     <span class="spade">
-     <img src={ spade } width='32' height='32' />
-     </span>
-     <span class="username" > {color.name} </span>
-     
-     <span class="gameicon">
-     <img src={ gameicon } width='52' height='52' />
-     </span>
-
-     <span class="people" > {color.id} / 6 </span>
-     <span class="spade2">
-     <img src={ spade } width='32' height='32' />
-     </span>
-     <span class="end"> {color.id} </span>
-     
-
-  </div>
-))
-
 function Scroll() {
+  const [flipped, set] = useState(false)
+  const { transform, opacity } = useSpring({
+    opacity: flipped ? 1 : 0,
+    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
+    config: { mass: 5, tension: 500, friction: 80 },
+  })
+  const colorsArray = colors.map((color) => (
+    <div class="outer" 
+      onClick={() => set(state => !state)}>
+    <a.div class="front"
+      style={{ opacity: opacity.to(o => 1 - o), transform, borderRadius: '20px'}}
+    >
+       <span class="inner" > {color.id} </span>
+       <span class="spade">
+       <img src={ spade } width='32' height='32' />
+       </span>
+       <span class="username" > {color.name} </span>
+       
+       <span class="gameicon">
+       <img src={ gameicon } width='52' height='52' />
+       </span>
+  
+       <span class="people" > {color.people} / 6 </span>
+       <span class="spade2">
+       <img src={ spade } width='32' height='32' />
+       </span>
+       <span class="end"> {color.id} </span>
+    </a.div>
+    <a.div
+        class="back"
+        style={{
+          opacity,
+          transform,
+          borderRadius: '20px',
+          rotateY: '180deg',
+        }}
+      />
+    </div>
+  ))
   return (
-    <Container>
-      <H1>WELCOME</H1>
+    <div class="Container">
       <HorizontalCenter>
         <Carousel>{colorsArray}</Carousel>
       </HorizontalCenter>
-    </Container>
+    </div>
   )
 }
 

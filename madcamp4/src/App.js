@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import './App.css';
 import LandingPage from './components/views/LandingPage/LandingPage'
-import LoginPage from './components/views/LoginPage/LoginPage'
+import LoginPage from './components/views/LoginPage/login'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
 import GamePage from './components/views/GamePage/GamePage'
 import Scroll from './components/views/Scroll/scroll'
@@ -22,7 +22,6 @@ function App() {
         <Route exact path="/register" component={Auth(RegisterPage, false)} />
         <Route exact path="/gamepage2" component={GamePage} />
         <Route exact path="/scroll" component={Scroll} />
-
       </Switch>
   </Router>
   );
