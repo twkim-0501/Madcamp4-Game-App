@@ -5,51 +5,64 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: stretch;
-    align-content: space-around;
+    align-content: space-between;
     flex-wrap: nowrap;
 }
 .leftbox{
     flex-grow: 1;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #e0e0e0;
+    text-align: center;
+    align-items: stretch;
 }
-.table{
-    background-color:#86ef94;
-    width:300px;
-    height:300px;
-    border-radius:150px;
-    text-align:center;
-    font-size:12px;
-    line-height:300px;
+.middlebox{
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 .rightbox{
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #e0e0e0;
+    text-align: center;
+    align-items: stretch;
+}
+.table{
+    background-color:#86ef94;
+    width:200px;
+    height:200px;
+    text-align:center;
+    font-size:12px;
 }
 .oponent-status{
-    flex-grow: 1.5;
-    background-color: #efe886;
-    display:flex;
-    flex-direction: row;
+    flex-grow: 1;
+    display: flex;
+    background-color: #e0e0e0;
+    text-align: center;
+    flex-direction: column;
+    align-items: stretch;
 }
 .game-status{
     flex-grow: 1;
     background-color: aqua;
 }
 .my-status{
-    flex-grow: 1;
-    padding-top: 10px;
+    flex-grow: 2;
     background-color: #e0e0e0;
     text-align: center;
+    flex-direction: column;
 }
 .opo-player{
     padding-top: 10px;
     text-align: center;
     flex-grow: 1;
-    display:flex;
+    display:block;
     flex-direction: column;
 }
 .opo-player:hover{
@@ -72,18 +85,20 @@
     box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }
 .exitBtn{
-    position:absolute;
-    left: 20px;
-    bottom: 20px;
+    /* position:absolute;
+    left: 1000px;
+    bottom: 20px; */
     width: 75px;
-    height: 50px;
+    height: 50px; 
+    /* flex-grow: 1; */
 }
 .startBtn{
-    position:absolute;
-    left: 20px;
-    bottom: 100px;
+    /* position:absolute;
+    left: 100px;
+    bottom: 20px;*/
     width: 75px;
-    height: 50px;
+    height: 50px; 
+    /* flex-grow: 1; */
 }
 .roomTitle{
     position:absolute;
@@ -110,12 +125,7 @@
     opacity: 1;
 }
 
-.staricon{
-    position: static;
-    float: left;
-    width: 20px;
-    height: 20px;
-    
-    padding-left: 10px;
-    color:yellow;
+.hexTable{
+    width: 440px;
+    height: 440px;
 }
