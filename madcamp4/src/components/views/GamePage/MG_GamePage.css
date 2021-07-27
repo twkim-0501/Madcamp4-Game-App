@@ -1,63 +1,133 @@
-.mainbox{
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background-color: #fef8f8;
+}
+
+.mainbox {
     display: flex;
     width: 100%;
     height: 100vh;
     flex-direction: row;
     justify-content: space-around;
     align-items: stretch;
-    align-content: space-around;
+    align-content: space-between;
     flex-wrap: nowrap;
 }
-.leftbox{
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.table{
-    background-color:#86ef94;
-    width:300px;
-    height:300px;
-    border-radius:150px;
-    text-align:center;
-    font-size:12px;
-    line-height:300px;
-}
-.rightbox{
+
+.leftbox {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    text-align: center;
+    background-color: #dddddd;
 }
-.oponent-status{
-    flex-grow: 1.5;
-    background-color: #efe886;
-    display:flex;
-    flex-direction: row;
+
+.middlebox {
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #dddddd;
+    align-items: center;
 }
-.game-status{
+
+.rightbox {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    background-color: #dddddd;
+}
+
+.table {
+    background-color: #86ef94;
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.oponent-status {
+    flex-grow: 1;
+    display: flex;
+    background-color: #e0e0e0;
+    text-align: center;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.game-status {
     flex-grow: 1;
     background-color: aqua;
 }
-.my-status{
-    flex-grow: 1;
-    padding-top: 10px;
+
+.my-status {
+    flex-grow: 2;
     background-color: #e0e0e0;
     text-align: center;
-}
-.opo-player{
-    padding-top: 10px;
-    text-align: center;
-    flex-grow: 1;
-    display:flex;
     flex-direction: column;
 }
-.opo-player:hover{
-    background-color: antiquewhite;
+
+.opo-player-right {
+    background-color: #ffffff;
+    text-align: center;
+    flex-grow: 1;
+    display: block;
+    flex-direction: column;
+    border-radius: 20px 0% 0% 20px;
+    margin-left: 15px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-.opo-player + .opo-player {
-    border-left: 0.7px solid #868e96;
+.opo-player-left {
+    background-color: #ffffff;
+    text-align: center;
+    flex-grow: 1;
+    display: block;
+    flex-direction: column;
+    border-radius: 0% 20px 20px 0%;
+    margin-right: 15px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.opo-player-right:hover {
+    background-color: #f0f0f0;
+}
+
+.opo-player-right:first-child {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.opo-player-right+.opo-player-right {
+    margin-bottom: 30px;
+}
+
+.opo-player-left:hover {
+    background-color: #f0f0f0;
+}
+
+.opo-player-left:first-child {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.opo-player-left+.opo-player-left {
+    margin-bottom: 30px;
+}
+
+.cardShow {
+    background-color: #4aad4a;
+    width: 340px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    flex-grow: 1;
+    border-radius: 80px;
+    border:15px solid #a95555;
+    /* box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.2); */
 }
 
 .chip {
@@ -69,34 +139,33 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
 }
-.exitBtn{
-    position:absolute;
-    left: 20px;
-    bottom: 20px;
+
+.exitBtn {
+    position: absolute;
+    left: 1100px;
+    bottom: 30px;
     width: 75px;
     height: 50px;
+    flex-grow: 1;
 }
-.startBtn{
-    position:absolute;
-    left: 20px;
+
+.startBtn {
+    position: absolute;
+    left: 1100px;
     bottom: 100px;
     width: 75px;
     height: 50px;
-}
-.roomTitle{
-    position:absolute;
-    left: 20px;
-    top: 40px;
-}
-.roomNumber{
-    position:absolute;
-    left: 20px;
-    top: 20px;
+    flex-grow: 1;
 }
 
-.closeicon{
+.roomTitle {
+    position: absolute;
+    top: 5px;
+}
+
+.closeicon {
     position: block;
     opacity: 0;
     float: right;
@@ -106,16 +175,17 @@
     cursor: pointer;
 }
 
-.opo-player:hover .closeicon{
+.opo-player:hover .closeicon {
     opacity: 1;
 }
 
-.staricon{
-    position: static;
-    float: left;
-    width: 20px;
-    height: 20px;
-    
-    padding-left: 10px;
-    color:yellow;
+.hexTable {
+    width: 440px;
+    height: 440px;
+}
+.Bid{
+    color: red;
+}
+.Bid:last-child{
+    border-bottom: 1px solid black
 }

@@ -19,28 +19,61 @@ var playerIdnSocket = [];
 module.exports = function(io) {
     io.on('connection', (socket) => {
         console.log("socket connect!", socket.id)
-    
         socket.on('enterRoom', (roomInfo, usersInfo, playerId) => {
+            if(playerId == null){
+                return;
+            }
             playerIdnSocket.push({"player": playerId, "socket": socket.id})
-            console.log("thisissocketidarray",playerIdnSocket);
+            //console.log("thisissocketidarray",playerIdnSocket);
             console.log('enterRoom')
             socket.join(roomInfo._id)
             socket.broadcast.emit('playerCome', usersInfo)
         });
     
-        socket.on('exitRoom', (roomInfo, usersInfo) => {
-            console.log("exit!")
-            socket.broadcast.emit('playerLeave', usersInfo)
-            socket.leave(roomInfo._id)
-        });
-    
-        socket.on('startClick', (roomInfo) => {
+        socket.on('startClick', (roomInfo,initChips,firstTurn, initBids,initTotal) => {
             console.log('startClick')
-            io.to(roomInfo._id).emit('startGame', {
-                items: items
-
+            var randomBid = items.shuffle()
+            socket.emit('startGame', {
+                items: randomBid,
+                Chips: initChips,
+                curTurn: firstTurn,
+                initBids: initBids,
+                initTotal: initTotal
+            })
+            socket.broadcast.emit('startGame', {
+                items: randomBid,
+                Chips: initChips,
+                curTurn: firstTurn,
+                initBids: initBids,
+                initTotal: initTotal
             })
         });
+
+        socket.on('turnInfo', (turnInfo) => {
+            console.log("turnInfo", turnInfo)
+            socket.broadcast.emit('turnInfo', turnInfo)
+        })
+
+        socket.on('nackchal', (nackchalInfo) => {
+            console.log("nackchalInfo", nackchalInfo)
+            socket.broadcast.emit('nackchal', nackchalInfo)
+            socket.emit('nackchal', nackchalInfo)
+        })
+
+        socket.on('FinishGame', (Playing, scores, playerName) => {
+            socket.broadcast.emit('FinishGame', {
+                Playing: Playing,
+                scores: scores,
+                playerName: playerName
+            })
+            socket.emit(
+                'FinishGame', {
+                    Playing: Playing,
+                    scores: scores,
+                    playerName: playerName
+                }
+            )
+        })
     
         socket.on('disconnect', function () {
             for(var i=0 ; i<playerIdnSocket.length ; i++){
