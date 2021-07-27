@@ -20,6 +20,9 @@ module.exports = function(io) {
     io.on('connection', (socket) => {
         console.log("socket connect!", socket.id)
         socket.on('enterRoom', (roomInfo, usersInfo, playerId) => {
+            if(playerId == null){
+                return;
+            }
             playerIdnSocket.push({"player": playerId, "socket": socket.id})
             //console.log("thisissocketidarray",playerIdnSocket);
             console.log('enterRoom')
@@ -27,20 +30,22 @@ module.exports = function(io) {
             socket.broadcast.emit('playerCome', usersInfo)
         });
     
-        socket.on('startClick', (roomInfo,initChips,firstTurn, initBids) => {
+        socket.on('startClick', (roomInfo,initChips,firstTurn, initBids,initTotal) => {
             console.log('startClick')
             var randomBid = items.shuffle()
             socket.emit('startGame', {
                 items: randomBid,
                 Chips: initChips,
                 curTurn: firstTurn,
-                initBids: initBids
+                initBids: initBids,
+                initTotal: initTotal
             })
             socket.broadcast.emit('startGame', {
                 items: randomBid,
                 Chips: initChips,
                 curTurn: firstTurn,
-                initBids: initBids
+                initBids: initBids,
+                initTotal: initTotal
             })
         });
 
@@ -52,6 +57,22 @@ module.exports = function(io) {
         socket.on('nackchal', (nackchalInfo) => {
             console.log("nackchalInfo", nackchalInfo)
             socket.broadcast.emit('nackchal', nackchalInfo)
+            socket.emit('nackchal', nackchalInfo)
+        })
+
+        socket.on('FinishGame', (Playing, scores, playerName) => {
+            socket.broadcast.emit('FinishGame', {
+                Playing: Playing,
+                scores: scores,
+                playerName: playerName
+            })
+            socket.emit(
+                'FinishGame', {
+                    Playing: Playing,
+                    scores: scores,
+                    playerName: playerName
+                }
+            )
         })
     
         socket.on('disconnect', function () {

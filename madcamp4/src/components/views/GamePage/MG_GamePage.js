@@ -39,6 +39,7 @@ function MG_GamePage() {
     const [curTurn, setCurTurn] = useState(0)
     const [curBid, setCurBid] = useState(0)
     const [playerBids, setPlayerBids] = useState([])
+    const [BidStatus, setBidStatus] = useState([])//플레이어별 유효 bid 총합과 index
     
     useEffect(() => {
 
@@ -68,6 +69,7 @@ function MG_GamePage() {
             setBet(0)
             setCurTurn(data.curTurn)
             setPlayerBids(data.initBids)
+            setBidStatus(data.initTotal)
         })
         Socket.on('unexpectedLeave', (leaveId) => {
             // if(playerId == null){
@@ -101,7 +103,14 @@ function MG_GamePage() {
             console.log("낙찰상황", nackchalInfo.playerBids)
             setPlayerBids(nackchalInfo.playerBids)
             setCurBid(nackchalInfo.curBid)
+            setBidStatus(nackchalInfo.BidStatus)
             setItems(nackchalInfo.Items)
+            console.log("낙찰직후status", nackchalInfo.BidStatus)
+        })
+
+        Socket.on('FinishGame', (finishInfo) => {
+            setPlaying(finishInfo.Playing)
+            console.log("게임결과", finishInfo.scores, finishInfo.playerName)
         })
     }, [])
 
@@ -153,23 +162,31 @@ function MG_GamePage() {
         
     }, [Chips])
     useEffect(() => {
+        if(Items.length < 1){
+            setPlaying(false)
+            //alert("게임 종료")
+            var scores= whoIsWinner()
+            Socket.emit('FinishGame', false, scores, playerName )
+            return;
+        }
         if(curTurn == myIndex && Chips[myIndex]==0 ){
             alert("칩이 없어 강제 낙찰됨!")
             setTimeout(function(){
                 NackChalClick();
             },3000)
-            
         }
-    }, [curTurn])
+    }, [Items])
 
     const startClick = () => {
         var initChips = Players.map(player => 10)
         var initBids = Players.map(player => [])
+        var temp = {totalBids: 0, activeIndex: []}
+        var initTotal = Players.map(player => temp)
         var firstTurn = Ordering()
         console.log("firstTurn", firstTurn)
-        Socket.emit('startClick', roomInfo, initChips, firstTurn, initBids)
+        Socket.emit('startClick', roomInfo, initChips, firstTurn, initBids, initTotal)
         //첫 칩 세팅
-        console.log("initChips and Bids", initChips, initBids)
+        console.log("initChips and Bids", initChips, initBids, initTotal)
         setChips(initChips);
     }
 
@@ -255,45 +272,55 @@ function MG_GamePage() {
         Chips.splice(myIndex, 1, Chips[myIndex] + Bet);
         setBet(0)
         setChips(Chips)
-        if(curTurn == (Players.length - 1)){
-            setCurTurn(0)
-            Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: 0})
-        }
-        else{
-            setCurTurn(curTurn+1)
-            Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: curTurn+1})
-        }
+        setCurTurn(myIndex)
+        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex})
         //낙찰 아이템 가져오기
         playerBids[myIndex].push(curBid)
         //array 정렬
         playerBids[myIndex].sort(function(a,b) {
             return b-a;
         })
-        console.log("tempmyBids", playerBids[myIndex])
+        var tempBidStatus =DFA_Bids(playerBids[myIndex])
+        //console.log("tempmyBids", playerBids[myIndex])
+        console.log("낙찰상황배열", tempBidStatus)
         playerBids.splice(myIndex, 1, playerBids[myIndex])
+        BidStatus.splice(myIndex, 1 , tempBidStatus)
         var tempItems = Items
         var nackchalItem = tempItems.pop()
         setCurBid(nackchalItem)
-        setItems(tempItems)
-        Socket.emit('nackchal', {playerBids: playerBids, curBid: nackchalItem, Items: tempItems})
+        //setItems(tempItems)
+        Socket.emit('nackchal', {playerBids: playerBids, curBid: nackchalItem, Items: tempItems, BidStatus: BidStatus})
 
     }
 
-    const forcedNackchal = () => {
-        //낙찰 아이템 가져오기
-        playerBids[myIndex].push(curBid)
-        //array 정렬
-        playerBids[myIndex].sort(function(a,b) {
-            return b-a;
-        })
-        console.log("tempmyBids", playerBids[myIndex])
-        playerBids.splice(myIndex, 1, playerBids[myIndex])
-        var tempItems = Items
-        var nackchalItem = tempItems.pop()
-        setCurBid(nackchalItem)
-        setItems(tempItems)
-        Socket.emit('nackchal', {playerBids: playerBids, curBid: nackchalItem, Items: tempItems})
+    const DFA_Bids = (arr) => {
+        //var arr = [-1,-3,-4,-5,-7,-9,-10, -12,-13,-14]
+        var activeIndex = [];
+        var inSequence = false;
+        var i = 0;
+        var result = 0;
+        var prev = 1;
+        while(i < arr.length){
+            inSequence = ((prev - arr[i])==1); // 연속된 상태인지 체크
+            if(inSequence == false){
+                result += arr[i]
+                activeIndex.push(i);
+            }
+            prev = arr[i]
+            i++
+        }
+        console.log("DFA result",result, activeIndex)
+        return {totalBids: result, activeIndex: activeIndex}
     }
+
+    const whoIsWinner = () => {
+        var scores = BidStatus.map((status, index) => (Chips[index] + status.totalBids))
+        console.log("totalscore", scores)
+        return scores
+    }
+    // const whoIsWinner
+
+
 
 
 
@@ -310,7 +337,11 @@ function MG_GamePage() {
                         Players.map((player, index) =>
                             (index % 2 == 0)
                                 ? <div class="opo-player">
-                                    <Oppo_player player={player} host= {host}/>
+                                    <Oppo_player 
+                                        player={player} host= {host} playerBids={playerBids}
+                                         BidStatus={BidStatus} Playing={Playing}
+                                         myIndex = {index}
+                                    />
                                     {
                                         (player?._id == playerId)
                                             ? <div>
@@ -364,7 +395,11 @@ function MG_GamePage() {
                         Players.map((player, index) =>
                             (index % 2 == 1)
                                 ? <div class="opo-player">
-                                    <Oppo_player player={player} host={host}/>
+                                    <Oppo_player 
+                                        player={player} host= {host} playerBids={playerBids}
+                                         BidStatus={BidStatus} Playing={Playing}
+                                         myIndex = {index}
+                                    />
                                     {
                                         (player?._id == playerId)
                                             ? <div>
