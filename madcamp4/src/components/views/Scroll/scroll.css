@@ -1,12 +1,7 @@
 .Container {
-
     height: stretch;
     width: 100%;
-
-    align-items: center;
-    justify-items: center;
-    justify-self: center;
-    align-self: center;
+   
     /* background-image: url("./table.jpeg");
     background-size: contain; */
 }

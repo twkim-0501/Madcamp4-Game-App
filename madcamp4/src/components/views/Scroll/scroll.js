@@ -1,17 +1,18 @@
 import styled from 'styled-components'
 import React, { useState } from "react"
-import { withRouter } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 import "./scroll.css"
 import spade from './spade.png'
 import gameicon from './cube.png'
 import { useSpring, a } from '@react-spring/web'
-import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import NavigationIcon from '@material-ui/icons/Navigation';
 import { makeStyles } from '@material-ui/core/styles';
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html, Center } from "@react-three/drei";
+import Slide from '@material-ui/core/Slide';
+import {useSelector} from 'react-redux'
+import axios from 'axios'
 
 const H1 = styled.h1`
   text-align: center;
@@ -272,6 +273,8 @@ function Carousel({children}) {
   )
 }
 
+
+
 const colors = [
   { name: "Tobby", people: 1, id: 'A'},
   { name: "Hello", people: 2, id: 1},
@@ -299,25 +302,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight
-};
-
 function Scroll() {
+  //let history = useHistory()
+  const user = useSelector(state => state.user)
   const classes = useStyles();
   const [flipped, set] = useState(true)
+  const [roomName, setRoomName] = useState('')
+  //const [open, setOpen] = React.useState(false);
+
+  const NewRoom = () => {
+    console.log(roomName);
+    console.log(user.userData?._id)
+    //socket으로 text 쏴주면 될듯
+    axios.post('/api/gameroom/addRoom', {roomName: 'roomname', user: user.userData})
+    setRoomName('');
+    alert('사용자의 이름으로 새로운 방이 생성됩니다')
+  };
+
+  const joinRoom = (e) => {
+    set(state => !state)
+    axios.post('/api/gameroom/joinRoom', {roomId: e.target.value, playerId: user.userData?._id})
+  }
+
   const { transform, opacity } = useSpring({
     opacity: 1,
     transform: `perspective(500px) rotateY(${flipped ? 360 : 180}deg)`,
     config: { mass: 5, tension: 500, friction: 80 },
   })
+
   const colorsArray = colors.map((color) => (
     <div class="outer" 
-      onClick={() => set(state => !state)}>
+      onClick={ joinRoom } value={color._id}>
     {
       flipped
-      ? <a.div class="front"
+      ? <a.div class="front" 
         style={{  transform, borderRadius: '20px'}}
       >
         <span class="inner" > {color.id} </span>
@@ -345,33 +363,35 @@ function Scroll() {
         }}
       />
     }
-    
-    
     </div>
   ))
   return (
+  
     <Canvas>
         <Stars
-            radius={100}
-            depth={50}
-            count={5000}
-            factor={4}
-            saturation={0}
-            fade
-          />
-      <Html as='div' className="Container" fullscreen="true" >
-      <h1 className="title"> MINUS AUCTION </h1>
-      <HorizontalCenter>
-        <Carousel>{colorsArray}</Carousel>
-      </HorizontalCenter>
-      <div className="plus">
-      <Fab variant="extended" aria-label="add" className={classes.margin} >
-        <AddIcon className={classes.extendedIcon}/>
-        New room
-      </Fab>
-      </div> 
-    </Html>
+          radius={100}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={0}
+          fade
+        />
+        <Html as='div' className="Container" fullscreen="true" >
+          <h1 className="title"> MINUS AUCTION </h1>
+          <HorizontalCenter style={{zIndex: 0}}>
+            <Carousel>{colorsArray}</Carousel>
+          </HorizontalCenter>
+          <div className="plus">
+          <a href="/gamepage" >
+          <Fab variant="extended" onClick={NewRoom} className={classes.margin} >
+            <AddIcon className={classes.extendedIcon}/>
+            New room
+          </Fab>
+          </a>
+          </div> 
+      </Html>
     </Canvas>
+    
   )
 }
 
