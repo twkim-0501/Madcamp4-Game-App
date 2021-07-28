@@ -392,7 +392,7 @@ function MG_GamePage() {
                   <Oppo_player 
                         player={Players[index]} host= {host} playerBids={playerBids}
                             BidStatus={BidStatus} Playing={Playing}
-                            myIndex = {index}
+                            Index = {index} myIndex = {myIndex}
                     />
                     {
                         (Players[index]?._id == playerId)
@@ -409,7 +409,7 @@ function MG_GamePage() {
                   <Oppo_player 
                         player={Players[index]} host= {host} playerBids={playerBids}
                             BidStatus={BidStatus} Playing={Playing}
-                            myIndex = {index}
+                            Index = {index} myIndex = {myIndex}
                     />
                     {
                         (Players[index]?._id == playerId)
@@ -477,7 +477,7 @@ function MG_GamePage() {
                   <Oppo_player 
                         player={Players[index]} host= {host} playerBids={playerBids}
                             BidStatus={BidStatus} Playing={Playing}
-                            myIndex = {index}
+                            Index = {index} myIndex = {myIndex}
                     />
                     {
                         (Players[index]?._id == playerId)
@@ -494,7 +494,7 @@ function MG_GamePage() {
                   <Oppo_player 
                         player={Players[index]} host= {host} playerBids={playerBids}
                             BidStatus={BidStatus} Playing={Playing}
-                            myIndex = {index}
+                            Index = {index} myIndex = {myIndex}
                     />
                     {
                         (Players[index]?._id == playerId)
