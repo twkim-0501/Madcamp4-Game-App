@@ -56,10 +56,11 @@ function getAllrooms(callback){
                         }
                     }
                     //console.log("i want to watch roomsView", roomsView, index)
-                    
                 })
             })
-            
+            setTimeout(() => {
+                
+            }, 100);
         })
         
     })
