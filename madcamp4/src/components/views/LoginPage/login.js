@@ -6,6 +6,8 @@ import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import { loginUser } from '../../../_actions/user_action'
 import { useDispatch } from 'react-redux'
+import { Canvas, useLoader, useFrame } from "@react-three/fiber";
+import { OrbitControls, Stars, Html, Center, Sky } from "@react-three/drei";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import './login.css'
@@ -28,24 +30,24 @@ const trans = (r, s) => `perspective(1500px) rotateX(30deg) rotateY(${r / 10}deg
 const useStyles = makeStyles((theme) => ({
 
     input: {
-      color: "black",
-      fontFamily: "cardfont",
+      color: "white",
+      fontFamily: "futura",
+      fontSize: "1rem"
     },
   
     text : {
-        ...theme.typography.button,
-        margin: theme.spacing(1),
+        margin: theme.spacing(2),
         fontSize: "1.5rem",
         fontFamily: "cardfont",
-        color: 'black',
+        color: 'white',
         width: '20ch',
           '& input:valid + fieldset': {
-            borderColor: 'black',
+            borderColor: 'white',
             borderWidth: 2,
             fontFamily: "cardfont",
           },
           '& input:invalid + fieldset': {
-            borderColor: 'red',
+            borderColor: 'white',
             borderWidth: 2,
             fontFamily: "cardfont",
          
@@ -53,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
           '& input:valid:focus + fieldset': {
             borderLeftWidth: 2,
             padding: '4px !important', // override inline-style
-            borderColor: 'black',
+            borderColor: 'white',
             fontFamily: "cardfont",
           },
     },
@@ -62,8 +64,14 @@ const useStyles = makeStyles((theme) => ({
         ...theme.typography.caption,
         margin: theme.spacing(1),
         fontSize: "1rem",
-        color: 'black',
-        fontFamily: "cardfont",
+        color: 'white',
+        fontFamily: "futura",
+    },
+    button: {
+      fontSize: "1.5rem",
+      fontFamily: "futura",
+      color: 'white',
+      width: '20ch',
     }
   }));
 
@@ -92,6 +100,8 @@ const Deck = ()=> {
   ))
 }
 
+
+
 function App(props) { 
     const classes = useStyles();
     const dispatch = useDispatch()
@@ -116,7 +126,7 @@ function App(props) {
         dispatch(loginUser(body))
         .then(response => {
             if (response.payload.ok) {
-                props.history.push('/')
+                props.history.push('/choose')
             } else {
                 alert('이메일과 비밀번호를 확인해주세요.')
             }
@@ -126,36 +136,45 @@ function App(props) {
       props.history.push('/register')
     }
     return (
-        <div class="mainbox">
+      <Canvas >
+        <OrbitControls/>
+        <Stars
+            radius={100}
+            depth={50}
+            count={5000}
+            factor={4}
+            saturation={0}
+            fade
+          />
+        <Html as='div' className="mainbox" fullscreen="true">
         <Deck/>
-        <div class="tempform"></div>
+        <div className="tempform"/>
         <div class="loginform">
             <form style={{display:'flex', flexDirection: 'column', alignItems: 'center', fontFamily: "cardfont"}}
                 > 
             <form  noValidate autoComplete="off">
             <TextField className={classes.text} id="outlined-basic" label="Email" 
             variant="outlined" InputProps={{className:classes.input}} InputLabelProps={{
-                style: { color: 'black', fontFamily: "cardfont"},
+                style: { color: 'white', fontFamily: "cardfont"},
             }}
             type="email" value={Email} onChange={onEmailHandler}/></form>
 
             <form  noValidate autoComplete="off">
             <TextField  className={classes.text} id="outlined-basic" label="Password" 
             variant="outlined" InputProps={{className:classes.input}} InputLabelProps={{
-                style: { color: 'black', fontFamily: "cardfont", },
+                style: { color: 'white', fontFamily: "cardfont", },
             }}
             type="password" value={Password} onChange={onPasswordlHandler}/></form>
 
             <br /> 
-            <Button className={classes.text} onClick={onSubmitHandler} color="primary">Login</Button>
+            <Button className={classes.button} onClick={onSubmitHandler} color="primary">Login</Button>
             
             <div className={classes.or} > {"OR"} </div>
-            <Button className={classes.text} onClick={moveSignup} color="primary">SignUp ?</Button>
+            <Button className={classes.button} onClick={moveSignup} color="primary">SignUp ?</Button>
             </form>
         </div>
-
-
-        </div>
+        </Html>
+        </Canvas>
     )
 }
 

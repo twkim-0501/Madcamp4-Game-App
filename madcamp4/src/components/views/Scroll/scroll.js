@@ -6,6 +6,13 @@ import "./scroll.css"
 import spade from './spade.png'
 import gameicon from './cube.png'
 import { useSpring, a } from '@react-spring/web'
+import Button from '@material-ui/core/Button';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import NavigationIcon from '@material-ui/icons/Navigation';
+import { makeStyles } from '@material-ui/core/styles';
+import { Canvas, useLoader, useFrame } from "@react-three/fiber";
+import { OrbitControls, Stars, Html, Center } from "@react-three/drei";
 
 const H1 = styled.h1`
   text-align: center;
@@ -95,7 +102,7 @@ function usePosition(ref) {
     return () => {
       element.removeEventListener('scroll', update, {passive: true})
     }
-  }, [ref])
+  })
 
   const scrollToElement = React.useCallback(
     (element) => {
@@ -148,9 +155,8 @@ const CarouserContainer = styled(Relative)`
 
  const CarouselButton = styled.button`
   position: absolute;
-
+  
   cursor: pointer;
-  margin-top: 90px;
 
   top: 50%;
   z-index: 1;
@@ -192,7 +198,7 @@ const CarouserContainer = styled(Relative)`
 
   // offset for children spacing
   margin-left: -1rem;
-  margin-top: 170px;
+  margin-top: 40px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -276,10 +282,31 @@ const colors = [
   { name: "Tobby", people: 6, id: 4},
   { name: "Tobby", people: 6, id: 4},
   { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
+  { name: "Tobby", people: 6, id: 11},
 ]
 
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+    width: "300px",
+    height: "50px",
+    color: "white",
+    backgroundColor: "indigo",
+    fontSize: "20px",
+    fontFamily: "futura"
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+}));
+
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight
+};
+
 function Scroll() {
+  const classes = useStyles();
   const [flipped, set] = useState(false)
   const { transform, opacity } = useSpring({
     opacity: flipped ? 1 : 0,
@@ -320,11 +347,31 @@ function Scroll() {
     </div>
   ))
   return (
-    <div class="Container">
+    <Canvas >
+        <Stars
+            radius={100}
+            depth={50}
+            count={5000}
+            factor={4}
+            saturation={0}
+            fade
+          />
+      <Html as='div' className="Container"  fullscreen="true" >
+      
+      <h1 className="title"> MINUS AUCTION </h1>
       <HorizontalCenter>
         <Carousel>{colorsArray}</Carousel>
       </HorizontalCenter>
-    </div>
+      <div className="plus">
+      <Fab variant="extended" aria-label="add" className={classes.margin} >
+        <AddIcon className={classes.extendedIcon}/>
+        New room
+      </Fab>
+      </div>
+
+    </Html>
+
+    </Canvas>
   )
 }
 
