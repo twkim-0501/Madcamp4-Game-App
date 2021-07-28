@@ -17,6 +17,7 @@ router.get('/getAllrooms', (req,res) => {
 })
 
 router.post('/addRoom', (req,res) => {
+    console.log("here")
     db.addRoom(req.body, (id)=>{
         res.status(200).send(id);
     })

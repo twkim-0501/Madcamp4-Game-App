@@ -3,7 +3,7 @@ const express = require("express");
 const {auth} = require('../../middleware/auth');
 const router = express.Router();
 
-const {User} = require("../models/User");
+const User = require("../models/User");
 router.post('/register', (req,res) => {
     //회원가입할 때 필요한 정보들
     const user = new User(req.body)
