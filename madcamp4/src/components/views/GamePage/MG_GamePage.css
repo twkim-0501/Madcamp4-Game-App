@@ -216,6 +216,24 @@ div.opo-player-right,#notmyTurn {
     border-bottom: 1px solid black
 }
 
+.Bids{
+    opacity:0;
+}
+
+.Bids,#Me{
+    opacity:1;
+}
+.Bids,#notMe{
+    opacity:0;
+}
+
+.opo-player-left:hover .Bids{
+    opacity: 1;
+}
+.opo-player-right:hover .Bids{
+    opacity: 1;
+}
+
 .Chip{
     cursor: pointer;
 }
