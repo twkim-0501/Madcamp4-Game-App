@@ -12,7 +12,7 @@ import GamePage from './components/views/GamePage/GamePage'
 import Scroll from './components/views/Scroll/scroll'
 import Auth from './hoc/auth'
 import MG_GamePage from "./components/views/GamePage/MG_GamePage";
-
+import Choose from './components/views/Choose/choose'
 
 
 function App() {
@@ -26,6 +26,7 @@ function App() {
           <Route exact path="/gamepage" component={Auth(MG_GamePage, true)} />
           <Route exact path="/gamepage2" component={GamePage} />
           <Route exact path="/scroll" component={Scroll} />
+          <Route exact path="/choose" component={Choose} />
         </Switch>
     </Router>
   );
