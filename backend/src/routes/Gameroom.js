@@ -12,6 +12,7 @@ router.get('/getAll', (req,res) => {
 
 router.get('/getAllrooms', (req,res) => {
     db.getAllrooms((rooms) => {
+        console.log("rooms",rooms)
         res.status(200).send(rooms);
     })
 })

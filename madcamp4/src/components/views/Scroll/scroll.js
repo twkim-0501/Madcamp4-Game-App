@@ -255,16 +255,6 @@ function Carousel({children, joinRoom}) {
     scrollLeft,
   } = usePosition(ref)
 
-  useEffect(() => {
-    axios.get('/api/gameroom/getAllrooms')
-        .then((res) => {
-            //console.log(res.data);
-            setRooms(res.data);
-            //console.log("Carousel",res,joinRoom)
-        })
-    
-  }, [])
-
   return (
     <CarouserContainer>
       <CarouserContainerInner ref={ref}>
