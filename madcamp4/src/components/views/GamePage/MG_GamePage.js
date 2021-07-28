@@ -7,9 +7,15 @@ import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useSelector } from "react-redux";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import axios from "axios";
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, green, yellow, indigo } from '@material-ui/core/colors';
+
+function Alert(props) {
+    return <MuiAlert elevation={3} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -48,6 +54,7 @@ function MG_GamePage() {
     const [playerBids, setPlayerBids] = useState([])
     const [BidStatus, setBidStatus] = useState([])//플레이어별 유효 bid 총합과 index
     const [isMyturn, setIsMyturn] = useState("notmyTurn")
+    const [startCondition, setStartCondition] = useState(false);
     
     const waiting = [0, 1, 2, 3, 4, 5];
     useEffect(() => {
@@ -79,6 +86,7 @@ function MG_GamePage() {
             setCurTurn(data.curTurn)
             setPlayerBids(data.initBids)
             setBidStatus(data.initTotal)
+            alert("게임시작! \n자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.")
         })
         Socket.on('unexpectedLeave', (leaveId) => {
             // if(playerId == null){
@@ -195,6 +203,10 @@ function MG_GamePage() {
     }, [Items])
 
     const startClick = () => {
+        if(Players.length <=1){
+            setStartCondition(true);
+            return;
+        }
         var initChips = Players.map(player => 10)
         var initBids = Players.map(player => [])
         var temp = {totalBids: 0, activeIndex: []}
@@ -355,6 +367,14 @@ function MG_GamePage() {
         );
       };
 
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+
+    setStartCondition(false);
+    };
+
 
 
   
@@ -412,8 +432,20 @@ function MG_GamePage() {
 
         <div class="middlebox">
             <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 
-            <div class="Round"> {"Round: " + Items.length} </div>
-            <button class="startBtn" onClick={startClick}>Game Start</button>
+            {
+                Playing ?
+                    (33-Items.length)!=32 ?
+                        <div class="Round"> {"Round: " + (33-Items.length)} </div> :
+                        <div class="Round"> Final Round </div>
+                    :
+                    null
+            }
+            {
+                myIndex==0 ?
+                <button class="startBtn" onClick={startClick}>Game Start</button> :
+                null
+            }
+            
             {/*
                 Playing ?
                 <div>
@@ -482,6 +514,11 @@ function MG_GamePage() {
           )}
         </div>
       </DndProvider>
+      <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
