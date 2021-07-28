@@ -118,15 +118,34 @@ body {
     margin-bottom: 30px;
 }
 
+div.opo-player-left,#myTurn {
+    border: 5px solid #4263eb;
+}
+div.opo-player-left,#notmyTurn {
+    border: 3px none black;
+}
+
+div.opo-player-right,#myTurn {
+    border: 5px solid #4263eb;
+}
+div.opo-player-right,#notmyTurn {
+    border: 3px none black;
+}
+
 .cardShow {
-    background-color: #4aad4a;
+    display:flex;
+    background-color: #ced4da;
     width: 340px;
     margin-top: 30px;
     margin-bottom: 30px;
     text-align: center;
     flex-grow: 1;
     border-radius: 80px;
-    border:15px solid #a95555;
+    border:10px solid #0e2079;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
     /* box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.2); */
 }
 
@@ -144,7 +163,7 @@ body {
 
 .exitBtn {
     position: absolute;
-    left: 1100px;
+    right: 300px;
     bottom: 30px;
     width: 75px;
     height: 50px;
@@ -153,7 +172,7 @@ body {
 
 .startBtn {
     position: absolute;
-    left: 1100px;
+    right: 300px;
     bottom: 100px;
     width: 75px;
     height: 50px;
@@ -161,8 +180,14 @@ body {
 }
 
 .roomTitle {
+    /*
     position: absolute;
-    top: 5px;
+    top: 5px;*/
+}
+.Round{
+    margin-top: 10px;
+    border: 2px solid navy;
+    font-weight: bold;
 }
 
 .closeicon {
@@ -188,4 +213,15 @@ body {
 }
 .Bid:last-child{
     border-bottom: 1px solid black
+}
+
+.Chip{
+    cursor: pointer;
+}
+
+.nackchalItem{
+    cursor: pointer;
+}
+.nackchalItem_notmyTurn{
+    cursor: none;
 }
