@@ -60,7 +60,7 @@ function getAllrooms(callback){
             })
             setTimeout(() => {
                 
-            }, 100);
+            }, 500);
         })
         
     })
