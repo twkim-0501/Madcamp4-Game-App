@@ -5,6 +5,7 @@
   html,
   body,
   #root {
+    background: black;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -50,17 +51,18 @@
 }
 
 .mainbox{
-  width: 100vw;
-  height: 100%;
-  display:flex;
-  align-content:center;
-  align-items: center;
-  justify-content: flex-end;
-
+  height: stretch;
+    width: 100%;
+    
 }
+
 .loginform{
   flex-grow: 1;
+  align-self: center;
+  justify-self: center;
+  align-items: center;
 }
 .tempform{
   flex-grow: 1;
+  align-items: center;
 }

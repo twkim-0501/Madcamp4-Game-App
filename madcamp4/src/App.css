@@ -41,3 +41,8 @@
   font-family: "cardfont";
   src: url("./font/CARDC.TTF");
 }
+
+@font-face {
+  font-family: "futura";
+  src: url("./font/FuturaBookfont.ttf");
+}
