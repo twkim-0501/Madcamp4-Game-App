@@ -348,6 +348,7 @@ function Scroll() {
   ))
   return (
     <Canvas >
+        
         <Stars
             radius={100}
             depth={50}
