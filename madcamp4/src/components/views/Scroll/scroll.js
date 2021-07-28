@@ -102,7 +102,7 @@ function usePosition(ref) {
     return () => {
       element.removeEventListener('scroll', update, {passive: true})
     }
-  }, [ref])
+  })
 
   const scrollToElement = React.useCallback(
     (element) => {
@@ -356,7 +356,7 @@ function Scroll() {
             saturation={0}
             fade
           />
-      <Html as='div' className="Container" fullscreen="true" >
+      <Html as='div' className="Container"  fullscreen="true" >
       
       <h1 className="title"> MINUS AUCTION </h1>
       <HorizontalCenter>
