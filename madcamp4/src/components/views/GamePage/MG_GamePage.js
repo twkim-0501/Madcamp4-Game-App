@@ -412,15 +412,6 @@ function MG_GamePage() {
     // const whoIsWinner
 
     const Table = () => {
-        const [{ canDrop, isOver }, drop] = useDrop({
-          accept: "chip",
-          drop: () => ({ name: "table" }),
-          collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            canDrop: monitor.canDrop(),
-          }),
-        });
-    
         return (
           <div class="cardShow" >
             {
@@ -445,16 +436,13 @@ function MG_GamePage() {
       };
 
     const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
+        if (reason === 'clickaway') {
+            return;
+        }
 
-    setStartCondition(false);
+        setStartCondition(false);
     };
 
-
-    
-  
     
   return (
     <div class="mainbox">
@@ -523,17 +511,6 @@ function MG_GamePage() {
                 null
             }
             
-            {/*
-                Playing ?
-                <div>
-                    {
-                        curTurn==myIndex ?
-                        <button class="nackchalBtn" onClick={NackChalClick}>NackChalHagy</button> :
-                        null
-                    }
-                </div> :
-                null*/
-            }
             <Table />
             <a href='/'>
                 <button class="exitBtn">나가기</button>
