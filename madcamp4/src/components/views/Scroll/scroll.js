@@ -337,11 +337,11 @@ function Scroll() {
     alert('사용자의 이름으로 새로운 방이 생성됩니다')
   };
 
-  const joinRoom = (e) => {
+  function joinRoom (index) {
     set(state => !state)
-    console.log("인덱스", e.target.value)
+    console.log("인덱스", index)
     console.log("여기에 룸아이디와야함!", rooms)
-    axios.post('/api/gameroom/joinRoom', {roomId: rooms[0]._id, playerId: user.userData?._id})
+    axios.post('/api/gameroom/joinRoom', {roomId: rooms[index]._id, playerId: user.userData?._id})
   }
 
   const { transform, opacity } = useSpring({
@@ -350,52 +350,8 @@ function Scroll() {
     config: { mass: 5, tension: 500, friction: 80 },
   })
 
-  const colorsArray2 = ({value, joinRoom}) => {
-    return (
-      <div>
-        {
-        rooms.map((color,index) => (
-          <div class="outer" value={color._id}
-            >
-          {
-            flipped
-            ? <a.div class="front" 
-              style={{  transform, borderRadius: '20px'}}
-            >
-              <span class="inner" > {color.id} </span>
-              <span class="spade">
-              <img src={ spade } width='32' height='32' />
-              </span>
-              <span class="username" > {color.name} </span>
-              
-              <span class="gameicon">
-              <img src={ gameicon } width='52' height='52' />
-              </span>
-          
-              <span class="people" > {color.people} / 6 </span>
-              <span class="spade2">
-              <img src={ spade } width='32' height='32' />
-              </span>
-              <span class="end"> {color.id} </span>
-            </a.div>
-            : <a.div
-              class="back"
-              style={{
-                transform,
-                borderRadius: '20px',
-                rotateY: '180deg',
-              }}
-            />
-          }
-          </div>
-        ))
-      }
-      </div>
-      
-    )
-  }
   const colorsArray = rooms.map((color,index) => (
-    <div class="outer" onClick={joinRoom} value={index}
+    <div class="outer" onClick={() => {joinRoom(index)}} value={index}
       >
     {
       flipped
