@@ -68,6 +68,8 @@ function getAllrooms(callback){
 
 function joinRoom(joinInfo, callback){
     const {roomId, playerId} = joinInfo;
+
+    console.log("joinInfo",joinInfo)
     GameroomModel.findOne({_id: roomId}, (err,res) => {
         if(res.players == null){
             callback();

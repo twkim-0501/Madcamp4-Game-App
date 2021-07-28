@@ -244,8 +244,9 @@ const ArrowRight = ({size = 40, color = '#fff'}) => (
 )
 
 
-function Carousel({children}) {
+function Carousel({children, joinRoom}) {
   const ref = React.useRef()
+  const [rooms, setRooms] = useState([])
 
   const {
     hasItemsOnLeft,
@@ -253,6 +254,16 @@ function Carousel({children}) {
     scrollRight,
     scrollLeft,
   } = usePosition(ref)
+
+  useEffect(() => {
+    axios.get('/api/gameroom/getAllrooms')
+        .then((res) => {
+            //console.log(res.data);
+            setRooms(res.data);
+            //console.log("Carousel",res,joinRoom)
+        })
+    
+  }, [])
 
   return (
     <CarouserContainer>
@@ -326,11 +337,11 @@ function Scroll() {
     alert('사용자의 이름으로 새로운 방이 생성됩니다')
   };
 
-  const joinRoom = (index) => {
+  const joinRoom = (e) => {
     set(state => !state)
-    console.log("인덱스", index)
-    console.log("여기에 룸아이디와야함!", rooms[index]._id)
-    axios.post('/api/gameroom/joinRoom', {roomId: rooms[index]._id, playerId: user.userData?._id})
+    console.log("인덱스", e.target.value)
+    console.log("여기에 룸아이디와야함!", rooms)
+    axios.post('/api/gameroom/joinRoom', {roomId: rooms[0]._id, playerId: user.userData?._id})
   }
 
   const { transform, opacity } = useSpring({
@@ -344,7 +355,7 @@ function Scroll() {
       <div>
         {
         rooms.map((color,index) => (
-          <div class="outer" value={color._id} onClick={ joinRoom.bind(index) } 
+          <div class="outer" value={color._id}
             >
           {
             flipped
@@ -384,7 +395,7 @@ function Scroll() {
     )
   }
   const colorsArray = rooms.map((color,index) => (
-    <div class="outer" value={color._id} onClick={ joinRoom.bind(index) } 
+    <div class="outer" onClick={joinRoom} value={index}
       >
     {
       flipped
