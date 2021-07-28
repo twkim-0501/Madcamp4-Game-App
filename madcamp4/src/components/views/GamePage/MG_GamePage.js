@@ -539,7 +539,7 @@ function MG_GamePage() {
                 null*/
             }
             <Table />
-            <a href='/'>
+            <a href='/scroll'>
                 <button class="exitBtn">나가기</button>
             </a>
             {/*

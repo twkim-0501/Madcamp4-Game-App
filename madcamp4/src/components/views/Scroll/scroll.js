@@ -330,12 +330,15 @@ function Scroll() {
   //const [open, setOpen] = React.useState(false);
 
   const NewRoom = () => {
+    set(state => !state)
     console.log(roomName);
     console.log(user.userData)
     //socket으로 text 쏴주면 될듯
     axios.post('/api/gameroom/addRoom', {roomName: 'roomname', user: user.userData})
     setRoomName('');
-    alert('사용자의 이름으로 새로운 방이 생성됩니다')
+    setTimeout(() => {
+      history.push('/gamepage')
+    }, 1500);
   };
 
   function joinRoom (index) {
