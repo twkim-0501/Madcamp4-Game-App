@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Oppo_player(props) {
-  const { player, myId, MyChips, Playing, host, playerBids, BidStatus, myIndex } = props;
-
+  const { player, myId, MyChips, Playing, host, playerBids, BidStatus, Index, myIndex } = props;
+  var isMe = (Index == myIndex) ? "Me" : "notMe"
   useEffect(() => {
-    console.log("map test", playerBids,myIndex, player);
+    console.log("map test", playerBids,Index, player);
   }, [Playing])
 
   return (
@@ -29,27 +29,37 @@ function Oppo_player(props) {
           {
             host?._id == player._id ?
             <span class="staricon">
-                <StarIcon style={{color: 'yellow'}}/>
+                <StarIcon style={{color: 'blue'}}/>
             </span> :
             null
           }
         </span>
       <span>
         {"Player " + player?.name}
-        <CloseIcon class="closeicon" />
+        <CloseIcon class="closeicon" id={isMe}/>
       </span>
       <span>
         {
           Playing ?
-          <div>
-            {
-              playerBids[myIndex]?.map( (Bid,index) => 
-                (BidStatus[myIndex].activeIndex.includes(index)) ?
-                  <div class="Bid">{Bid}</div> :
-                  <div>{Bid}</div>
-              )
-            }
-          </div>
+            (Index == myIndex) ?
+            <div class="Bids" id="Me">
+              {
+                playerBids[Index]?.map( (Bid,index) => 
+                  (BidStatus[Index].activeIndex.includes(index)) ?
+                    <div class="Bid">{Bid}</div> :
+                    <div>{Bid}</div>
+                )
+              }
+            </div> :
+            <div class="Bids">
+              {
+                playerBids[Index]?.map( (Bid,index) => 
+                  (BidStatus[Index].activeIndex.includes(index)) ?
+                    <div class="Bid">{Bid}</div> :
+                    <div>{Bid}</div>
+                )
+              }
+            </div>
            :
           null
         }

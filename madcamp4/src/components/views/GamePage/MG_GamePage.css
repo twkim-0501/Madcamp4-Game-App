@@ -118,49 +118,75 @@ body {
     margin-bottom: 30px;
 }
 
+div.opo-player-left,#myTurn {
+    border: 5px solid #4263eb;
+}
+div.opo-player-left,#notmyTurn {
+    border: 3px none black;
+}
+
+div.opo-player-right,#myTurn {
+    border: 5px solid #4263eb;
+}
+div.opo-player-right,#notmyTurn {
+    border: 3px none black;
+}
+
 .cardShow {
-    background-color: #4aad4a;
+    display:flex;
+    background-color: #ced4da;
     width: 340px;
     margin-top: 30px;
     margin-bottom: 30px;
     text-align: center;
     flex-grow: 1;
     border-radius: 80px;
-    border:15px solid #a95555;
+    border:10px solid #0e2079;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
     /* box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.2); */
 }
 
 .chip {
-    border-radius: 50%;
+    border-radius: 25px;
     background-color: #fff3f3;
-    height: 50px;
-    width: 50px;
     margin: 10px auto;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+    height: 50px;
+    width: 50px;
+    cursor:pointer;
 }
 
   
 .chip-y{
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     transition: all .4s cubic-bezier(.29,.04,.92,.29);
-    position: fixed;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
 }
 .chip-x{
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    background: #00B7FF;
+    background: #09e652;
     transition: all .4s linear;
+    justify-content: center;
+    align-items: center;
+    cursor:pointer;
+    display: flex;
 }
 
 .exitBtn {
     position: absolute;
-    left: 1100px;
+    right: 400px;
     bottom: 30px;
     width: 75px;
     height: 50px;
@@ -169,7 +195,7 @@ body {
 
 .startBtn {
     position: absolute;
-    left: 1100px;
+    right: 400px;
     bottom: 100px;
     width: 75px;
     height: 50px;
@@ -177,8 +203,14 @@ body {
 }
 
 .roomTitle {
+    /*
     position: absolute;
-    top: 5px;
+    top: 5px;*/
+}
+.Round{
+    margin-top: 10px;
+    border: 2px solid navy;
+    font-weight: bold;
 }
 
 .closeicon {
@@ -205,11 +237,37 @@ body {
 .Bid:last-child{
     border-bottom: 1px solid black
 }
-.box{
-    width: 50px;
+.chipBox{
+    width: 100px;
     height: 50px;
     background: #00B7FF;
-    position: fixed;
-    top: 80%;
-    left: 50%;
+}
+
+.Bids{
+    opacity:0;
+}
+
+.Bids,#Me{
+    opacity:1;
+}
+.Bids,#notMe{
+    opacity:0;
+}
+
+.opo-player-left:hover .Bids{
+    opacity: 1;
+}
+.opo-player-right:hover .Bids{
+    opacity: 1;
+}
+
+.Chip{
+    cursor: pointer;
+}
+
+.nackchalItem{
+    cursor: pointer;
+}
+.nackchalItem_notmyTurn{
+    cursor: none;
 }
