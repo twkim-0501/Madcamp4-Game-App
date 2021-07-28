@@ -1,16 +1,18 @@
 import "./choose.css";
 import * as THREE from "three";
-import { OrbitControls, Stars, Sky } from "@react-three/drei";
+import { OrbitControls, Stars, Sky, Html } from "@react-three/drei";
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
-import { Suspense, useMemo, useRef } from "react";
-import { withRouter } from "react-router-dom";
+import { Suspense, useMemo, useRef, useState,  } from "react";
+import { withRouter,  useHistory} from "react-router-dom";
+import pingpong from './ping-pong.png'
 
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight
 };
 
-const Text = ({ text, position, vAlign = "center", hAlign = "center" }) => {
+const Text = ({ text, position, vAlign = "center", hAlign = "center", history, check }) => {
+  
   const font = useLoader(THREE.FontLoader, "/bold.blob");
   const config = useMemo(
     () => ({
@@ -27,20 +29,40 @@ const Text = ({ text, position, vAlign = "center", hAlign = "center" }) => {
     [font]
   );
   const mesh = useRef();
+  const [active, setActive] = useState(false);
+  const [hover, setHover] = useState(false);
+  // useFrame(()=> {
+  //   mesh.current.rotation.x = mesh.current.rotation.y += 0.01
+  //   if (active) {
+  //     history.push('/scroll')
+  //   }
+  // })
+
   useFrame(({ clock }) => {
     const size = new THREE.Vector3();
-    mesh.current.geometry.computeBoundingBox();
-    mesh.current.geometry.boundingBox.getSize(size);
-    mesh.current.position.x =
-      hAlign === "center" ? -size.x / 2 : hAlign === "right" ? 0 : -size.x;
-    mesh.current.position.y =
-      vAlign === "center" ? -size.y / 2 : vAlign === "top" ? 0 : -size.y;
-    mesh.current.rotation.y = mesh.current.rotation.x = mesh.current.rotation.z =
-      Math.sin(clock.getElapsedTime()) * 0.1;
+      if (active) {
+        setTimeout(() => {
+          if (!check)
+            history.push('/scroll')
+          else history.push('/gamepage2')
+        }, 10);
+      }
+      else {
+        mesh.current.geometry.computeBoundingBox();
+        mesh.current.geometry.boundingBox.getSize(size);
+        mesh.current.position.x =
+          hAlign === "center" ? -size.x / 2 : hAlign === "right" ? 0 : -size.x;
+        mesh.current.position.y =
+          vAlign === "center" ? -size.y / 2 : vAlign === "top" ? 0 : -size.y;
+        mesh.current.rotation.y = mesh.current.rotation.x = mesh.current.rotation.z =
+          Math.sin(clock.getElapsedTime()) * 0.1;
+      }
   });
   return (
-    <group position={position}>
-      <mesh ref={mesh}>
+    <group position={position} >
+      <mesh ref={mesh} onClick={() => {
+        setActive(!active);
+      }}> 
         <textGeometry center args={[text, config]} />
         <meshNormalMaterial />
       </mesh>
@@ -48,11 +70,8 @@ const Text = ({ text, position, vAlign = "center", hAlign = "center" }) => {
   );
 };
 
-const onSubmitHandler = (event) => {
-alert('hello')
-}
-
 function App(props) {
+  let history = useHistory()
   return (
     <Canvas className="canvas">
              <OrbitControls/>
@@ -72,11 +91,12 @@ function App(props) {
             saturation={0}
             fade
           />
-          <Text onClick={onSubmitHandler} text="PING" position={[-2, 0.25, -2]} />
-          <Text text="PONG" position={[-2, -0.25, -2]} />
+          
+          <Text text="PING" position={[-2, 0.25, -2]} history={history} check={true}/>
+          <Text text="PONG" position={[-2, -0.25, -2]} history={history} check={true}/>
 
-          <Text text="MINUS" position={[2, 0.25, -2]} />
-          <Text text="AUCTION" position={[2, -0.25, -2]} />
+          <Text text="MINUS" position={[2, 0.25, -2]} history={history} check={false}/>
+          <Text text="AUCTION" position={[2, -0.25, -2]} history={history} check={false}/>
         </perspectiveCamera>
       </Suspense>
       <ambientLight />

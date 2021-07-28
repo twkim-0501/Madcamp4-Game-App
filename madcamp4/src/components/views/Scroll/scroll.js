@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import React, { useState } from "react"
 import { withRouter } from "react-router-dom";
-import ReactCardFlip from 'react-card-flip';
 import "./scroll.css"
 import spade from './spade.png'
 import gameicon from './cube.png'
@@ -102,7 +101,7 @@ function usePosition(ref) {
     return () => {
       element.removeEventListener('scroll', update, {passive: true})
     }
-  }, [ref])
+  })
 
   const scrollToElement = React.useCallback(
     (element) => {
@@ -143,7 +142,7 @@ function usePosition(ref) {
   }
 }
 
-const CarouserContainer = styled(Relative)`
+const CarouserContainer = styled.div`
   overflow: hidden;
 `
 
@@ -170,22 +169,22 @@ const CarouserContainer = styled(Relative)`
 `
  const LeftCarouselButton = styled(CarouselButton)`
   left: 0;
-  transform: translate(-100%, -50%);
+  transform: translate(0%, -50%);
 
-  ${CarouserContainer}:hover & {
-    transform: translate(0%, -50%);
-  }
+  // ${CarouserContainer}:hover & {
+  //   transform: translate(0%, -50%);
+  // }
 
   visibility: ${({hasItemsOnLeft}) => (hasItemsOnLeft ? `all` : `hidden`)};
 `
 
  const RightCarouselButton = styled(CarouselButton)`
   right: 0;
-  transform: translate(100%, -50%);
+  transform: translate(0%, -50%);
 
-  ${CarouserContainer}:hover & {
-    transform: translate(0%, -50%);
-  }
+  // ${CarouserContainer}:hover & {
+  //   transform: translate(0%, -50%);
+  // }
 
   visibility: ${({hasItemsOnRight}) => (hasItemsOnRight ? `all` : `hidden`)};
 `
@@ -274,15 +273,15 @@ function Carousel({children}) {
 }
 
 const colors = [
-  { name: "Tobby", people: 6, id: 'A'},
-  { name: "Hello", people: 6, id: 1},
-  { name: "Tobby", people: 6, id: 2},
-  { name: "Tobby", people: 6, id: 3},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 11},
+  { name: "Tobby", people: 1, id: 'A'},
+  { name: "Hello", people: 2, id: 1},
+  { name: "Tobby", people: 3, id: 2},
+  { name: "Tobby", people: 4, id: 3},
+  { name: "Tobby", people: 5, id: 4},
+  { name: "Tobby", people: 6, id: 5},
+  { name: "Tobby", people: 6, id: 6},
+  { name: "Tobby", people: 6, id: 7},
+  { name: "Tobby", people: 6, id: 8},
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -307,48 +306,51 @@ const sizes = {
 
 function Scroll() {
   const classes = useStyles();
-  const [flipped, set] = useState(false)
+  const [flipped, set] = useState(true)
   const { transform, opacity } = useSpring({
-    opacity: flipped ? 1 : 0,
-    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
+    opacity: 1,
+    transform: `perspective(500px) rotateY(${flipped ? 360 : 180}deg)`,
     config: { mass: 5, tension: 500, friction: 80 },
   })
   const colorsArray = colors.map((color) => (
     <div class="outer" 
       onClick={() => set(state => !state)}>
-    <a.div class="front"
-      style={{ opacity: opacity.to(o => 1 - o), transform, borderRadius: '20px'}}
-    >
-       <span class="inner" > {color.id} </span>
-       <span class="spade">
-       <img src={ spade } width='32' height='32' />
-       </span>
-       <span class="username" > {color.name} </span>
-       
-       <span class="gameicon">
-       <img src={ gameicon } width='52' height='52' />
-       </span>
-  
-       <span class="people" > {color.people} / 6 </span>
-       <span class="spade2">
-       <img src={ spade } width='32' height='32' />
-       </span>
-       <span class="end"> {color.id} </span>
-    </a.div>
-    <a.div
+    {
+      flipped
+      ? <a.div class="front"
+        style={{  transform, borderRadius: '20px'}}
+      >
+        <span class="inner" > {color.id} </span>
+        <span class="spade">
+        <img src={ spade } width='32' height='32' />
+        </span>
+        <span class="username" > {color.name} </span>
+        
+        <span class="gameicon">
+        <img src={ gameicon } width='52' height='52' />
+        </span>
+    
+        <span class="people" > {color.people} / 6 </span>
+        <span class="spade2">
+        <img src={ spade } width='32' height='32' />
+        </span>
+        <span class="end"> {color.id} </span>
+      </a.div>
+      : <a.div
         class="back"
         style={{
-          opacity,
           transform,
           borderRadius: '20px',
           rotateY: '180deg',
         }}
       />
+    }
+    
+    
     </div>
   ))
   return (
-    <Canvas >
-        
+    <Canvas>
         <Stars
             radius={100}
             depth={50}
@@ -358,7 +360,6 @@ function Scroll() {
             fade
           />
       <Html as='div' className="Container" fullscreen="true" >
-      
       <h1 className="title"> MINUS AUCTION </h1>
       <HorizontalCenter>
         <Carousel>{colorsArray}</Carousel>
@@ -368,10 +369,8 @@ function Scroll() {
         <AddIcon className={classes.extendedIcon}/>
         New room
       </Fab>
-      </div>
-
+      </div> 
     </Html>
-
     </Canvas>
   )
 }
