@@ -1,8 +1,8 @@
-  
+
 .Container {
     height: stretch;
     width: 100%;
-   
+   margin-top: 40px;
     /* background-image: url("./table.jpeg");
     background-size: contain; */
 }
@@ -40,7 +40,7 @@
 .inner {
     text-align: right;
     padding-right: 30px;
-    padding-top: 20px;
+    padding-top: 18px;
     padding-bottom: 7px;
     font-family: "cardfont";
 }
@@ -71,13 +71,14 @@
 .spade2 {
     text-align: right;
     padding-right: 23px;
+    padding-top: 7px;
     transform: rotate(180deg);
 }
 
 .end {
     text-align: right;
-    padding-bottom: 10px;
-    padding-right: 30px;
+    padding-top: 5px;
+    padding-right: 29px;
     transform: rotate(180deg);
     font-family: "cardfont";
 }
