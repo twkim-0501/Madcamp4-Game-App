@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import "./MG_GamePage.css"
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 let Socket
+
 function MG_GamePage() {
     const user = useSelector(state => state.user)
     const playerId = user.userData?._id
@@ -42,12 +44,19 @@ function MG_GamePage() {
     const [curBid, setCurBid] = useState(0)
     const [playerBids, setPlayerBids] = useState([])
     const [BidStatus, setBidStatus] = useState([])//플레이어별 유효 bid 총합과 index
+
+    const [clickChip, setClickChip] = useState()
+    const tableRef = useRef()
+    const chipYRef = useRef()
+    const chipXRef = useRef()
+    const chipRef = useRef()
     
     const waiting = [0, 1, 2, 3, 4, 5];
+
     useEffect(() => {
 
-        Socket = io('http://192.249.18.179:80')
-        //Socket = io('http://192.249.18.171:80')
+        // Socket = io('http://192.249.18.179:80')
+        Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -169,13 +178,18 @@ function MG_GamePage() {
     useEffect(() => {
         console.log("my chip???", Chips[myIndex])
         if(curTurn == myIndex && Chips[myIndex]==0 ){
+            alert("칩이 없어 강제 낙찰 하세요")
+        }
+    }, [curTurn])
+
+    useEffect(() => {
+        if(curTurn == myIndex && Chips[myIndex]==0 ){
             alert("칩이 없어 강제 낙찰됨!")
             setTimeout(function(){
                 NackChalClick();
             },3000)
         }
-    }, [curTurn])
-
+    },[curTurn])
     useEffect(() => {
         if(Items.length < 1){
             setPlaying(false)
@@ -211,40 +225,70 @@ function MG_GamePage() {
     }
 
 
-    const Chip = () => {
-        const [{ isDragging, canDrag }, drag] = useDrag({
-            type: 'chip',
-            item: { name: 'chip' },
-            end: (item, monitor) => {
-                const dropResult = monitor.getDropResult()
-                if (dropResult && dropResult.name === 'table') {
-                    //chip array 갱신
-                    Chips.splice(myIndex, 1, Chips[myIndex] - 1);
+    // const Chip = () => {
+    //     const [{ isDragging, canDrag }, drag] = useDrag({
+    //         type: 'chip',
+    //         item: { name: 'chip' },
+    //         end: (item, monitor) => {
+    //             const dropResult = monitor.getDropResult()
+    //             if (dropResult && dropResult.name === 'table') {
+    //                 //chip array 갱신
+    //                 Chips.splice(myIndex, 1, Chips[myIndex] - 1);
                     
-                    console.log(Chips)
-                    setChips(Chips)
-                    setBet(Bet + 1)
-                    if(curTurn == (Players.length - 1)){
-                        setCurTurn(0)
-                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: 0})
-                    }
-                    else{
-                        setCurTurn(curTurn+1)
-                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1})
-                    }
-                }
-            },
-            collect: (monitor) => ({
-                isDragging: monitor.isDragging(),
-                canDrag: monitor.canDrag()
-            }),
-        });
+    //                 console.log(Chips)
+    //                 setChips(Chips)
+    //                 setBet(Bet + 1)
+    //                 if(curTurn == (Players.length - 1)){
+    //                     setCurTurn(0)
+    //                     Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: 0})
+    //                 }
+    //                 else{
+    //                     setCurTurn(curTurn+1)
+    //                     Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1})
+    //                 }
+    //             }
+    //         },
+    //         collect: (monitor) => ({
+    //             isDragging: monitor.isDragging(),
+    //             canDrag: monitor.canDrag()
+    //         }),
+    //     });
 
-        const opacity = isDragging ? 0.4 : 1;
+    //     const opacity = isDragging ? 0.4 : 1;
+
+    //     return (
+    //         <div className='chip' ref={drag} style={{ opacity }}>
+    //             {canDrag ? "베팅" : "베팅불가"}
+    //         </div>
+    //     )
+    // }
+
+    const Chip = (props) => {
+        const init = () => {
+            chipYRef.current.style.top=`${props.origin.y}px`;
+            chipYRef.current.style.left=`${props.origin.x}px`;
+            if(props.origin.y > props.terminal.y){
+                chipYRef.current.style.transition = "all .4s cubic-bezier(0,.3,.55,1.62)"
+            }
+            console.log(props.id);
+            setTimeout(()=>{
+                fall()
+            },0)
+        };
+
+        const fall = () => {
+            chipYRef.current.style.transform=`translateY(${props.terminal.y - props.origin.y}px)`;
+            chipXRef.current.style.transform=`translateX(${props.terminal.x - props.origin.x}px)`;
+            // setTimeout(()=>{
+            //     props.complete(props.id)
+            // }, 400)
+        };
 
         return (
-            <div className='chip' ref={drag} style={{ opacity }}>
-                {canDrag ? "베팅" : "베팅불가"}
+            <div className='chip-y' ref={chipYRef}>
+                <div className='chip-x' ref={chipXRef}>
+                    베팅
+                </div>
             </div>
         )
     }
@@ -263,7 +307,7 @@ function MG_GamePage() {
         Chips.splice(myIndex, 1, Chips[myIndex] + Bet);
         setBet(0)
         setChips(Chips)
-        if (Chips[myIndex] > 0) {
+        if(Chips[myIndex]>0){
             setDragable(true)
         }
         setCurTurn(myIndex)
@@ -326,17 +370,29 @@ function MG_GamePage() {
         });
     
         return (
-          <div class="cardShow" ref={drop}>
-            {/* <Hexagon className='hexTable' style={{stroke: '#000000'}} /> */}
-            
-          </div>
+        //   <div class="cardShow" ref={drop}>
+            <div class="cardShow" ref={tableRef}> 
+                {/* <Hexagon className='hexTable' style={{stroke: '#000000'}} /> */}
+            </div>
         );
       };
 
 
-
+    const chipClick = (e) => {
+        let chip = {
+            id: `${e.timeStamp}`,
+            termialX:tableRef.current.offsetLeft+15,
+            termialY:tableRef.current.offsetTop,
+            originX:e.pageX,
+            originY:e.pageY
+        };
+        setClickChip(chip, () => {
+            chipRef.current.init()
+        })
+        
+    }
   
-
+    
   return (
     <div class="mainbox">
       <DndProvider backend={HTML5Backend}>
@@ -355,7 +411,10 @@ function MG_GamePage() {
                             ? <div>
                                 {Playing ? Chips[myIndex] : null}
                                 {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    ? Dragable ? <Chip onClick={chipClick} ref={chipRef} key={clickChip?.id} 
+                                    terminal={{x: clickChip?.termialX, y: clickChip?.termialY}}
+                                    origin={{x: clickChip?.originX, y: clickChip?.originY}}
+                                    id={clickChip?.id} /> : <FixedChip />
                                     : null}
                             </div>
                             : null
@@ -410,7 +469,10 @@ function MG_GamePage() {
                             ? <div>
                                 {Playing ? Chips[myIndex] : null}
                                 {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    ? Dragable ? <Chip onClick={chipClick} ref={chipRef} key={clickChip?.id} 
+                                    terminal={{x: clickChip?.termialX, y: clickChip?.termialY}}
+                                    origin={{x: clickChip?.originX, y: clickChip?.originY}}
+                                    id={clickChip?.id} /> : <FixedChip />
                                     : null}
                             </div>
                             : null

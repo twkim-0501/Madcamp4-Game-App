@@ -131,7 +131,7 @@ body {
 }
 
 .chip {
-    border-radius: 10px;
+    border-radius: 50%;
     background-color: #fff3f3;
     height: 50px;
     width: 50px;
@@ -140,6 +140,22 @@ body {
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+}
+
+  
+.chip-y{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: all .4s cubic-bezier(.29,.04,.92,.29);
+    position: fixed;
+}
+.chip-x{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #00B7FF;
+    transition: all .4s linear;
 }
 
 .exitBtn {
@@ -188,4 +204,12 @@ body {
 }
 .Bid:last-child{
     border-bottom: 1px solid black
+}
+.box{
+    width: 50px;
+    height: 50px;
+    background: #00B7FF;
+    position: fixed;
+    top: 80%;
+    left: 50%;
 }
