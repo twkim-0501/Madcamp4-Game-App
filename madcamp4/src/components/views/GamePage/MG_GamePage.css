@@ -167,6 +167,28 @@ div.opo-player-right,#notmyTurn {
     cursor:pointer;
 }
 
+  
+.chip-y{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all .4s cubic-bezier(.29,.04,.92,.29);
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
+}
+.chip-x{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #09e652;
+    transition: all .4s linear;
+    justify-content: center;
+    align-items: center;
+    cursor:pointer;
+    display: flex;
+}
+
 .exitBtn {
     position: absolute;
     right: 400px;
@@ -216,6 +238,14 @@ div.opo-player-right,#notmyTurn {
 }
 .activeBid{
     color: red;
+}
+.Bid:last-child{
+    border-bottom: 1px solid black
+}
+.chipBox{
+    width: 100px;
+    height: 50px;
+    background: #00B7FF;
 }
 
 .Bids{
