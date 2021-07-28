@@ -159,11 +159,12 @@ div.opo-player-right,#notmyTurn {
     justify-content: center;
     align-items: center;
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.5);
+    cursor:pointer;
 }
 
 .exitBtn {
     position: absolute;
-    right: 300px;
+    right: 400px;
     bottom: 30px;
     width: 75px;
     height: 50px;
@@ -172,7 +173,7 @@ div.opo-player-right,#notmyTurn {
 
 .startBtn {
     position: absolute;
-    right: 300px;
+    right: 400px;
     bottom: 100px;
     width: 75px;
     height: 50px;
