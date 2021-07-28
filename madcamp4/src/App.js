@@ -23,7 +23,7 @@ function App() {
           <Route exact path="/" component={Auth(LandingPage, true)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
-          <Route exact path="/gamepage/:hostName" component={Auth(MG_GamePage, true)} />
+          <Route exact path="/gamepage" component={Auth(MG_GamePage, true)} />
           <Route exact path="/gamepage2" component={GamePage} />
           <Route exact path="/scroll" component={Auth(Scroll, true)} />
           <Route exact path="/choose" component={Choose} />
