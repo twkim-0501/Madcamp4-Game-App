@@ -1,7 +1,6 @@
 .Container {
     height: stretch;
     width: 100%;
-    background: #000;
     align-items: center;
     justify-items: center;
     justify-self: center;
