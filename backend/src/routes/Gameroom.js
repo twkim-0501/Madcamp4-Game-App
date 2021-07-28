@@ -10,6 +10,12 @@ router.get('/getAll', (req,res) => {
     })
 })
 
+router.get('/getAllrooms', (req,res) => {
+    db.getAllrooms((rooms) => {
+        res.status(200).send(rooms);
+    })
+})
+
 router.post('/addRoom', (req,res) => {
     db.addRoom(req.body, (id)=>{
         res.status(200).send(id);
