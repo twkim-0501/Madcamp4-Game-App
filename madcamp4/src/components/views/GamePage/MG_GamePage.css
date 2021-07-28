@@ -38,6 +38,7 @@ body {
     flex-direction: column;
     justify-content: space-between;
     text-align: center;
+    align-items: flex-end;
     background-color: #dddddd;
 }
 
@@ -79,6 +80,8 @@ body {
     border-radius: 20px 0% 0% 20px;
     margin-left: 15px;
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    height: 28%;
 }
 
 .opo-player-left {
@@ -90,6 +93,8 @@ body {
     border-radius: 0% 20px 20px 0%;
     margin-right: 15px;
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    height: 28%;
 }
 
 .opo-player-right:hover {
@@ -150,7 +155,6 @@ div.opo-player-right,#notmyTurn {
 }
 
 .chip {
-    
     border-radius: 25px;
     background-color: #fff3f3;
     margin: 10px auto;
@@ -210,29 +214,19 @@ div.opo-player-right,#notmyTurn {
     width: 440px;
     height: 440px;
 }
-.Bid{
+.activeBid{
     color: red;
-}
-.Bid:last-child{
-    border-bottom: 1px solid black
 }
 
 .Bids{
     opacity:0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-driection: row;
 }
 
 .Bids,#Me{
     opacity:1;
-}
-.Bids,#notMe{
-    opacity:0;
-}
-
-.opo-player-left:hover .Bids{
-    opacity: 1;
-}
-.opo-player-right:hover .Bids{
-    opacity: 1;
 }
 
 .Chip{
@@ -244,4 +238,19 @@ div.opo-player-right,#notmyTurn {
 }
 .nackchalItem_notmyTurn{
     cursor: none;
+}
+
+.myChips{
+    border-top: 1px solid black;
+    display: flex;
+    flex-direction: row;
+}
+.myChipsNum{
+    flex-grow:1;
+}
+.ChipForBet{
+    flex-grow:1;
+}
+.instruction{
+    font-size: x-large;
 }

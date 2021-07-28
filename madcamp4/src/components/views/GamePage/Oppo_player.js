@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Oppo_player(props) {
   const { player, myId, MyChips, Playing, host, playerBids, BidStatus, Index, myIndex } = props;
-  var isMe = (Index == myIndex) ? "Me" : "notMe"
   useEffect(() => {
     console.log("map test", playerBids,Index, player);
   }, [Playing])
@@ -36,27 +35,17 @@ function Oppo_player(props) {
         </span>
       <span>
         {"Player " + player?.name}
-        <CloseIcon class="closeicon" id={isMe}/>
+        <CloseIcon class="closeicon"/>
       </span>
       <span>
         {
           Playing ?
-            (Index == myIndex) ?
-            <div class="Bids" id="Me">
-              {
-                playerBids[Index]?.map( (Bid,index) => 
-                  (BidStatus[Index].activeIndex.includes(index)) ?
-                    <div class="Bid">{Bid}</div> :
-                    <div>{Bid}</div>
-                )
-              }
-            </div> :
             <div class="Bids">
               {
                 playerBids[Index]?.map( (Bid,index) => 
                   (BidStatus[Index].activeIndex.includes(index)) ?
-                    <div class="Bid">{Bid}</div> :
-                    <div>{Bid}</div>
+                  <span class="activeBid">{Bid}</span> :
+                  <span class="inactiveBid">{Bid}</span>
                 )
               }
             </div>

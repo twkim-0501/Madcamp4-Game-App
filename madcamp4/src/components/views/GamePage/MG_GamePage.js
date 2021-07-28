@@ -55,6 +55,7 @@ function MG_GamePage() {
     const [BidStatus, setBidStatus] = useState([])//플레이어별 유효 bid 총합과 index
     const [isMyturn, setIsMyturn] = useState("notmyTurn")
     const [startCondition, setStartCondition] = useState(false);
+    const [startAlert, setStartAlert] = useState(false);
     
     const waiting = [0, 1, 2, 3, 4, 5];
     useEffect(() => {
@@ -86,7 +87,7 @@ function MG_GamePage() {
             setCurTurn(data.curTurn)
             setPlayerBids(data.initBids)
             setBidStatus(data.initTotal)
-            alert("게임시작! \n자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.")
+            setStartAlert(true);
         })
         Socket.on('unexpectedLeave', (leaveId) => {
             // if(playerId == null){
@@ -180,7 +181,7 @@ function MG_GamePage() {
     }, [Chips])
     useEffect(() => {
         if(curTurn == myIndex && Chips[myIndex]==0 ){
-            alert("칩이 없어서 낙찰해야 함!")
+            alert("칩이 없어서 낙찰하셔야 합니다!")
         }
         if(curTurn == myIndex){
             setIsMyturn("myTurn")
@@ -373,6 +374,7 @@ function MG_GamePage() {
     }
 
     setStartCondition(false);
+    setStartAlert(false);
     };
 
 
@@ -413,10 +415,10 @@ function MG_GamePage() {
                     />
                     {
                         (Players[index]?._id == playerId)
-                            ? <div>
-                                {Playing ? Chips[myIndex] : null}
+                            ? <div class="myChips">
+                                {Playing ? <span class="myChipsNum">{Chips[myIndex]}</span> : null}
                                 {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    ? Dragable ? <span class="ChipForBet"><Chip /></span> :<span class="ChipForBet"><FixedChip /></span>
                                     : null}
                             </div>
                             : null
@@ -517,6 +519,26 @@ function MG_GamePage() {
       <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="warning">
           플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
+        </Alert>
+      </Snackbar>
+      <Snackbar open={startAlert} autoHideDuration={8000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="info" >
+            <div class="instruction">
+                게임시작!
+                <br/>
+                자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.
+                <br/>
+                상품을 낙찰 받고 싶지 않다면 칩을 테이블에 지불하고 턴을 넘기십시오.
+                <br/>
+                총 -3부터 -35까지의 경매 상품이 있으며, 한 개의 히든 상품은 끝까지 경매에 오르지 않습니다
+                <br/>
+                마지막에 가지고 있는 칩 수와 상품들의 총 합이 자신의 점수가 되며, 점수가 가장 높은 사람이 승리합니다
+                <br/>
+                연속된 숫자를 보유하고 있는 경우, 절댓값이 낮은 숫자만 점수에 포함됩니다
+                <br/> 
+                (ex. -12,-13, -14를 가지고 있을 때 -13과 -14는 포함되지 않습니다)
+            </div>
+            
         </Alert>
       </Snackbar>
     </div>
