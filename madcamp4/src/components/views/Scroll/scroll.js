@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
+import axios from "axios"
 import { withRouter } from "react-router-dom";
 import ReactCardFlip from 'react-card-flip';
 import "./scroll.css"
@@ -273,18 +274,6 @@ function Carousel({children}) {
   )
 }
 
-const colors = [
-  { name: "Tobby", people: 6, id: 'A'},
-  { name: "Hello", people: 6, id: 1},
-  { name: "Tobby", people: 6, id: 2},
-  { name: "Tobby", people: 6, id: 3},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 11},
-]
-
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
@@ -306,6 +295,25 @@ const sizes = {
 };
 
 function Scroll() {
+  const [rooms, setRooms] = useState([])
+  const colors = [
+    { name: "Kelly", people: 6, id: 'A'},
+    { name: "ChanYoung", people: 6, id: 1},
+    { name: "Tobby", people: 6, id: 2},
+    { name: "Tobby", people: 6, id: 3},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 11},
+  ]
+  useEffect(() => {
+        axios.get('/api/gameroom/getAllrooms')
+        .then((res) => {
+            console.log(res.data);
+            setRooms(res.data);
+        })
+    },[])
   const classes = useStyles();
   const [flipped, set] = useState(false)
   const { transform, opacity } = useSpring({
@@ -313,7 +321,7 @@ function Scroll() {
     transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
     config: { mass: 5, tension: 500, friction: 80 },
   })
-  const colorsArray = colors.map((color) => (
+  const colorsArray = rooms.map((color) => (
     <div class="outer" 
       onClick={() => set(state => !state)}>
     <a.div class="front"
@@ -348,6 +356,7 @@ function Scroll() {
   ))
   return (
     <Canvas >
+        
         <Stars
             radius={100}
             depth={50}
