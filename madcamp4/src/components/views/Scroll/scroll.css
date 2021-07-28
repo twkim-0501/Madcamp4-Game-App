@@ -1,12 +1,7 @@
 .Container {
-
     height: stretch;
     width: 100%;
- 
-    align-items: center;
-    justify-items: center;
-    justify-self: center;
-    align-self: center;
+   
     /* background-image: url("./table.jpeg");
     background-size: contain; */
 }
@@ -35,8 +30,10 @@
   background-size: contain;
   width:20rem;
   height: 28rem;
-  position: absolute;
   will-change: transform, opacity;
+  display: flex;
+    flex-direction: column;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.3);
 }
 
 .inner {
@@ -66,7 +63,8 @@
 .people {
     text-align: center;
     padding: 18px;
-    font-family: "cardfont";
+    font-family: "futura";
+    font-weight: bold;
 }
 
 .spade2 {

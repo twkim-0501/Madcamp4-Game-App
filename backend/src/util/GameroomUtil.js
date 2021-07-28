@@ -25,35 +25,38 @@ function getAll(callback){
     });
 }
 
-async function getAllrooms(callback){
+function getAllrooms(callback){
     const numArr=['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
-    
-    
-    GameroomModel.find({},(err,res) => {
+    GameroomModel.find({}, (err,res) => {
         var roomsInfo = res;
         var roomsView = []
-        roomsInfo.map( async (room, index) =>  {
+        roomsInfo.map( (room, index) =>  {
             var randomNum = Math.floor(Math.random()*13)
-            console.log("getAllroomsTest",room)
+            //console.log("getAllroomsTest",room)
             //var playersInfo = await GameroomModel.findOne({_id: room._id}).populate('players')
-            GameroomModel.findOne({_id: room._id}, async (err,res) => {
+            GameroomModel.findOne({_id: room._id}, (err,res) => {
                 //var playersInfo = res.populate('players')
                 var playersInfo = res
                 console.log("getAllroomsTest2",playersInfo.players)
                 UserModel.findOne({_id: playersInfo.players[0]}, (err,res) => {
                     
                     if(playersInfo.players.length == 0){
-                        roomsView.push({name: "-Empty-", people: playersInfo.players.length, id: numArr[randomNum]})
+                        roomsView.push({name: "-Empty-", people: playersInfo.players.length, id: numArr[randomNum], _id: room._id})
+                        if(roomsInfo.length-1 == index){
+                            console.log("roomsView",roomsView)
+                            callback(roomsView)
+                        }
                     }
                     else{
                         var hostname = res.name
-                        roomsView.push({name: hostname, people: playersInfo.players.length, id: numArr[randomNum]})
+                        roomsView.push({name: hostname, people: playersInfo.players.length, id: numArr[randomNum], _id: room._id})
+                        if(roomsInfo.length-1 == index){
+                            console.log("roomsView",roomsView)
+                            callback(roomsView)
+                        }
                     }
-                    console.log("i want to watch roomsView", roomsView, index)
-                    if(roomsInfo.length-1 == index){
-                        console.log("roomsView",roomsView)
-                        callback(roomsView)
-                    }
+                    //console.log("i want to watch roomsView", roomsView, index)
+                    
                 })
             })
             

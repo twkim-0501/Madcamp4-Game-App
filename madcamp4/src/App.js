@@ -25,7 +25,7 @@ function App() {
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
           <Route exact path="/gamepage/:hostName" component={Auth(MG_GamePage, true)} />
           <Route exact path="/gamepage2" component={GamePage} />
-          <Route exact path="/scroll" component={Scroll} />
+          <Route exact path="/scroll" component={Auth(Scroll, true)} />
           <Route exact path="/choose" component={Choose} />
         </Switch>
     </Router>
