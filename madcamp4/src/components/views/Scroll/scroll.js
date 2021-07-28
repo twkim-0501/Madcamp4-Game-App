@@ -347,8 +347,7 @@ function Scroll() {
     </div>
   ))
   return (
-    <Canvas className="Container">
-        
+    <Canvas >
         <Stars
             radius={100}
             depth={50}
@@ -357,7 +356,7 @@ function Scroll() {
             saturation={0}
             fade
           />
-      <Html as='div' fullscreen="true" >
+      <Html as='div' className="Container" fullscreen="true" >
       
       <h1 className="title"> MINUS AUCTION </h1>
       <HorizontalCenter>
