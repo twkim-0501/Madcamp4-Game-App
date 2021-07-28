@@ -263,7 +263,7 @@ function MG_GamePage() {
 
         return (
             <div className='chip' ref={drag} style={{ opacity }}>
-                {canDrag ? "베팅" : "베팅불가"}
+                이거 칩임
             </div>
         )
     }
