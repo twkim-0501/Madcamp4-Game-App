@@ -3,29 +3,40 @@ import "./MG_GamePage.css"
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
-import My_player from './My_player';
 import io from "socket.io-client";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { useLocation, useHistory } from "react-router";
 import { useSelector } from "react-redux";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import axios from "axios";
-import Hexagon from "react-hexagon";
-import Card from "@material-ui/core/Card";
+import Avatar from '@material-ui/core/Avatar';
+import { deepOrange, green, yellow, indigo } from '@material-ui/core/colors';
+
+function Alert(props) {
+    return <MuiAlert elevation={3} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-}));
+    root: {
+      display: 'flex',
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+    square: {
+      color: theme.palette.getContrastText( indigo[800]),
+      backgroundColor: indigo[800],
+    },
+    rounded: {
+      color: '#fff',
+      backgroundColor: green[500],
+    },
+  }));
 
 let Socket
 function MG_GamePage() {
+    const classes = useStyles();
     const user = useSelector(state => state.user)
     const playerId = user.userData?._id
     const playerName = user.userData?.name
@@ -38,10 +49,12 @@ function MG_GamePage() {
     const [Dragable, setDragable] = useState(true)
     const [Playing, setPlaying] = useState(false)
     const [Chips, setChips] = useState([])
-    const [curTurn, setCurTurn] = useState(0)
+    const [curTurn, setCurTurn] = useState(-1)
     const [curBid, setCurBid] = useState(0)
     const [playerBids, setPlayerBids] = useState([])
     const [BidStatus, setBidStatus] = useState([])//플레이어별 유효 bid 총합과 index
+    const [isMyturn, setIsMyturn] = useState("notmyTurn")
+    const [startCondition, setStartCondition] = useState(false);
     
     const waiting = [0, 1, 2, 3, 4, 5];
     useEffect(() => {
@@ -73,6 +86,7 @@ function MG_GamePage() {
             setCurTurn(data.curTurn)
             setPlayerBids(data.initBids)
             setBidStatus(data.initTotal)
+            alert("게임시작! \n자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.")
         })
         Socket.on('unexpectedLeave', (leaveId) => {
             // if(playerId == null){
@@ -166,10 +180,15 @@ function MG_GamePage() {
     }, [Chips])
     useEffect(() => {
         if(curTurn == myIndex && Chips[myIndex]==0 ){
-            alert("칩이 없어 강제 낙찰됨!")
-            setTimeout(function(){
-                NackChalClick();
-            },3000)
+            alert("칩이 없어서 낙찰해야 함!")
+        }
+        if(curTurn == myIndex){
+            setIsMyturn("myTurn")
+            console.log("myTurn!")
+        }
+        else{
+            setIsMyturn("notmyTurn")
+            console.log("notmyTurn!")
         }
     },[curTurn])
     useEffect(() => {
@@ -184,6 +203,10 @@ function MG_GamePage() {
     }, [Items])
 
     const startClick = () => {
+        if(Players.length <=1){
+            setStartCondition(true);
+            return;
+        }
         var initChips = Players.map(player => 10)
         var initBids = Players.map(player => [])
         var temp = {totalBids: 0, activeIndex: []}
@@ -240,7 +263,7 @@ function MG_GamePage() {
 
         return (
             <div className='chip' ref={drag} style={{ opacity }}>
-                {canDrag ? "베팅" : "베팅불가"}
+                이거 칩임
             </div>
         )
     }
@@ -323,11 +346,34 @@ function MG_GamePage() {
     
         return (
           <div class="cardShow" ref={drop}>
-            {/* <Hexagon className='hexTable' style={{stroke: '#000000'}} /> */}
-            -3
+            {
+                Playing ?
+                    (curTurn == myIndex) ?
+                    <div class="nackchalItem" onClick={NackChalClick}>
+                    <Avatar  className={classes.square}>
+                        {curBid}
+                    </Avatar>
+                    </div> :
+                    <div class="nackchalItem_notmyTurn">
+                    <Avatar  className={classes.square}>
+                        {curBid}
+                    </Avatar>
+                    </div>
+                 :
+                null
+            }
+            <div>{"쌓인 칩: "+Bet}</div>
           </div>
         );
       };
+
+    const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+
+    setStartCondition(false);
+    };
 
 
 
@@ -339,12 +385,31 @@ function MG_GamePage() {
         <div class="leftbox">
           {waiting.map((index) =>
             index % 2 == 0 ? (
-              Players[index] != null ? (
-                <div class="opo-player-left">
+              Players[index] != null ? 
+              (
+                (index != curTurn) ?
+                <div class={"opo-player-left"} id="notmyTurn">
                   <Oppo_player 
                         player={Players[index]} host= {host} playerBids={playerBids}
                             BidStatus={BidStatus} Playing={Playing}
-                            myIndex = {index}
+                            Index = {index} myIndex = {myIndex}
+                    />
+                    {
+                        (Players[index]?._id == playerId)
+                            ? <div>
+                                {Playing ? Chips[myIndex] : null}
+                                {Playing && (curTurn==myIndex)
+                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    : null}
+                            </div>
+                            : null
+                    }
+                </div> :
+                <div class={"opo-player-left"} id="myTurn">
+                  <Oppo_player 
+                        player={Players[index]} host= {host} playerBids={playerBids}
+                            BidStatus={BidStatus} Playing={Playing}
+                            Index = {index} myIndex = {myIndex}
                     />
                     {
                         (Players[index]?._id == playerId)
@@ -357,7 +422,8 @@ function MG_GamePage() {
                             : null
                     }
                 </div>
-              ) : (
+              ) : 
+              (
                 <div class="opo-player-left">waiting</div>
               )
             ) : null
@@ -365,29 +431,40 @@ function MG_GamePage() {
         </div>
 
         <div class="middlebox">
-            <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div>
-            <button class="startBtn" onClick={startClick}>Game Start</button>
+            <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 
             {
                 Playing ?
+                    (33-Items.length)!=32 ?
+                        <div class="Round"> {"Round: " + (33-Items.length)} </div> :
+                        <div class="Round"> Final Round </div>
+                    :
+                    null
+            }
+            {
+                myIndex==0 ?
+                <button class="startBtn" onClick={startClick}>Game Start</button> :
+                null
+            }
+            
+            {/*
+                Playing ?
                 <div>
-                    <div>{"현재 입찰 상품: " + curBid}</div>
                     {
                         curTurn==myIndex ?
                         <button class="nackchalBtn" onClick={NackChalClick}>NackChalHagy</button> :
                         null
                     }
                 </div> :
-                null
+                null*/
             }
             <Table />
             <a href='/'>
                 <button class="exitBtn">나가기</button>
             </a>
-            <div>{"Bet: "+Bet}</div>
-            {
+            {/*
                 Playing ?
                 <div>{"Current Turn: "+ Players[curTurn]?.name}</div> :
-                null
+                null*/
             }
         </div>
 
@@ -395,11 +472,29 @@ function MG_GamePage() {
           {waiting.map((index) =>
             index % 2 == 1 ? (
               Players[index] != null ? (
-                <div class="opo-player-right">
+                (index != curTurn) ?
+                <div class={"opo-player-right"} id="notmyTurn">
                   <Oppo_player 
                         player={Players[index]} host= {host} playerBids={playerBids}
                             BidStatus={BidStatus} Playing={Playing}
-                            myIndex = {index}
+                            Index = {index} myIndex = {myIndex}
+                    />
+                    {
+                        (Players[index]?._id == playerId)
+                            ? <div>
+                                {Playing ? Chips[myIndex] : null}
+                                {Playing && (curTurn==myIndex)
+                                    ? Dragable ? <Chip /> : <FixedChip />
+                                    : null}
+                            </div>
+                            : null
+                    }
+                </div> :
+                <div class={"opo-player-right"} id="myTurn">
+                  <Oppo_player 
+                        player={Players[index]} host= {host} playerBids={playerBids}
+                            BidStatus={BidStatus} Playing={Playing}
+                            Index = {index} myIndex = {myIndex}
                     />
                     {
                         (Players[index]?._id == playerId)
@@ -419,6 +514,11 @@ function MG_GamePage() {
           )}
         </div>
       </DndProvider>
+      <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="warning">
+          플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
