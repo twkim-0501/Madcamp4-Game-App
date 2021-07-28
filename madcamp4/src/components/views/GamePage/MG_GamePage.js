@@ -340,8 +340,6 @@ function MG_GamePage() {
                 <div className='chip-x' ref={chipXRef}>
                     베팅
                 </div>
-             {/* <div className='chip' ref={drag} style={{ opacity }}>
-                 이거 칩임 */}
             </div>
         )
     }
