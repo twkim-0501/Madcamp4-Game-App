@@ -3,6 +3,11 @@
     width: 100%;
     background: #000;
     align-items: center;
+    justify-items: center;
+    justify-self: center;
+    align-self: center;
+    /* background-image: url("./table.jpeg");
+    background-size: contain; */
 }
 
 .outer {
@@ -77,3 +82,16 @@
     font-family: "cardfont";
 }
 
+.plus{
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+}
+
+.title {
+    color: white;
+    text-align: center;
+    padding-top: 70px;
+    font-family: "futura";
+    font-size: 40px;
+}
