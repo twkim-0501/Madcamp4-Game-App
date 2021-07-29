@@ -376,7 +376,7 @@ function MG_GamePage() {
             setDragable(true)
         }
         setCurTurn(myIndex)
-        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex})
+        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex}, roomInfo)
         //낙찰 아이템 가져오기
         playerBids[myIndex].push(curBid)
         //array 정렬
@@ -482,11 +482,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="notmyTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>

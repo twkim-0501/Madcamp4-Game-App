@@ -25,14 +25,6 @@ function Oppo_player(props) {
   return (
       Index % 2 == 0
         ? <div class="rocketTextLeft" >
-            <span style={{fontFamily: "futura", fontSize: 20}}>
-                {
-                  player?.name == null ?
-                    "Player "
-                    : "Player " + player?.name
-                }
-              
-            </span>
             <span>
               {
                 Playing ?
@@ -51,14 +43,6 @@ function Oppo_player(props) {
             </span>
           </div>
         : <div class="rocketTextRight" >
-            <span style={{fontFamily: "futura", fontSize: 20}}>
-                {
-                  player?.name == null ?
-                    "Player "
-                    : "Player " + player?.name
-                }
-              
-            </span>
             <span>
               {
                 Playing ?

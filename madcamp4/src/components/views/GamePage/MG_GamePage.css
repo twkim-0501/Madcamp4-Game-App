@@ -345,10 +345,14 @@ div.shoot,
 }
 
 .rocketTextLeft {
+  background-color: #444444aa;
+  width: 180px;
+  height: 140px;
   transform: rotate(-90deg);
   position: absolute;
-  left: 3%;
-  top: 60%;
+  right: -10px;
+  bottom: 16%;
+  border-radius: 25%;
 }
 .rocketTextRight {
   transform: rotate(90deg);
