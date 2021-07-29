@@ -28,8 +28,10 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     square: {
-      color: theme.palette.getContrastText( indigo[800]),
-      backgroundColor: indigo[800],
+      color: "white",
+      fontFamily: "game",
+      fontSize: "40px"
+      
     },
     rounded: {
       color: '#fff',
@@ -74,8 +76,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        // Socket = io('http://192.249.18.179:80')
-        Socket = io('http://192.249.18.171:80')
+        Socket = io('http://192.249.18.179:80')
+        //Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -376,7 +378,7 @@ function MG_GamePage() {
             setDragable(true)
         }
         setCurTurn(myIndex)
-        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex})
+        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex}, roomInfo)
         //낙찰 아이템 가져오기
         playerBids[myIndex].push(curBid)
         //array 정렬
@@ -426,14 +428,14 @@ function MG_GamePage() {
 
     const Table = () => {
         return (
-          <div class="cardShow" >
+          <div class="chiptable" >
             {
                 Playing ?
                     (curTurn == myIndex) ?
                     <div class="nackchalItem" onClick={NackChalClick}>
-                        <Avatar className={classes.square} >
+                        <span className={classes.square} >
                             {curBid}
-                        </Avatar>
+                        </span>
                     </div> :
                     <div class="nackchalItem_notmyTurn">
                         <Avatar className={classes.square}>
@@ -442,8 +444,7 @@ function MG_GamePage() {
                     </div>
                 : null
             }
-            <br />  
-            <div class='chipBox' ref={tableRef}>{"쌓인 칩: "+Bet}</div>
+        
           </div>
         );
       };
@@ -482,11 +483,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="notmyTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
@@ -498,11 +499,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="notmyTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
@@ -533,11 +534,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="myTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
@@ -558,11 +559,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="myTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
@@ -603,14 +604,19 @@ function MG_GamePage() {
                 </div>
         
                 <div class="space">
+                    <Table/>
                     <div class="moon" ref={tableRef}>
                         <div class="crater"></div>
                         <div class="crater"></div>
                         <div class="crater"></div>
+                        
+                        <div class="moonlight-perspective">
+                    <span class="moonlight"></span>
                     </div>
-                    <div class="orbit">
-                        <div class="rocket"></div>
-                    </div>
+                </div>
+                <div class="orbit">
+                    <div class="rocket"></div>
+                </div>
                     
                     
                     {
@@ -639,6 +645,7 @@ function MG_GamePage() {
                             <div class="rocket-right" >
                                 <div class={"rocket-body"} id="notmyTurn">
                                     <div class="body">
+                                    <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}
@@ -654,6 +661,7 @@ function MG_GamePage() {
                             <div class="rocket-right" >
                                 <div class={"rocket-body"} id="notmyTurn">
                                     <div class="body">
+                                        <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}
@@ -688,6 +696,7 @@ function MG_GamePage() {
                             ? <div class="rocket-right" >
                                 <div class={"rocket-body"} id="myTurn" >
                                     <div class="body">
+                                        <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}
@@ -711,6 +720,7 @@ function MG_GamePage() {
                             : <div class="rocket-right" >
                                 <div class={"rocket-body"} id="myTurn">
                                     <div class="body">
+                                        <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}

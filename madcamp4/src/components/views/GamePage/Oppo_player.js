@@ -25,14 +25,6 @@ function Oppo_player(props) {
   return (
       Index % 2 == 0
         ? <div class="rocketTextLeft" >
-            <span style={{fontFamily: "futura", fontSize: 20}}>
-                {
-                  player?.name == null ?
-                    "Player "
-                    : "Player " + player?.name
-                }
-              
-            </span>
             <span>
               {
                 Playing ?
@@ -41,7 +33,7 @@ function Oppo_player(props) {
                       playerBids[Index]?.map( (Bid,index) => 
                         (BidStatus[Index].activeIndex.includes(index)) ?
                         <span class="activeBid">{Bid}</span> :
-                        <span class="inactiveBid">{Bid}</span>
+                        <span class="inactiveBid">{Bid} </span>
                       )
                     }
                   </div>
@@ -51,14 +43,6 @@ function Oppo_player(props) {
             </span>
           </div>
         : <div class="rocketTextRight" >
-            <span style={{fontFamily: "futura", fontSize: 20}}>
-                {
-                  player?.name == null ?
-                    "Player "
-                    : "Player " + player?.name
-                }
-              
-            </span>
             <span>
               {
                 Playing ?
@@ -66,8 +50,8 @@ function Oppo_player(props) {
                     {
                       playerBids[Index]?.map( (Bid,index) => 
                         (BidStatus[Index].activeIndex.includes(index)) ?
-                        <span class="activeBid">{Bid}</span> :
-                        <span class="inactiveBid">{Bid}</span>
+                        <span class="activeBid">{Bid} </span> :
+                        <span class="inactiveBid">{Bid} </span>
                       )
                     }
                   </div>
