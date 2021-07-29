@@ -77,6 +77,7 @@ function MG_GamePage() {
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
+                console.log("change check")
                 setPlayers(newPlayers)
             }
         })
@@ -220,7 +221,7 @@ function MG_GamePage() {
             setPlaying(false)
             //alert("게임 종료")
             var scores= whoIsWinner()
-            Socket.emit('FinishGame', false, scores, playerName )
+            Socket.emit('FinishGame', false, scores, playerName, roomInfo )
             return;
         }
         
@@ -306,11 +307,11 @@ function MG_GamePage() {
                     setBet(Bet + 1)
                     if(curTurn == (Players.length - 1)){
                         setCurTurn(0)
-                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: 0})
+                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: 0}, roomInfo)
                     }
                     else{
                         setCurTurn(curTurn+1)
-                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1})
+                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1}, roomInfo)
                     }
                 }, 600)
             }, 
@@ -406,7 +407,7 @@ function MG_GamePage() {
         setCurBid(nackchalItem)
         //setItems(tempItems)
         
-        Socket.emit('nackchal', {playerBids: playerBids, curBid: nackchalItem, Items: tempItems, BidStatus: BidStatus})
+        Socket.emit('nackchal', {playerBids: playerBids, curBid: nackchalItem, Items: tempItems, BidStatus: BidStatus}, roomInfo)
 
     }
 
@@ -490,6 +491,22 @@ function MG_GamePage() {
                         Players[index] != null ? 
                         (
                             (index != curTurn) ?
+                                (Players[index]?._id == playerId) ?
+                                <div class="rocket-left" >
+                                    <div class={"rocket-body"} id="notmyTurn">
+                                        <div class="body">
+                                            <Oppo_player 
+                                                player={Players[index]} host= {host} playerBids={playerBids}
+                                                    BidStatus={BidStatus} Playing={Playing}
+                                                    Index = {index} myIndex = {myIndex}
+                                            />
+                                        </div>
+                                        <div class="fin fin-left"></div>
+                                        <div class="fin fin-right"></div>
+                                        <div class="window">{Chips[myIndex]}</div>
+                                    </div>
+                                </div>
+                                :
                                 <div class="rocket-left" >
                                     <div class={"rocket-body"} id="notmyTurn">
                                         <div class="body">
@@ -638,20 +655,36 @@ function MG_GamePage() {
                         Players[index] != null ? 
                         (
                             (index != curTurn) ?
-                                <div class="rocket-right" >
-                                    <div class={"rocket-body"} id="notmyTurn">
-                                        <div class="body">
-                                            <Oppo_player 
-                                                player={Players[index]} host= {host} playerBids={playerBids}
-                                                    BidStatus={BidStatus} Playing={Playing}
-                                                    Index = {index} myIndex = {myIndex} 
-                                            />
-                                        </div>
-                                        <div class="fin fin-left"></div>
-                                        <div class="fin fin-right"></div>
-                                        <div class="window"></div>
+                            (Players[index]?._id == playerId) ?
+                            <div class="rocket-right" >
+                                <div class={"rocket-body"} id="notmyTurn">
+                                    <div class="body">
+                                        <Oppo_player 
+                                            player={Players[index]} host= {host} playerBids={playerBids}
+                                                BidStatus={BidStatus} Playing={Playing}
+                                                Index = {index} myIndex = {myIndex}
+                                        />
                                     </div>
+                                    <div class="fin fin-left"></div>
+                                    <div class="fin fin-right"></div>
+                                    <div class="window">{Chips[myIndex]}</div>
                                 </div>
+                            </div>
+                            :
+                            <div class="rocket-right" >
+                                <div class={"rocket-body"} id="notmyTurn">
+                                    <div class="body">
+                                        <Oppo_player 
+                                            player={Players[index]} host= {host} playerBids={playerBids}
+                                                BidStatus={BidStatus} Playing={Playing}
+                                                Index = {index} myIndex = {myIndex}
+                                        />
+                                    </div>
+                                    <div class="fin fin-left"></div>
+                                    <div class="fin fin-right"></div>
+                                    <div class="window"></div>
+                                </div>
+                            </div>
                                 
                             
                             // <div class={"opo-player-left"} id="notmyTurn">
@@ -672,7 +705,7 @@ function MG_GamePage() {
                                 // } */}
                             // </div> 
                             : (Players[index]?._id == playerId)
-                            ? <div class="rocket-" >
+                            ? <div class="rocket-right" >
                                 <div class={"rocket-body"} id="myTurn" onClick={chipClick}>
                                     <div class="body">
                                         <Oppo_player 

@@ -387,6 +387,13 @@ div.rocket-body,
   left: calc(50% - 30px);
   top: 20px;
   border: 5px solid #a3a3a3;
+  transform: rotate(-90deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "futura";
+  color: #c0c0c0;
+  font-weight: bolder;
 }
 .rocket-left .fin {
   position: absolute;
