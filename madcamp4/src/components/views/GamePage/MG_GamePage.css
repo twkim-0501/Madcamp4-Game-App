@@ -366,6 +366,7 @@ div.shoot,
   right: -10px;
   bottom: 16%;
   border-radius: 25%;
+  padding: 14px;
 }
 .rocketTextRight {
   transform: rotate(90deg);

@@ -33,7 +33,7 @@ function Oppo_player(props) {
                       playerBids[Index]?.map( (Bid,index) => 
                         (BidStatus[Index].activeIndex.includes(index)) ?
                         <span class="activeBid">{Bid}</span> :
-                        <span class="inactiveBid">{Bid}</span>
+                        <span class="inactiveBid">{Bid} </span>
                       )
                     }
                   </div>
@@ -50,8 +50,8 @@ function Oppo_player(props) {
                     {
                       playerBids[Index]?.map( (Bid,index) => 
                         (BidStatus[Index].activeIndex.includes(index)) ?
-                        <span class="activeBid">{Bid}</span> :
-                        <span class="inactiveBid">{Bid}</span>
+                        <span class="activeBid">{Bid} </span> :
+                        <span class="inactiveBid">{Bid} </span>
                       )
                     }
                   </div>

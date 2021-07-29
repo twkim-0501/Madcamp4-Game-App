@@ -76,8 +76,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        Socket = io('http://192.249.18.179:80')
-        //Socket = io('http://192.249.18.171:80')
+        // Socket = io('http://192.249.18.179:80')
+        Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -499,11 +499,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="notmyTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
@@ -534,11 +534,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="myTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
@@ -559,11 +559,11 @@ function MG_GamePage() {
                                     <div class={"rocket-body"} id="myTurn">
                                         <div class="body">
                                             <div class='playerNameLeft'>{Players[index].name}</div>
-                                            {/* <Oppo_player 
+                                            <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
                                                     BidStatus={BidStatus} Playing={Playing}
                                                     Index = {index} myIndex = {myIndex}
-                                            /> */}
+                                            />
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
