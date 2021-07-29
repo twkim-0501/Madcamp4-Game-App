@@ -30,6 +30,7 @@ function getAllrooms(callback){
     GameroomModel.find({}, (err,res) => {
         var roomsInfo = res;
         var roomsView = []
+        var index = 0;
         roomsInfo.map( async (room, index) =>  {
             var randomNum = Math.floor(Math.random()*13)
             //console.log("getAllroomsTest",room)
@@ -58,13 +59,36 @@ function getAllrooms(callback){
                     //console.log("i want to watch roomsView", roomsView, index)
                 })
             })
-            setTimeout(() => {
-                
-            }, 1000);
         })
         
     })
-    
+}
+async function getAllrooms2(callback){
+    const numArr=['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
+    var roomsArray = await GameroomModel.find({})
+    //console.log("roomsArray",roomsArray)
+    var UserArray = await UserModel.find({})
+    //console.log("UserArray", UserArray)
+    var roomsView = [];
+    roomsArray.map((room,index) => {
+        var randomNum = Math.floor(Math.random()*13)
+        //console.log("players",room.players)
+        if(room.players.length<1){
+            roomsView.push({name: "-Empty-", people: room.players.length, id: numArr[randomNum], _id: room._id})
+        }
+        else{
+            console.log("hostid", room.players[0])
+            for(var i = 0 ; i < UserArray.length ; i++){
+                //console.log("UserInfo",UserArray[i]._id)
+                if(UserArray[i]._id.equals(room.players[0])){
+                    //console.log("here?")
+                    roomsView.push({name: UserArray[i].name, people: room.players.length, id: numArr[randomNum], _id: room._id})
+                    console.log("roomsView",roomsView)
+                }
+            }
+        }
+    })
+    callback(roomsView)
 }
 
 function joinRoom(joinInfo, callback){
@@ -136,6 +160,7 @@ module.exports = {
     addRoom,
     getAll,
     getAllrooms,
+    getAllrooms2,
     joinRoom,
     exitRoom,
     findCurrentRoom,
