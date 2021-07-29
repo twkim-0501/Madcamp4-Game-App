@@ -15,6 +15,12 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import UndoIcon from '@material-ui/icons/Undo';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {useSelector} from 'react-redux'
+import vert from "./vert.png"
+import menu from "./menu.png"
+import exit from "./exit.png"
+import prev from "./leftarrow.png"
+import re from "./refresh.png"
+
 
 const H1 = styled.h1`
   text-align: center;
@@ -475,7 +481,7 @@ function Scroll(props) {
             {/* <Carousel><colorsArray2 joinRoom={joinRoom} rooms={rooms}/></Carousel> */}
           </HorizontalCenter>
           
-          <div className="plus">
+          <div className="plus2">
           {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
           <Fab variant="extended" onClick={NewRoom} className={classes.margin} >
             <AddIcon className={classes.extendedIcon}/>
@@ -483,16 +489,26 @@ function Scroll(props) {
           </Fab>
           </div> 
 
-          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
-          <Fab aria-label="add" onClick={logout} className={classes.logout} >
-              <ExitToAppIcon />
-          </Fab>
-          <Fab aria-label="add" onClick={undo} className={classes.undo} >
-              <UndoIcon />
-          </Fab>
-          <Fab aria-label="add" onClick={refresh} className={classes.refresh} >
-              <RefreshIcon />
-          </Fab>
+          <div id="container-floating">
+     
+            <div onClick={undo} class="nd4 nds" data-toggle="tooltip" data-placement="left" data-original-title="contract@gmail.com">
+              <img class="reminder"/>
+              <img class="exit" src={ prev }/>
+            </div>
+            <div  onClick={logout}  class="nd3 nds" data-toggle="tooltip" data-placement="left" data-original-title="Reminder">
+              <img class="reminder"/>
+              <img class="exit" src={ exit }/>
+            </div>
+            <div onClick={refresh} class="nd1 nds" data-toggle="tooltip" data-placement="left" data-original-title="Edoardo@live.it">
+              <img class="reminder"/>
+              <img class="exit" src={ re }/>
+            </div>
+
+            <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="newmail()">
+              <img class="plus" src={ menu } />
+              <img class="edit" src={ vert }/>
+            </div>
+          </div>
 
         
       </Html>

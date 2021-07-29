@@ -67,6 +67,8 @@ function MG_GamePage() {
     const [isMyturn, setIsMyturn] = useState("notmyTurn")
     const [startCondition, setStartCondition] = useState(false);
     const [startAlert, setStartAlert] = useState(false);
+
+    const [isStart, set] = useState(false)
     
     const waiting = [0, 1, 2, 3, 4, 5];
 
@@ -232,6 +234,7 @@ function MG_GamePage() {
             setStartCondition(true);
             return;
         }
+        set(true)
         var initChips = Players.map(player => 10)
         var initBids = Players.map(player => [])
         var temp = {totalBids: 0, activeIndex: []}
@@ -610,43 +613,25 @@ function MG_GamePage() {
                     )}
                 </div>
         
-                <div class="middlebox">
-                    <div class='outer-circle' ref={tableRef}>
-                        <div class='inner-circle'>
-                        </div>
-                        <span className="q"></span>
-                        <span className="w"></span>
-                        <span className="e"></span>
-                        <span className="r"></span>
+                <div class="space">
+                    <div class="moon">
+                        <div class="crater"></div>
+                        <div class="crater"></div>
+                        <div class="crater"></div>
                     </div>
-                    <button class="startBtn" onClick={startClick}>Game Start</button>
-                    <a href='/scroll'>
-                        <button class="exitBtn">나가기</button>
-                    </a>
-                    {/* <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 
+                    <div class="orbit">
+                        <div class="rocket"></div>
+                    </div>
+                    
+                    
                     {
-                        Playing ?
-                            (33-Items.length)!=32 ?
-                                <div class="Round"> {"Round: " + (33-Items.length)} </div> :
-                                <div class="Round"> Final Round </div>
-                            :
-                            null
-                    }
-                    {
-                        myIndex==0 ?
-                        <button class="startBtn" onClick={startClick}>Game Start</button> :
-                        null
+                        isStart ? <text>Game Start</text>
+                        : <text class="startBtn" onClick={startClick}>Press to Start</text>
                     }
                     
-                    <Table />
-                    <a href='/'>
-                        <button class="exitBtn">나가기</button>
+                    <a href='/scroll' class="exitBtn"  style={{ textDecorationLine : 'none'}}>
+                    <text class="exitBtntext">Exit</text>
                     </a>
-                    {/*
-                        Playing ?
-                        <div>{"Current Turn: "+ Players[curTurn]?.name}</div> :
-                        null
-                    } */}
                 </div>
         
                 <div class="rightbox">
