@@ -46,3 +46,8 @@
   font-family: "futura";
   src: url("./font/FuturaBookfont.ttf");
 }
+
+@font-face {
+  font-family: "game";
+  src: url("./font/game.ttf");
+}
