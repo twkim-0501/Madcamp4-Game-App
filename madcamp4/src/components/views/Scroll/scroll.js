@@ -1,18 +1,18 @@
 import styled from 'styled-components'
-import React, { useState } from "react"
-import { withRouter } from "react-router-dom";
-import ReactCardFlip from 'react-card-flip';
+import React, { useState, useEffect } from "react"
+import axios from "axios"
+import { withRouter, useHistory } from "react-router-dom";
 import "./scroll.css"
 import spade from './spade.png'
 import gameicon from './cube.png'
 import { useSpring, a } from '@react-spring/web'
-import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import NavigationIcon from '@material-ui/icons/Navigation';
 import { makeStyles } from '@material-ui/core/styles';
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html, Center } from "@react-three/drei";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import {useSelector} from 'react-redux'
 
 const H1 = styled.h1`
   text-align: center;
@@ -143,7 +143,7 @@ function usePosition(ref) {
   }
 }
 
-const CarouserContainer = styled(Relative)`
+const CarouserContainer = styled.div`
   overflow: hidden;
 `
 
@@ -170,22 +170,22 @@ const CarouserContainer = styled(Relative)`
 `
  const LeftCarouselButton = styled(CarouselButton)`
   left: 0;
-  transform: translate(-100%, -50%);
+  transform: translate(0%, -50%);
 
-  ${CarouserContainer}:hover & {
-    transform: translate(0%, -50%);
-  }
+  // ${CarouserContainer}:hover & {
+  //   transform: translate(0%, -50%);
+  // }
 
   visibility: ${({hasItemsOnLeft}) => (hasItemsOnLeft ? `all` : `hidden`)};
 `
 
  const RightCarouselButton = styled(CarouselButton)`
   right: 0;
-  transform: translate(100%, -50%);
+  transform: translate(0%, -50%);
 
-  ${CarouserContainer}:hover & {
-    transform: translate(0%, -50%);
-  }
+  // ${CarouserContainer}:hover & {
+  //   transform: translate(0%, -50%);
+  // }
 
   visibility: ${({hasItemsOnRight}) => (hasItemsOnRight ? `all` : `hidden`)};
 `
@@ -243,8 +243,9 @@ const ArrowRight = ({size = 40, color = '#fff'}) => (
 )
 
 
-function Carousel({children}) {
+function Carousel({children, joinRoom}) {
   const ref = React.useRef()
+  const [rooms, setRooms] = useState([])
 
   const {
     hasItemsOnLeft,
@@ -253,11 +254,21 @@ function Carousel({children}) {
     scrollLeft,
   } = usePosition(ref)
 
+  useEffect(() => {
+    axios.get('/api/gameroom/getAllrooms')
+        .then((res) => {
+            //console.log(res.data);
+            setRooms(res.data);
+            //console.log("Carousel",res,joinRoom)
+        })
+    
+  }, [])
+
   return (
     <CarouserContainer>
       <CarouserContainerInner ref={ref}>
         {React.Children.map(children, (child, index) => (
-          <CarouselItem key={index}>{child}</CarouselItem>
+          <CarouselItem key={index} >{child}</CarouselItem>
         ))}
       </CarouserContainerInner>
       <LeftCarouselButton hasItemsOnLeft={hasItemsOnLeft} onClick={scrollLeft}>
@@ -273,23 +284,12 @@ function Carousel({children}) {
   )
 }
 
-const colors = [
-  { name: "Tobby", people: 6, id: 'A'},
-  { name: "Hello", people: 6, id: 1},
-  { name: "Tobby", people: 6, id: 2},
-  { name: "Tobby", people: 6, id: 3},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 4},
-  { name: "Tobby", people: 6, id: 11},
-]
-
 const useStyles = makeStyles((theme) => ({
   margin: {
-    margin: theme.spacing(1),
-    width: "300px",
-    height: "50px",
+    margin: theme.spacing(4),
+    borderRadius: "30px",
+    width: "320px",
+    height: "57px",
     color: "white",
     backgroundColor: "indigo",
     fontSize: "20px",
@@ -298,80 +298,171 @@ const useStyles = makeStyles((theme) => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
   },
+  logout: {
+    position: "absolute",
+    bottom: "10%",
+    right: "3%",
+    alignItems: "center",
+    justifyContent: 'center',
+    color: "white",
+    backgroundColor: "gray",
+    fontSize: "15px",
+    fontFamily: "futura",
+  },
 }));
 
-const sizes = {
-  width: window.innerWidth,
-  height: window.innerHeight
-};
-
-function Scroll() {
+function Scroll(props) {
+  let history = useHistory()
+  const user = useSelector(state => state.user)
+  const [rooms, setRooms] = useState([])
+  const colors = [
+    { name: "Kelly", people: 6, id: 'A'},
+    { name: "ChanYoung", people: 6, id: 1},
+    { name: "Tobby", people: 6, id: 2},
+    { name: "Tobby", people: 6, id: 3},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 4},
+    { name: "Tobby", people: 6, id: 11},
+  ]
+  useEffect(() => {
+        axios.get('/api/gameroom/getAllrooms')
+        .then((res) => {
+            console.log(res.data);
+            setRooms(res.data);
+        })
+    }, [])
+  //let history = useHistory()
+  
   const classes = useStyles();
-  const [flipped, set] = useState(false)
+  const [flipped, set] = useState(true)
+  const [roomName, setRoomName] = useState('')
+  //const [open, setOpen] = React.useState(false);
+
+  const NewRoom = () => {
+    set(state => !state)
+    console.log(roomName);
+    console.log(user.userData)
+    //socket으로 text 쏴주면 될듯
+    axios.post('/api/gameroom/addRoom', {roomName: 'roomname', user: user.userData})
+    setRoomName('');
+    setTimeout(() => {
+      history.push('/gamepage')
+    }, 1500);
+  };
+
+  function joinRoom (index) {
+    set(state => !state)
+    console.log("인덱스", index)
+    console.log("여기에 룸아이디와야함!", rooms)
+    axios.post('/api/gameroom/joinRoom', {roomId: rooms[index]._id, playerId: user.userData?._id})
+    setTimeout(() => {
+      history.push('/gamepage')
+    }, 1000);
+  }
+
+  const logout= () => {
+    axios.get('api/user/logout')
+    .then(response => {
+        if (response.data.ok) {
+            alert('로그아웃되었습니다.')
+            props.history.push('/login')
+        }
+    })
+  }
+
   const { transform, opacity } = useSpring({
-    opacity: flipped ? 1 : 0,
-    transform: `perspective(600px) rotateY(${flipped ? 180 : 0}deg)`,
+    opacity: 1,
+    transform: `perspective(500px) rotateY(${flipped ? 360 : 180}deg)`,
     config: { mass: 5, tension: 500, friction: 80 },
   })
-  const colorsArray = colors.map((color) => (
-    <div class="outer" 
-      onClick={() => set(state => !state)}>
-    <a.div class="front"
-      style={{ opacity: opacity.to(o => 1 - o), transform, borderRadius: '20px'}}
-    >
-       <span class="inner" > {color.id} </span>
-       <span class="spade">
-       <img src={ spade } width='32' height='32' />
-       </span>
-       <span class="username" > {color.name} </span>
-       
-       <span class="gameicon">
-       <img src={ gameicon } width='52' height='52' />
-       </span>
-  
-       <span class="people" > {color.people} / 6 </span>
-       <span class="spade2">
-       <img src={ spade } width='32' height='32' />
-       </span>
-       <span class="end"> {color.id} </span>
-    </a.div>
-    <a.div
+
+  const colorsArray = rooms.map((color,index) => (
+    <div class="outer" onClick={() => {joinRoom(index)}} value={index}
+      >
+    {
+      flipped
+      ? <a.div class="front" 
+        style={{  transform, borderRadius: '20px'}}
+      >
+        <span class="inner" > {color.id} </span>
+        <span class="spade">
+        <img src={ spade } width='32' height='32' />
+        </span>
+        <span class="username" > {color.name} </span>
+        
+        <span class="gameicon">
+        <img src={ gameicon } width='52' height='52' />
+        </span>
+    
+        <span class="people" > {color.people} / 6 </span>
+        <span class="spade2">
+        <img src={ spade } width='32' height='32' />
+        </span>
+        <span class="end"> {color.id} </span>
+      </a.div>
+      : <a.div
         class="back"
         style={{
-          opacity,
           transform,
           borderRadius: '20px',
           rotateY: '180deg',
         }}
       />
+    }
     </div>
   ))
   return (
-    <Canvas >
+  
+    <Canvas>
         <Stars
-            radius={100}
-            depth={50}
-            count={5000}
-            factor={4}
-            saturation={0}
-            fade
-          />
-      <Html as='div' className="Container"  fullscreen="true" >
-      
-      <h1 className="title"> MINUS AUCTION </h1>
-      <HorizontalCenter>
-        <Carousel>{colorsArray}</Carousel>
-      </HorizontalCenter>
-      <div className="plus">
-      <Fab variant="extended" aria-label="add" className={classes.margin} >
-        <AddIcon className={classes.extendedIcon}/>
-        New room
-      </Fab>
-      </div>
+          radius={100}
+          depth={50}
+          count={5000}
+          factor={4}
+          saturation={0}
+          fade
+        />
+        <Html as='div' className="Container" fullscreen="true" >
+          <h1 className="title"> MINUS AUCTION </h1>
+          <div class="animate-container">
+          <div class="spaceship-full">
+            <div class="spaceship-container">
+              <div class="spaceship">
+                <span class="top"></span>
+                <span class="midle"></span>
+                <span class="bottom"></span>
+              </div>
+              <div class="light-perspective">
+                <span class="light"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+          <HorizontalCenter style={{zIndex: 0}}>
+          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
+            <Carousel joinRoom={joinRoom} rooms={rooms} >{colorsArray}</Carousel>
+            
+            {/* <Carousel><colorsArray2 joinRoom={joinRoom} rooms={rooms}/></Carousel> */}
+          </HorizontalCenter>
+          
+          <div className="plus">
+          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
+          <Fab variant="extended" onClick={NewRoom} className={classes.margin} >
+            <AddIcon className={classes.extendedIcon}/>
+            New room
+          </Fab>
+          </div> 
 
-    </Html>
-
+          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
+          <Fab aria-label="add" onClick={logout} className={classes.logout} >
+              <ExitToAppIcon />
+          </Fab>
+        
+      </Html>
     </Canvas>
+    
   )
 }
 

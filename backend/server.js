@@ -11,7 +11,7 @@ const port = 80;
 const config = require('./config/key');
 const {auth} = require('./middleware/auth');
 
-const {User} = require("./src/models/User");
+const User = require("./src/models/User");
 
 //server instance
 const server = http.createServer(app);

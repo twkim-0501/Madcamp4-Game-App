@@ -90,4 +90,4 @@ userSchema.statics.findByToken = function (token, cb){
 }
 
 const User = mongoose.model('User', userSchema)
-module.exports = { User }
+module.exports = User;

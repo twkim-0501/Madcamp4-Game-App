@@ -480,7 +480,7 @@ function MG_GamePage() {
             fade
           />
 
-        <Html as='div' className="Container" fullscreen="true" >
+        <Html as='div' fullscreen="true" >
             <div class="mainbox">
                 <div class="leftbox">
                     {waiting.map((index) =>
@@ -572,10 +572,10 @@ function MG_GamePage() {
                     <div class='outer-circle' ref={tableRef}>
                         <div class='inner-circle'>
                         </div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                        <span className="q"></span>
+                        <span className="w"></span>
+                        <span className="e"></span>
+                        <span className="r"></span>
                     </div>
                     <button class="startBtn" onClick={startClick}>Game Start</button>
                     <a href='/'>

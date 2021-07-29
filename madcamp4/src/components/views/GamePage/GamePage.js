@@ -7,12 +7,15 @@ import create from "zustand"
 import * as THREE from "three"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import React, { Suspense, useRef, useCallback, useEffect, useState } from "react"
+import {Html } from "@react-three/drei";
 import lerp from "lerp"
 import Text from "./Text"
 import pingSound from "./resources/ping.mp3"
 import earthImg from "./resources/white.jpeg"
 import { withRouter } from "react-router-dom"
-import "./GamePage.css"
+import Fab from '@material-ui/core/Fab';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Create a store ...
 var clamp = require('lodash.clamp');
@@ -116,11 +119,40 @@ function ContactGround(props) {
   return <mesh ref={ref} />
 }
 
-function GamePage() {
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(1),
+    width: "300px",
+    height: "50px",
+    color: "white",
+    backgroundColor: "indigo",
+    fontSize: "20px",
+    fontFamily: "futura"
+  },
+  extendedIcon: {
+    marginRight: theme.spacing(1),
+  },
+  logout: {
+    marginTop: "300px",
+    marginLeft: "600px",
+    alignItems: "center",
+    justifyContent: 'center',
+    color: "white",
+    backgroundColor: "gray",
+    fontSize: "15px",
+    fontFamily: "futura",
+  },
+}));
+
+function GamePage(props) {
+  const classes = useStyles();
   const welcome = useStore((state) => state.welcome)
   const { reset } = useStore((state) => state.api)
   const count = useStore((state) => state.count)
   const onClick = useCallback(() => welcome && reset(false), [welcome, reset])
+  const back = () => {
+    props.history.push('/')
+  }
 
   return (
     <div onClick={onClick} style={{ position: "relative", width: '100%', height: '100%' }}>
@@ -161,6 +193,7 @@ function GamePage() {
             <Paddle />
           </Suspense>
         </Physics>
+
       </Canvas>
     </div>
   )

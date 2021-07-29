@@ -1,4 +1,5 @@
 const GameroomModel = require("../models/Gameroom");
+const UserModel = require("../models/User");
 var current_num = 0;
 
 //roomInfo라는 json에 roomtitle, 그리고
@@ -24,8 +25,52 @@ function getAll(callback){
     });
 }
 
+function getAllrooms(callback){
+    const numArr=['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
+    GameroomModel.find({}, (err,res) => {
+        var roomsInfo = res;
+        var roomsView = []
+        roomsInfo.map( (room, index) =>  {
+            var randomNum = Math.floor(Math.random()*13)
+            //console.log("getAllroomsTest",room)
+            //var playersInfo = await GameroomModel.findOne({_id: room._id}).populate('players')
+            GameroomModel.findOne({_id: room._id}, (err,res) => {
+                //var playersInfo = res.populate('players')
+                var playersInfo = res
+                console.log("getAllroomsTest2",playersInfo.players)
+                UserModel.findOne({_id: playersInfo.players[0]}, (err,res) => {
+                    
+                    if(playersInfo.players.length == 0){
+                        roomsView.push({name: "-Empty-", people: playersInfo.players.length, id: numArr[randomNum], _id: room._id})
+                        if(roomsInfo.length-1 == index){
+                            console.log("roomsView",roomsView)
+                            callback(roomsView)
+                        }
+                    }
+                    else{
+                        var hostname = res.name
+                        roomsView.push({name: hostname, people: playersInfo.players.length, id: numArr[randomNum], _id: room._id})
+                        if(roomsInfo.length-1 == index){
+                            console.log("roomsView",roomsView)
+                            callback(roomsView)
+                        }
+                    }
+                    //console.log("i want to watch roomsView", roomsView, index)
+                })
+            })
+            setTimeout(() => {
+                
+            }, 500);
+        })
+        
+    })
+    
+}
+
 function joinRoom(joinInfo, callback){
     const {roomId, playerId} = joinInfo;
+
+    console.log("joinInfo",joinInfo)
     GameroomModel.findOne({_id: roomId}, (err,res) => {
         if(res.players == null){
             callback();
@@ -90,6 +135,7 @@ async function getPlayersInfo(roomInfo, callback){
 module.exports = {
     addRoom,
     getAll,
+    getAllrooms,
     joinRoom,
     exitRoom,
     findCurrentRoom,

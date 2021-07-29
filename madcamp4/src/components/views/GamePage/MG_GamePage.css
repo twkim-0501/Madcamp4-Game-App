@@ -212,11 +212,6 @@ div.opo-player-right,#notmyTurn {
   flex-grow: 1;
 }
 
-.roomTitle {
-  /*
-    position: absolute;
-    top: 5px;*/
-}
 .Round {
   margin-top: 10px;
   border: 2px solid navy;
@@ -501,18 +496,6 @@ span:nth-child(3) {
 span:nth-child(4) {
   filter: blur(160px);
 } */
-.q {
-  filter: blur(5px);
-}
-.w {
-  filter: blur(15px);
-}
-.e {
-  filter: blur(80px);
-}
-.r {
-  filter: blur(160px);
-}
 .inner-circle {
   width: 90px;
   height: 90px;
