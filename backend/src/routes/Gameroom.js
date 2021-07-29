@@ -16,6 +16,12 @@ router.get('/getAllrooms', (req,res) => {
         res.status(200).send(rooms);
     })
 })
+router.get('/getAllrooms2', (req,res) => {
+    db.getAllrooms2((rooms) => {
+        console.log("rooms",rooms)
+        res.status(200).send(rooms);
+    })
+})
 
 router.post('/addRoom', (req,res) => {
     //console.log("here")
@@ -53,5 +59,6 @@ router.post('/getPlayersInfo', (req,res) => {
         res.status(200).send(infos);
     })
 })
+
 
 module.exports = router;

@@ -97,9 +97,20 @@ module.exports = function(io) {
                         })
                     }
                     else{
-                        deleteLeave(leavePlayer)
+                        GameroomModel.find({}, (err,res) => {
+                            var allRooms = res
+                            var currentRoom = allRooms.filter(room => room.players.includes(leavePlayer));
+                            var leaveRoom = currentRoom[0]
+                            var afterplayers = leaveRoom.players.filter((player) => (player != leavePlayer))
+                            GameroomModel.findOneAndUpdate({_id: leaveRoom._id}, {
+                                players: afterplayers
+                            },(err,res) => {
+                                console.log("updateresult",afterplayers, res)
+                                socket.broadcast.emit('unexpectedLeave', leaveRoom);
+                            })
+                        })
                         console.log("where is leaveRoom", leaveRoom)
-                        socket.broadcast.emit('unexpectedLeave', leaveRoom);
+                        
                     }
                     
                 
@@ -109,19 +120,4 @@ module.exports = function(io) {
             console.log('user disconnected: ', socket.id);
         });
     });
-}
-
-
-
-async function deleteLeave(leavePlayer){
-    var allRooms = await GameroomModel.find({})
-    var currentRoom = allRooms.filter(room => room.players.includes(leavePlayer));
-    var leaveRoom = currentRoom[0]
-    var afterplayers = leaveRoom.players.filter((player) => (player != leavePlayer))
-    var updateRooms = await GameroomModel.findOneAndUpdate({_id: leaveRoom._id}, {
-        players: afterplayers
-    })
-    console.log("updateresult",afterplayers, updateRooms)
-    //console.log("leaveRoom", leaveRoom);
-    
 }

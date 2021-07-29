@@ -306,7 +306,7 @@ function Scroll() {
     { name: "Tobby", people: 6, id: 11},
   ]
   useEffect(() => {
-        axios.get('/api/gameroom/getAllrooms')
+        axios.get('/api/gameroom/getAllrooms2')
         .then((res) => {
             console.log(res.data);
             setRooms(res.data);
