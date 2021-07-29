@@ -303,29 +303,27 @@ div.shoot,
     transform: rotate(90deg);
 }
 
-.rocketText {
+.rocketTextLeft {
   transform: rotate(-90deg);
   position: absolute;
-  left: 0%;
+  left: 5%;
+  top: 60%;
+}
+.rocketTextRight {
+  transform: rotate(90deg);
+  position: absolute;
+  right: 10%;
   top: 60%;
 }
 
-.rocket-left {
-  text-align: center;
-  flex-grow: 1;
-  display: absolute;
-  flex-direction: column;
-  width: 200px;
-  height: 20%;
+
+/* .rocketText#right {
   transform: rotate(90deg);
-  margin-left: 30%;
-  margin-top: 10%;
-}
-.rocket-left .rocket-body {
-  /* transform: rotate(90deg); */
-  width: 160px;
-  left: calc(50% - 50px);
-}
+  position: absolute;
+  left: 0%;
+  top: 60%;
+} */
+
 div.rocket-body,
 #myTurn {
   animation: bounce 0.5s infinite;
@@ -341,6 +339,22 @@ div.rocket-body,
   animation: nobounce 0.5s infinite;
   opacity: 0;
 }
+
+.rocket-left {
+  text-align: center;
+  flex-grow: 1;
+  display: absolute;
+  flex-direction: column;
+  width: 200px;
+  height: 20%;
+  transform: rotate(90deg);
+  margin-left: 30%;
+  margin-top: 10%;
+}
+.rocket-left .rocket-body {
+  width: 160px;
+  left: calc(50% - 50px);
+}
 .rocket-left .rocket-body .body {
   background-color: #c0c0c0;
   height: 300px;
@@ -351,6 +365,7 @@ div.rocket-body,
   border-bottom-right-radius: 60%;
   border-bottom: 5px solid #a5a5a5;
   border-right: 10px solid #a5a5a5;
+  cursor: pointer;
 }
 .rocket-left .rocket-body:before {
   content: "";
@@ -400,20 +415,19 @@ div.rocket-body,
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 200px;
   height: 20%;
   transform: rotate(-90deg);
-  margin-right: -10%;
-  margin-top: -33%;
+  margin-right: 20%;
+  margin-top: -10%;
 }
 .rocket-right .rocket-body {
-  width: 120px;
+  width: 160px;
   left: calc(50% - 50px);
-  animation: bounce 0.5s infinite;
 }
 .rocket-right .rocket-body .body {
   background-color: #c0c0c0;
-  height: 250px;
+  height: 300px;
   left: calc(50% - 50px);
   border-top-right-radius: 100%;
   border-top-left-radius: 100%;
@@ -421,6 +435,7 @@ div.rocket-body,
   border-bottom-right-radius: 60%;
   border-bottom: 5px solid #a5a5a5;
   border-left: 10px solid #a5a5a5;
+  cursor: pointer;
 }
 .rocket-right .rocket-body:before {
   content: "";

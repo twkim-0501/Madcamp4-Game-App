@@ -17,39 +17,77 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Oppo_player(props) {
-  const { player, myId, MyChips, Playing, host, playerBids, BidStatus, Index, myIndex } = props;
+  const { player, Playing, host, playerBids, BidStatus, Index, } = props;
   useEffect(() => {
     console.log("map test", playerBids,Index, player);
   }, [Playing])
 
   return (
-    <div class='rocketText'>
-      <span style={{fontFamily: "futura", fontSize: 20}}>
-          {
-            host?._id == player._id ?
-              <StarIcon style={{color: 'blue'}}/>
-            :
-            null
-          }
-        {"Player " + player?.name}
-      </span>
-      <span>
-        {
-          Playing ?
-            <div class="Bids">
+      Index % 2 == 0
+        ? <div class="rocketTextLeft" >
+            <span style={{fontFamily: "futura", fontSize: 20}}>
+                {
+                  host?._id == player._id ?
+                    <StarIcon style={{color: 'blue'}}/>
+                  :
+                  null
+                }
+                {
+                  player?.name == null ?
+                    "Player "
+                    : "Player " + player?.name
+                }
+              
+            </span>
+            <span>
               {
-                playerBids[Index]?.map( (Bid,index) => 
-                  (BidStatus[Index].activeIndex.includes(index)) ?
-                  <span class="activeBid">{Bid}</span> :
-                  <span class="inactiveBid">{Bid}</span>
-                )
+                Playing ?
+                  <div class="Bids">
+                    {
+                      playerBids[Index]?.map( (Bid,index) => 
+                        (BidStatus[Index].activeIndex.includes(index)) ?
+                        <span class="activeBid">{Bid}</span> :
+                        <span class="inactiveBid">{Bid}</span>
+                      )
+                    }
+                  </div>
+                :
+                null
               }
-            </div>
-           :
-          null
-        }
-      </span>
-    </div>
+            </span>
+          </div>
+        : <div class="rocketTextRight" >
+            <span style={{fontFamily: "futura", fontSize: 20}}>
+                {
+                  host?._id == player._id ?
+                    <StarIcon style={{color: 'blue'}}/>
+                  :
+                  null
+                }
+                {
+                  player?.name == null ?
+                    "Player "
+                    : "Player " + player?.name
+                }
+              
+            </span>
+            <span>
+              {
+                Playing ?
+                  <div class="Bids">
+                    {
+                      playerBids[Index]?.map( (Bid,index) => 
+                        (BidStatus[Index].activeIndex.includes(index)) ?
+                        <span class="activeBid">{Bid}</span> :
+                        <span class="inactiveBid">{Bid}</span>
+                      )
+                    }
+                  </div>
+                :
+                null
+              }
+            </span>
+          </div>
   )
 }
 
