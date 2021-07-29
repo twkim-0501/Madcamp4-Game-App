@@ -12,12 +12,13 @@ router.get('/getAll', (req,res) => {
 
 router.get('/getAllrooms', (req,res) => {
     db.getAllrooms((rooms) => {
+        console.log("rooms",rooms)
         res.status(200).send(rooms);
     })
 })
 
 router.post('/addRoom', (req,res) => {
-    console.log("here")
+    //console.log("here")
     db.addRoom(req.body, (id)=>{
         res.status(200).send(id);
     })
@@ -27,7 +28,7 @@ router.post('/findCurrentRoom', (req,res) => {
     //console.log("route user", req.body)
 
     db.findCurrentRoom(req.body.user, (_id) => {
-        //console.log('find room', _id)
+        console.log('find room', _id)
         res.status(200).send(_id);
     })
 })

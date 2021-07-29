@@ -98,27 +98,30 @@ function MG_GamePage() {
             setBidStatus(data.initTotal)
             setStartAlert(true);
         })
-        Socket.on('unexpectedLeave', (leaveId) => {
-            // if(playerId == null){
-            //     return;
-            // }
-            axios.post('/api/gameroom/findCurrentRoom', {user: leaveId})
+        Socket.on('unexpectedLeave', (leaveRoom) => {
+            console.log("unexpectedLeave", leaveRoom)
+            axios.post('/api/gameroom/getPlayersInfo', leaveRoom)
             .then(res => {
-                console.log("undexpectedcheck",leaveId, res.data);
-                if(res.data==null){
-                    return;
-                }
-                axios.post('/api/gameroom/exitRoom',
-                {playerId: leaveId, roomId: res.data})
-                .then(res => {
-                    if(res.data){
-                        axios.post('/api/gameroom/getPlayersInfo', res.data)
-                        .then(res => {
-                            setPlayers(res.data)
-                })
-                    }
-                })
-            })    
+                console.log("after leave player", res.data)
+                setPlayers(res.data)
+            })
+            // axios.post('/api/gameroom/findCurrentRoom', {user: leaveId})
+            // .then(res => {
+            //     console.log("undexpectedcheck",leaveId, res.data);
+            //     if(res.data==null){
+            //         return;
+            //     }
+            //     axios.post('/api/gameroom/exitRoom',
+            //     {playerId: leaveId, roomId: res.data._id})
+            //     .then(res => {
+            //         if(res.data){
+            //             axios.post('/api/gameroom/getPlayersInfo', res.data)
+            //             .then(res => {
+            //                 setPlayers(res.data)
+            //     })
+            //         }
+            //     })
+            // })    
         } )
         Socket.on('turnInfo', (turnInfo) => {
             setChips(turnInfo.Chips)
@@ -176,7 +179,6 @@ function MG_GamePage() {
                     }
                 })
         }
-        
     }, [user])
 
     useEffect(() => {
@@ -539,7 +541,7 @@ function MG_GamePage() {
                 null*/
             }
             <Table />
-            <a href='/'>
+            <a href='/scroll'>
                 <button class="exitBtn">나가기</button>
             </a>
             {/*

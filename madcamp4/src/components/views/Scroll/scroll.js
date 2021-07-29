@@ -255,16 +255,6 @@ function Carousel({children, joinRoom}) {
     scrollLeft,
   } = usePosition(ref)
 
-  useEffect(() => {
-    axios.get('/api/gameroom/getAllrooms')
-        .then((res) => {
-            //console.log(res.data);
-            setRooms(res.data);
-            //console.log("Carousel",res,joinRoom)
-        })
-    
-  }, [])
-
   return (
     <CarouserContainer>
       <CarouserContainerInner ref={ref}>
@@ -301,6 +291,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Scroll() {
+  let history = useHistory()
   const user = useSelector(state => state.user)
   const [rooms, setRooms] = useState([])
   const colors = [
@@ -329,12 +320,15 @@ function Scroll() {
   //const [open, setOpen] = React.useState(false);
 
   const NewRoom = () => {
+    set(state => !state)
     console.log(roomName);
     console.log(user.userData)
     //socket으로 text 쏴주면 될듯
     axios.post('/api/gameroom/addRoom', {roomName: 'roomname', user: user.userData})
     setRoomName('');
-    alert('사용자의 이름으로 새로운 방이 생성됩니다')
+    setTimeout(() => {
+      history.push('/gamepage')
+    }, 1500);
   };
 
   function joinRoom (index) {
@@ -342,6 +336,9 @@ function Scroll() {
     console.log("인덱스", index)
     console.log("여기에 룸아이디와야함!", rooms)
     axios.post('/api/gameroom/joinRoom', {roomId: rooms[index]._id, playerId: user.userData?._id})
+    setTimeout(() => {
+      history.push('/gamepage')
+    }, 1000);
   }
 
   const { transform, opacity } = useSpring({
@@ -399,16 +396,17 @@ function Scroll() {
         <Html as='div' className="Container" fullscreen="true" >
           <h1 className="title"> MINUS AUCTION </h1>
           <HorizontalCenter style={{zIndex: 0}}>
+          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
             <Carousel joinRoom={joinRoom} rooms={rooms} >{colorsArray}</Carousel>
             {/* <Carousel><colorsArray2 joinRoom={joinRoom} rooms={rooms}/></Carousel> */}
           </HorizontalCenter>
           <div className="plus">
-          <a href="/gamepage" >
+          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
           <Fab variant="extended" onClick={NewRoom} className={classes.margin} >
             <AddIcon className={classes.extendedIcon}/>
             New room
           </Fab>
-          </a>
+          
           </div> 
       </Html>
     </Canvas>
