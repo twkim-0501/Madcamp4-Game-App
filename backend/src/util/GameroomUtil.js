@@ -83,7 +83,7 @@ async function getAllrooms2(callback){
                 if(UserArray[i]._id.equals(room.players[0])){
                     //console.log("here?")
                     roomsView.push({name: UserArray[i].name, people: room.players.length, id: numArr[randomNum], _id: room._id})
-                    console.log("roomsView",roomsView)
+                    //console.log("roomsView",roomsView)
                 }
             }
         }
