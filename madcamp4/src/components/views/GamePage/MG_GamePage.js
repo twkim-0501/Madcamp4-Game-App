@@ -76,8 +76,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        // Socket = io('http://192.249.18.179:80')
-        Socket = io('http://192.249.18.171:80')
+        Socket = io('http://192.249.18.179:80')
+        //Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
