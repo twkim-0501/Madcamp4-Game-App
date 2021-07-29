@@ -376,7 +376,7 @@ function MG_GamePage() {
             setDragable(true)
         }
         setCurTurn(myIndex)
-        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex})
+        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex}, roomInfo)
         //낙찰 아이템 가져오기
         playerBids[myIndex].push(curBid)
         //array 정렬
