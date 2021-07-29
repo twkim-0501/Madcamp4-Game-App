@@ -178,7 +178,7 @@ div.opo-player-right,#notmyTurn {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  transition: all 0.4s cubic-bezier(1,0,1,1.07);
+  transition: all 0.8s cubic-bezier(1,0,1,1.07);
   justify-content: center;
   align-items: center;
   margin: 10px auto;
@@ -188,13 +188,21 @@ div.opo-player-right,#notmyTurn {
   height: 20px;
   border-radius: 50%;
   background: rgb(184, 55, 55);
-  transition: all 0.4s linear;
+  transition: all 0.8s linear;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   display: flex;
+  animation: rainbow 0.5s linear infinite;
 }
-
+@keyframes rainbow {
+  0% {
+    filter:hue-rotate(0deg);
+  }
+  100% {
+    filter:hue-rotate(360deg);
+  }
+}
 .exitBtn {
   position: absolute;
   bottom: 10%;
@@ -313,21 +321,32 @@ div.opo-player-right,#notmyTurn {
   font-size: x-large;
 }
 
+.playerNameLeft {
+  font-family: 'futura';
+  color: white;
+  transform: rotate(-90deg);
+  position: absolute;
+  top: 52%;
+  left: -25%;
+  font-size: 20px;
+  font-weight: 500;
+}
+
 div.shoot,
 #left {
-    position: relative;
-    top: -150%;
-    left: -30%;
-    z-index: -5;
-    transform: rotate(-90deg);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: -10;
+    transform: rotate(0deg);
 }
 div.shoot,
 #right {
-    position: relative;
-    top: -50%;
-    left: -22%;
-    z-index: -5;
-    transform: rotate(90deg);
+    /* position: absolute; */
+    top: 0px;
+    left: 0px;
+    z-index: -10;
+    transform: rotate(0deg);
 }
 
 .rocketTextLeft {
@@ -377,6 +396,7 @@ div.rocket-body,
   transform: rotate(90deg);
   margin-left: 30%;
   margin-top: 10%;
+  z-index: 2;
 }
 .rocket-left .rocket-body {
   width: 160px;
@@ -392,7 +412,6 @@ div.rocket-body,
   border-bottom-right-radius: 60%;
   border-bottom: 5px solid #a5a5a5;
   border-right: 10px solid #a5a5a5;
-  cursor: pointer;
 }
 .rocket-left .rocket-body:before {
   content: "";
@@ -414,6 +433,7 @@ div.rocket-body,
   left: calc(50% - 30px);
   top: 20px;
   border: 5px solid #a3a3a3;
+  cursor: pointer;
   transform: rotate(-90deg);
   display: flex;
   align-items: center;
@@ -421,6 +441,7 @@ div.rocket-body,
   font-family: "futura";
   color: #c0c0c0;
   font-weight: bolder;
+  z-index: 4;
 }
 .rocket-left .fin {
   position: absolute;
@@ -469,7 +490,6 @@ div.rocket-body,
   border-bottom-right-radius: 60%;
   border-bottom: 5px solid #a5a5a5;
   border-left: 10px solid #a5a5a5;
-  cursor: pointer;
 }
 .rocket-right .rocket-body:before {
   content: "";
@@ -491,6 +511,15 @@ div.rocket-body,
   left: calc(50% - 30px);
   top: 20px;
   border: 5px solid #949191;
+  cursor: pointer;
+  transform: rotate(90deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "futura";
+  color: #c0c0c0;
+  font-weight: bolder;
+  z-index: 4;
 }
 .rocket-right .fin {
   position: absolute;
