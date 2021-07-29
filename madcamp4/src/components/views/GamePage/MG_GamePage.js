@@ -28,8 +28,10 @@ const useStyles = makeStyles((theme) => ({
       },
     },
     square: {
-      color: theme.palette.getContrastText( indigo[800]),
-      backgroundColor: indigo[800],
+      color: "white",
+      fontFamily: "game",
+      fontSize: "40px"
+      
     },
     rounded: {
       color: '#fff',
@@ -74,8 +76,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        // Socket = io('http://192.249.18.179:80')
-        Socket = io('http://192.249.18.171:80')
+        Socket = io('http://192.249.18.179:80')
+        //Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -426,14 +428,14 @@ function MG_GamePage() {
 
     const Table = () => {
         return (
-          <div class="cardShow" >
+          <div class="chiptable" >
             {
                 Playing ?
                     (curTurn == myIndex) ?
                     <div class="nackchalItem" onClick={NackChalClick}>
-                        <Avatar className={classes.square} >
+                        <span className={classes.square} >
                             {curBid}
-                        </Avatar>
+                        </span>
                     </div> :
                     <div class="nackchalItem_notmyTurn">
                         <Avatar className={classes.square}>
@@ -442,8 +444,7 @@ function MG_GamePage() {
                     </div>
                 : null
             }
-            <br />  
-            <div class='chipBox' ref={tableRef}>{"쌓인 칩: "+Bet}</div>
+        
           </div>
         );
       };
@@ -603,14 +604,19 @@ function MG_GamePage() {
                 </div>
         
                 <div class="space">
+                    <Table/>
                     <div class="moon" ref={tableRef}>
                         <div class="crater"></div>
                         <div class="crater"></div>
                         <div class="crater"></div>
+                        
+                        <div class="moonlight-perspective">
+                    <span class="moonlight"></span>
                     </div>
-                    <div class="orbit">
-                        <div class="rocket"></div>
-                    </div>
+                </div>
+                <div class="orbit">
+                    <div class="rocket"></div>
+                </div>
                     
                     
                     {

@@ -47,6 +47,14 @@
   font-size: 12px;
 }
 
+.chiptable {
+  position: absoulte;
+  width: 9rem;
+  height: 9rem;
+  margin-bottom: 200px;
+  margin-left: 140px
+}
+
 .oponent-status {
   flex-grow: 1;
   display: flex;
@@ -560,7 +568,7 @@ div.rocket-body,
   justify-content: center;
   align-items: center;
   min-height: 100vh;
- 
+  
 }
 .moon {
   background: #d8d8d8;
@@ -632,5 +640,30 @@ div.rocket-body,
   100% {
     transform: translate3d(140%, 140%, 0) rotate(90deg);
  }
+}
+
+.moonlight-perspective {
+  position: absolute;
+  width: 110px;
+  height: 200px;
+  bottom: 60px;
+  right: 20px;
+  perspective: 150px;
+  -webkit-perspective: 150px;
+  transform: rotate(180deg);
+  animation: pisca 15s infinite;
+  z-index: -3;
+}
+
+.moonlight {
+  position: absolute;
+  -webkit-transform: rotateX(45deg);
+  transform: rotateX(45deg);
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(to bottom, #fff, transparent);
+  background-size: 150px 200px;
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
 }
 
