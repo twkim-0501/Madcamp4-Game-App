@@ -280,7 +280,19 @@ div.opo-player-right,#notmyTurn {
   height: 440px;
 }
 .activeBid {
-  color: red;
+  /* color: red; */
+  color: white;
+  margin: 5px;
+  font-size: 15px;
+  font-family: "futura";
+  font-weight: bolder;
+}
+.inactiveBid {
+  color: rgb(150, 150, 150);
+  margin: 5px;
+  font-size: 15px;
+  font-family: "futura";
+  font-weight: bolder;
 }
 .Bid:last-child {
   border-bottom: 1px solid black;
@@ -338,7 +350,7 @@ div.opo-player-right,#notmyTurn {
   transform: rotate(-90deg);
   position: absolute;
   top: 60%;
-  left: -30%;
+  left: -25%;
   font-size: 20px;
   font-weight: 500;
 }
@@ -347,28 +359,28 @@ div.opo-player-right,#notmyTurn {
   color: yellow;
   transform: rotate(-90deg);
   position: absolute;
-  top: 52%;
+  top: 60%;
   left: -25%;
   font-size: 20px;
   font-weight: 500;
 }
 .playerNameRight {
-  font-family: 'futura';
+  font-family: 'game';
   color: white;
   transform: rotate(90deg);
   position: absolute;
-  top: 52%;
-  right: -25%;
+  top: 53%;
+  right:  -40%;
   font-size: 20px;
   font-weight: 500;
 }
 .playerNameRightMy {
-  font-family: 'futura';
+  font-family: 'game';
   color: yellow;
   transform: rotate(90deg);
   position: absolute;
-  top: 52%;
-  right: -25%;
+  top: 53%;
+  right: -40%;
   font-size: 20px;
   font-weight: 500;
 }
@@ -398,6 +410,10 @@ div.opo-player-right,#notmyTurn {
   bottom: 16%;
   border-radius: 25%;
   padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 .rocketTextRight {
   background-color: #444444aa;
