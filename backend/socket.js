@@ -1,3 +1,5 @@
+const GameroomModel = require("./src/models/Gameroom");
+
 Array.prototype.shuffle = function () {
     var length = this.length;
 
@@ -24,7 +26,7 @@ module.exports = function(io) {
                 return;
             }
             playerIdnSocket.push({"player": playerId, "socket": socket.id})
-            //console.log("thisissocketidarray",playerIdnSocket);
+            console.log("thisissocketidarray",playerIdnSocket);
             console.log('enterRoom')
             socket.join(roomInfo._id)
             socket.broadcast.emit('playerCome', usersInfo)
@@ -76,15 +78,46 @@ module.exports = function(io) {
         })
     
         socket.on('disconnect', function () {
+            var leavePlayer = null;
             for(var i=0 ; i<playerIdnSocket.length ; i++){
                 if(playerIdnSocket[i].socket==socket.id){
-                    //console.log("leaveplayerId", playerIdnSocket[i].player)
-                    socket.broadcast.emit('unexpectedLeave', playerIdnSocket[i].player);
+                    console.log("leaveplayerId", playerIdnSocket[i].player)
+                    leavePlayer= playerIdnSocket[i].player;
                     playerIdnSocket.splice(i,1);
                 }
+            }
+            if(leavePlayer !=null){
+                console.log("삭제됐나요?", leavePlayer)
+                GameroomModel.find({}, (err,res) => {
+                    var currentRoom = res.filter(room => room.players.includes(leavePlayer));
+                    var leaveRoom = currentRoom[0];
+                    if(leaveRoom.players.length<=1){
+                        GameroomModel.deleteOne({_id: leaveRoom._id}, (err,res) => {
+
+                        })
+                    }
+                    else{
+                        GameroomModel.find({}, (err,res) => {
+                            var allRooms = res
+                            var currentRoom = allRooms.filter(room => room.players.includes(leavePlayer));
+                            var leaveRoom = currentRoom[0]
+                            var afterplayers = leaveRoom.players.filter((player) => (player != leavePlayer))
+                            GameroomModel.findOneAndUpdate({_id: leaveRoom._id}, {
+                                players: afterplayers
+                            },(err,res) => {
+                                console.log("updateresult",afterplayers, res)
+                                socket.broadcast.emit('unexpectedLeave', leaveRoom);
+                            })
+                        })
+                        console.log("where is leaveRoom", leaveRoom)
+                        
+                    }
+                    
+                
+                })
+                
             }
             console.log('user disconnected: ', socket.id);
         });
     });
 }
-    

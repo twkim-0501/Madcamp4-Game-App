@@ -72,8 +72,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        // Socket = io('http://192.249.18.179:80')
-        Socket = io('http://192.249.18.171:80')
+        Socket = io('http://192.249.18.179:80')
+        //Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -101,27 +101,30 @@ function MG_GamePage() {
             setBidStatus(data.initTotal)
             setStartAlert(true);
         })
-        Socket.on('unexpectedLeave', (leaveId) => {
-            // if(playerId == null){
-            //     return;
-            // }
-            axios.post('/api/gameroom/findCurrentRoom', {user: leaveId})
+        Socket.on('unexpectedLeave', (leaveRoom) => {
+            console.log("unexpectedLeave", leaveRoom)
+            axios.post('/api/gameroom/getPlayersInfo', leaveRoom)
             .then(res => {
-                console.log("undexpectedcheck",leaveId, res.data);
-                if(res.data==null){
-                    return;
-                }
-                axios.post('/api/gameroom/exitRoom',
-                {playerId: leaveId, roomId: res.data})
-                .then(res => {
-                    if(res.data){
-                        axios.post('/api/gameroom/getPlayersInfo', res.data)
-                        .then(res => {
-                            setPlayers(res.data)
-                })
-                    }
-                })
-            })    
+                console.log("after leave player", res.data)
+                setPlayers(res.data)
+            })
+            // axios.post('/api/gameroom/findCurrentRoom', {user: leaveId})
+            // .then(res => {
+            //     console.log("undexpectedcheck",leaveId, res.data);
+            //     if(res.data==null){
+            //         return;
+            //     }
+            //     axios.post('/api/gameroom/exitRoom',
+            //     {playerId: leaveId, roomId: res.data._id})
+            //     .then(res => {
+            //         if(res.data){
+            //             axios.post('/api/gameroom/getPlayersInfo', res.data)
+            //             .then(res => {
+            //                 setPlayers(res.data)
+            //     })
+            //         }
+            //     })
+            // })    
         } )
         Socket.on('turnInfo', (turnInfo) => {
             setChips(turnInfo.Chips)
@@ -179,7 +182,6 @@ function MG_GamePage() {
                     }
                 })
         }
-        
     }, [user])
 
     useEffect(() => {
@@ -584,7 +586,7 @@ function MG_GamePage() {
                         <span className="r"></span>
                     </div>
                     <button class="startBtn" onClick={startClick}>Game Start</button>
-                    <a href='/'>
+                    <a href='/scroll'>
                         <button class="exitBtn">나가기</button>
                     </a>
                     {/* <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 
