@@ -306,13 +306,13 @@ div.shoot,
 .rocketTextLeft {
   transform: rotate(-90deg);
   position: absolute;
-  left: 5%;
+  left: 3%;
   top: 60%;
 }
 .rocketTextRight {
   transform: rotate(90deg);
   position: absolute;
-  right: 10%;
+  right: 15%;
   top: 60%;
 }
 
@@ -380,12 +380,12 @@ div.rocket-body,
 }
 .rocket-left .window {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 100%;
   background-color: #a75248;
-  left: calc(50% - 25px);
-  top: 40px;
+  left: calc(50% - 30px);
+  top: 20px;
   border: 5px solid #a3a3a3;
 }
 .rocket-left .fin {
@@ -450,12 +450,12 @@ div.rocket-body,
 }
 .rocket-right .window {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 100%;
   background-color: #a75248;
-  left: calc(50% - 25px);
-  top: 40px;
+  left: calc(50% - 30px);
+  top: 20px;
   border: 5px solid #949191;
 }
 .rocket-right .fin {
