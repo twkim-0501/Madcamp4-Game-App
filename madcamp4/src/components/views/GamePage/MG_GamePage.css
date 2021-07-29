@@ -282,14 +282,14 @@ div.opo-player-right,#notmyTurn {
 .activeBid {
   /* color: red; */
   color: white;
-  padding: 30px;
+  margin: 5px;
   font-size: 15px;
   font-family: "futura";
   font-weight: bolder;
 }
 .inactiveBid {
   color: rgb(150, 150, 150);
-  
+  margin: 5px;
   font-size: 15px;
   font-family: "futura";
   font-weight: bolder;
@@ -352,7 +352,7 @@ div.opo-player-right,#notmyTurn {
   transform: rotate(-90deg);
   position: absolute;
   top: 60%;
-  left: -30%;
+  left: -25%;
   font-size: 20px;
   font-weight: 500;
 }
@@ -361,28 +361,28 @@ div.opo-player-right,#notmyTurn {
   color: yellow;
   transform: rotate(-90deg);
   position: absolute;
-  top: 52%;
+  top: 60%;
   left: -25%;
   font-size: 20px;
   font-weight: 500;
 }
 .playerNameRight {
-  font-family: 'futura';
+  font-family: 'game';
   color: white;
   transform: rotate(90deg);
   position: absolute;
-  top: 52%;
-  right: -25%;
+  top: 53%;
+  right:  -40%;
   font-size: 20px;
   font-weight: 500;
 }
 .playerNameRightMy {
-  font-family: 'futura';
+  font-family: 'game';
   color: yellow;
   transform: rotate(90deg);
   position: absolute;
-  top: 52%;
-  right: -25%;
+  top: 53%;
+  right: -40%;
   font-size: 20px;
   font-weight: 500;
 }

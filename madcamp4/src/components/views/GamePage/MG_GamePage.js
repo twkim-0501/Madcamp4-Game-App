@@ -758,11 +758,7 @@ function MG_GamePage() {
                     ) : null
                     )}
                 </div>
-                <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
-                <Alert onClose={handleClose} severity="warning">
-                    플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
-                </Alert>
-                </Snackbar>
+                
                 <Snackbar open={startAlert} autoHideDuration={8000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="info" >
                     <div class="instruction">
@@ -784,6 +780,11 @@ function MG_GamePage() {
                 </Alert>
                 </Snackbar>
             </div>
+            <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="warning">
+                    플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
+                </Alert>
+            </Snackbar>
         </Html>  
     </Canvas>
     
