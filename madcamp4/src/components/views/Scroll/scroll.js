@@ -366,10 +366,13 @@ function Scroll(props) {
     console.log(user.userData)
     //socket으로 text 쏴주면 될듯
     axios.post('/api/gameroom/addRoom', {roomName: 'roomname', user: user.userData})
-    setRoomName('');
-    setTimeout(() => {
-      history.push('/gamepage')
-    }, 1500);
+    .then(res => {
+      setRoomName('');
+      setTimeout(() => {
+        history.push(`/gamepage/${res.data}`)
+      }, 1500);
+    })
+    
   };
 
   function joinRoom (index) {
@@ -378,7 +381,7 @@ function Scroll(props) {
     console.log("여기에 룸아이디와야함!", rooms)
     axios.post('/api/gameroom/joinRoom', {roomId: rooms[index]._id, playerId: user.userData?._id})
     setTimeout(() => {
-      history.push('/gamepage')
+      history.push(`/gamepage/${rooms[index]._id}`)
     }, 1000);
   }
 
