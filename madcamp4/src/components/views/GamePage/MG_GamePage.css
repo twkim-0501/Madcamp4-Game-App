@@ -52,7 +52,7 @@
   width: 9rem;
   height: 9rem;
   margin-bottom: 200px;
-  margin-left: 140px
+  margin-left: 70px
 }
 
 .oponent-status {
@@ -195,13 +195,13 @@ div.opo-player-right,#notmyTurn {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: rgb(184, 55, 55);
+  background: #a75248;
   transition: all 0.8s linear;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   display: flex;
-  animation: rainbow 0.5s linear infinite;
+  /* animation: rainbow 0.5s linear infinite; */
 }
 @keyframes rainbow {
   0% {
@@ -300,7 +300,12 @@ div.opo-player-right,#notmyTurn {
 .chipBox {
   width: 100px;
   height: 50px;
-  background: #00b7ff;
+  margin-left: 20px;
+  font-family: "futura";
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 30px;
+  color:rgb(230, 105, 22);
 }
 
 .Bids {
@@ -342,8 +347,18 @@ div.opo-player-right,#notmyTurn {
 }
 
 .playerNameLeft {
-  font-family: 'futura';
+  font-family: 'game';
   color: white;
+  transform: rotate(-90deg);
+  position: absolute;
+  top: 60%;
+  left: -30%;
+  font-size: 20px;
+  font-weight: 500;
+}
+.playerNameLeftMy {
+  font-family: 'game';
+  color: yellow;
   transform: rotate(-90deg);
   position: absolute;
   top: 52%;
@@ -361,21 +376,29 @@ div.opo-player-right,#notmyTurn {
   font-size: 20px;
   font-weight: 500;
 }
+.playerNameRightMy {
+  font-family: 'futura';
+  color: yellow;
+  transform: rotate(90deg);
+  position: absolute;
+  top: 52%;
+  right: -25%;
+  font-size: 20px;
+  font-weight: 500;
+}
 
-div.shoot,
-#left {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    z-index: -10;
+.shootLeft {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    z-index: -100;
     transform: rotate(0deg);
 }
-div.shoot,
-#right {
-    /* position: absolute; */
-    top: 0px;
-    left: 0px;
-    z-index: -10;
+.shootRight {
+    position: absolute;
+    top: 10%;
+    left: 30%;
+    z-index: -100;
     transform: rotate(0deg);
 }
 
@@ -406,14 +429,6 @@ div.shoot,
   padding: 14px;
 }
 
-
-/* .rocketText#right {
-  transform: rotate(90deg);
-  position: absolute;
-  left: 0%;
-  top: 60%;
-} */
-
 div.rocket-body,
 #myTurn {
   animation: bounce 0.5s infinite;
@@ -440,7 +455,6 @@ div.rocket-body,
   transform: rotate(90deg);
   margin-left: 30%;
   margin-top: 10%;
-  z-index: 2;
 }
 .rocket-left .rocket-body {
   width: 160px;
@@ -476,7 +490,7 @@ div.rocket-body,
   background-color: #a75248;
   left: calc(50% - 30px);
   top: 20px;
-  border: 5px solid #a3a3a3;
+  border: 5px solid #949191;
   cursor: pointer;
   transform: rotate(-90deg);
   display: flex;
@@ -485,7 +499,6 @@ div.rocket-body,
   font-family: "futura";
   color: #c0c0c0;
   font-weight: bolder;
-  z-index: 4;
 }
 .rocket-left .fin {
   position: absolute;
@@ -512,7 +525,7 @@ div.rocket-body,
 .rocket-right {
   text-align: center;
   flex-grow: 1;
-  display: flex;
+  display: absolute;
   flex-direction: column;
   width: 200px;
   height: 20%;
@@ -563,7 +576,6 @@ div.rocket-body,
   font-family: "futura";
   color: #c0c0c0;
   font-weight: bolder;
-  z-index: 4;
 }
 .rocket-right .fin {
   position: absolute;
