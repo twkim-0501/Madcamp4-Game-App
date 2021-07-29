@@ -286,17 +286,6 @@ div.opo-player-right,#notmyTurn {
   font-size: x-large;
 }
 
-.rocket-left {
-  text-align: center;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  width: 250px;
-  height: 20%;
-  transform: rotate(90deg);
-  margin-left: 20%;
-  margin-top: 25%;
-}
 div.shoot,
 #left {
     position: relative;
@@ -313,8 +302,28 @@ div.shoot,
     z-index: -5;
     transform: rotate(90deg);
 }
+
+.rocketText {
+  transform: rotate(-90deg);
+  position: absolute;
+  left: 0%;
+  top: 60%;
+}
+
+.rocket-left {
+  text-align: center;
+  flex-grow: 1;
+  display: absolute;
+  flex-direction: column;
+  width: 200px;
+  height: 20%;
+  transform: rotate(90deg);
+  margin-left: 30%;
+  margin-top: 10%;
+}
 .rocket-left .rocket-body {
-  width: 120px;
+  /* transform: rotate(90deg); */
+  width: 160px;
   left: calc(50% - 50px);
 }
 div.rocket-body,
@@ -334,7 +343,7 @@ div.rocket-body,
 }
 .rocket-left .rocket-body .body {
   background-color: #c0c0c0;
-  height: 250px;
+  height: 300px;
   left: calc(50% - 50px);
   border-top-right-radius: 100%;
   border-top-left-radius: 100%;
@@ -485,7 +494,7 @@ div.rocket-body,
   border-radius: 50%;
 }
 /* span:nth-child(1) {
-  filter: blur(5px);
+  filter: blur(10px);
 }
 span:nth-child(2) {
   filter: blur(15px);
@@ -502,6 +511,8 @@ span:nth-child(4) {
   top: -1px;
   left: -1px;
   position: absolute;
+  /* background: black; */
+  /* box-shadow: inset 0px 0px 5px 5px white; */
   background-image: url("https://www.freeiconspng.com/uploads/moon-png-no-background-15.png");
   background-size: 100%;
   border-radius: 50%;

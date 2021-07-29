@@ -23,17 +23,14 @@ function Oppo_player(props) {
   }, [Playing])
 
   return (
-    <div>
-      <span>
+    <div class='rocketText'>
+      <span style={{fontFamily: "futura", fontSize: 20}}>
           {
             host?._id == player._id ?
-            <span class="staricon">
-                <StarIcon style={{color: 'blue'}}/>
-            </span> :
+              <StarIcon style={{color: 'blue'}}/>
+            :
             null
           }
-        </span>
-      <span>
         {"Player " + player?.name}
       </span>
       <span>

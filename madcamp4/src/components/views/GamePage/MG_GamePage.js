@@ -490,7 +490,13 @@ function MG_GamePage() {
                             (index != curTurn) ?
                                 <div class="rocket-left" >
                                     <div class={"rocket-body"} id="notmyTurn">
-                                        <div class="body"></div>
+                                        <div class="body">
+                                            <Oppo_player 
+                                                player={Players[index]} host= {host} playerBids={playerBids}
+                                                    BidStatus={BidStatus} Playing={Playing}
+                                                    Index = {index} myIndex = {myIndex}
+                                            />
+                                        </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
                                         <div class="window"></div>
@@ -556,7 +562,7 @@ function MG_GamePage() {
                         ) : 
                         (
                             <div class="rocket-left" >
-                                <div class="rocket-body" id="nowon">
+                                <div class="rocket-body" id="notmyTurn">
                                     <div class="body"></div>
                                     <div class="fin fin-left"></div>
                                     <div class="fin fin-right"></div>
