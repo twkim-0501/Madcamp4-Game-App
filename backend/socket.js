@@ -107,7 +107,7 @@ module.exports = function(io) {
                                 players: afterplayers
                             },(err,res) => {
                                 console.log("updateresult",afterplayers, leaveRoom._id,res)
-                                socket.broadcast.emit('unexpectedLeave', leaveRoom);
+                                socket.to(leaveRoom._id).emit('unexpectedLeave', leaveRoom);
                                 socket.leave(leaveRoom._id)
                             })
                         })
