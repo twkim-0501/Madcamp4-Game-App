@@ -2,7 +2,6 @@
 .Container {
     height: stretch;
     width: 100%;
-  
     /* background-image: url("./table.jpeg");
     background-size: contain; */
 }
@@ -83,7 +82,7 @@
     font-family: "cardfont";
 }
 
-.plus{
+.plus2{
     justify-content: center;
     align-content: center;
     text-align: center;

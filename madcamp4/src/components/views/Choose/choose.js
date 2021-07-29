@@ -10,6 +10,9 @@ import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios"
+import vert from "../Scroll/vert.png"
+import menu from "../Scroll/menu.png"
+import exit from "../Scroll/exit.png"
 
 const sizes = {
   width: window.innerWidth,
@@ -90,13 +93,23 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "15px",
     fontFamily: "futura",
   },
+  logout: {
+    position: "absolute",
+    bottom: "10%",
+    right: "3%",
+    alignItems: "center",
+    justifyContent: 'center',
+    color: "white",
+    backgroundColor: "gray",
+    fontSize: "15px",
+    fontFamily: "futura",
+  },
 }));
 
 function App(props) {
   let history = useHistory()
   const classes = useStyles();
   
-
   const logout= () => {
     axios.get('api/user/logout')
     .then(response => {
@@ -108,6 +121,7 @@ function App(props) {
   }
   return (
     <Canvas className="canvas">
+    
       <OrbitControls/>
       <Suspense fallback={null}>
         <perspectiveCamera
@@ -134,6 +148,21 @@ function App(props) {
         </perspectiveCamera>
       </Suspense>
       <ambientLight />
+
+      <Html position={[7.4, -4.6, -1]} >
+        <div id="container-floating">
+        
+        <div onClick={logout} class="nd1 nds" data-toggle="tooltip" data-placement="left" data-original-title="Edoardo@live.it">
+              <img class="reminder"/>
+              <img class="exit" src={ exit }/>
+            </div>
+  
+        <div id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create" onclick="newmail()">
+          <img class="plus" src={ menu } />
+          <img class="edit" src={ vert }/>
+        </div>
+      </div>
+      </Html>
     </Canvas>
   );
 }
