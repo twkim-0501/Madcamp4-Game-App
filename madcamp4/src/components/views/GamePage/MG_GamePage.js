@@ -445,7 +445,6 @@ function MG_GamePage() {
                 : null
             }
             <br />  
-            <span className="chipBox">{Bet}</span>
           </div>
         );
       };
@@ -609,6 +608,9 @@ function MG_GamePage() {
                         
                         <div class="moonlight-perspective">
                     <span class="moonlight"></span>
+                    </div>
+                    <div class="moon2" > 
+                    <span className="chipBox" >{Bet}</span>
                     </div>
                 </div>
                 <div class="orbit">

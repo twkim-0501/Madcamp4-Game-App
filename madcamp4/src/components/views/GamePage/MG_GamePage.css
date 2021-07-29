@@ -288,12 +288,10 @@ div.opo-player-right,#notmyTurn {
 .chipBox {
   width: 100px;
   height: 50px;
-  margin-left: 20px;
   font-family: "futura";
-  font-size: 25px;
-  font-weight: bold;
-  margin-left: 30px;
-  color:rgb(230, 105, 22);
+  font-size: 20px;
+  margin-left: 10px;
+  color:rgb(0, 0, 0);
 }
 
 .Bids {
@@ -609,6 +607,16 @@ div.rocket-body,
   border-radius: 50%;
   box-shadow: inset -12px -12px 0 0 #b6b6b6;
   position: absolute;
+}
+.moon2 {
+  background: #d8d8d8;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  box-shadow: inset -6px -6px 0 0 #b6b6b6;
+  position: absolute;
+  margin-left: 145px;
+  padding-top: 8px;
 }
 .crater {
   position: absolute;
