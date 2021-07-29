@@ -280,7 +280,19 @@ div.opo-player-right,#notmyTurn {
   height: 440px;
 }
 .activeBid {
-  color: red;
+  /* color: red; */
+  color: white;
+  padding: 30px;
+  font-size: 15px;
+  font-family: "futura";
+  font-weight: bolder;
+}
+.inactiveBid {
+  color: rgb(150, 150, 150);
+  
+  font-size: 15px;
+  font-family: "futura";
+  font-weight: bolder;
 }
 .Bid:last-child {
   border-bottom: 1px solid black;
@@ -377,6 +389,10 @@ div.shoot,
   bottom: 16%;
   border-radius: 25%;
   padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
 .rocketTextRight {
   background-color: #444444aa;

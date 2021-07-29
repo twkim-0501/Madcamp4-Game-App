@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,6 +14,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+  },
+  root: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(0.5),
+    },
   },
 }));
 
@@ -25,7 +34,7 @@ function Oppo_player(props) {
   return (
       Index % 2 == 0
         ? <div class="rocketTextLeft" >
-            <span>
+            
               {
                 Playing ?
                   <div class="Bids">
@@ -40,7 +49,7 @@ function Oppo_player(props) {
                 :
                 null
               }
-            </span>
+            
           </div>
         : <div class="rocketTextRight" >
             <span>
