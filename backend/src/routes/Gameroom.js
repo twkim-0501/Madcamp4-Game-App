@@ -34,7 +34,7 @@ router.post('/findCurrentRoom', (req,res) => {
     //console.log("route user", req.body)
 
     db.findCurrentRoom(req.body.user, (_id) => {
-        console.log('find room', _id)
+        //console.log('find room', _id)
         res.status(200).send(_id);
     })
 })

@@ -72,8 +72,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        // Socket = io('http://192.249.18.179:80')
-        Socket = io('http://192.249.18.171:80')
+        Socket = io('http://192.249.18.179:80')
+        //Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -580,7 +580,7 @@ function MG_GamePage() {
                         <span className="r"></span>
                     </div>
                     <button class="startBtn" onClick={startClick}>Game Start</button>
-                    <a href='/'>
+                    <a href='/scroll'>
                         <button class="exitBtn">나가기</button>
                     </a>
                     {/* <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 

@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html, Center } from "@react-three/drei";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import UndoIcon from '@material-ui/icons/Undo';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import {useSelector} from 'react-redux'
 
 const H1 = styled.h1`
@@ -299,6 +301,28 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "15px",
     fontFamily: "futura",
   },
+  undo: {
+    position: "absolute",
+    bottom: "20%",
+    right: "3%",
+    alignItems: "center",
+    justifyContent: 'center',
+    color: "white",
+    backgroundColor: "gray",
+    fontSize: "15px",
+    fontFamily: "futura",
+  },
+  refresh: {
+    position: "absolute",
+    bottom: "30%",
+    right: "3%",
+    alignItems: "center",
+    justifyContent: 'center',
+    color: "white",
+    backgroundColor: "gray",
+    fontSize: "15px",
+    fontFamily: "futura",
+  },
 }));
 
 function Scroll(props) {
@@ -360,6 +384,17 @@ function Scroll(props) {
             props.history.push('/login')
         }
     })
+  }
+  const undo= () => {
+    props.history.push('/')
+  }
+
+  const refresh = () => {
+    axios.get('/api/gameroom/getAllrooms2')
+        .then((res) => {
+            console.log(res.data);
+            setRooms(res.data);
+        })
   }
 
   const { transform, opacity } = useSpring({
@@ -449,6 +484,13 @@ function Scroll(props) {
           <Fab aria-label="add" onClick={logout} className={classes.logout} >
               <ExitToAppIcon />
           </Fab>
+          <Fab aria-label="add" onClick={undo} className={classes.undo} >
+              <UndoIcon />
+          </Fab>
+          <Fab aria-label="add" onClick={refresh} className={classes.refresh} >
+              <RefreshIcon />
+          </Fab>
+
         
       </Html>
     </Canvas>
