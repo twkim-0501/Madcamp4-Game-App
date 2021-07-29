@@ -72,8 +72,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        Socket = io('http://192.249.18.179:80')
-        //Socket = io('http://192.249.18.171:80')
+        // Socket = io('http://192.249.18.179:80')
+        Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -312,7 +312,7 @@ function MG_GamePage() {
                         setCurTurn(curTurn+1)
                         Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1})
                     }
-                }, 600)
+                }, 900)
             }, 
             init(chip) {
                 chipYRef.current.style.top=`${chip.originY}px`;
@@ -492,6 +492,7 @@ function MG_GamePage() {
                             (index != curTurn) ?
                                 <div class="rocket-left" >
                                     <div class={"rocket-body"} id="notmyTurn">
+                                        <div class='playerName'>{Players[index].name}</div>
                                         <div class="body">
                                             <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
@@ -525,7 +526,7 @@ function MG_GamePage() {
                             // </div> 
                             : (Players[index]?._id == playerId)
                                 ? <div class="rocket-left" >
-                                    <div class={"rocket-body"} id="myTurn" onClick={chipClick}>
+                                    <div class={"rocket-body"} id="myTurn">
                                         <div class="body">
                                             <Oppo_player 
                                                 player={Players[index]} host= {host} playerBids={playerBids}
@@ -535,16 +536,17 @@ function MG_GamePage() {
                                         </div>
                                         <div class="fin fin-left"></div>
                                         <div class="fin fin-right"></div>
-                                        <div class="window"></div>
+                                        <div class="window" onClick={chipClick}>
+                                            <div class='shoot' id="left">
+                                                {/* {Playing ? Chips[myIndex] : null}
+                                                {Playing && (curTurn==myIndex)
+                                                    ? Dragable ? <Chip  />: <FixedChip />
+                                                : null} */}
+                                                <Chip ref={chipRef} />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class='shoot' id="left">
-                                        {/* {Playing ? Chips[myIndex] : null}
-                                        {Playing && (curTurn==myIndex)
-                                            ? Dragable ? <Chip  />: <FixedChip />
-                                        : null} */}
-                                        <div>Chips[myIndex]</div>
-                                        <Chip ref={chipRef} />
-                                    </div>
+                                    
                                 </div>
                                 : <div class="rocket-left" >
                                     <div class={"rocket-body"} id="myTurn">
@@ -672,8 +674,8 @@ function MG_GamePage() {
                                 // } */}
                             // </div> 
                             : (Players[index]?._id == playerId)
-                            ? <div class="rocket-" >
-                                <div class={"rocket-body"} id="myTurn" onClick={chipClick}>
+                            ? <div class="rocket-right" >
+                                <div class={"rocket-body"} id="myTurn" >
                                     <div class="body">
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
@@ -683,16 +685,17 @@ function MG_GamePage() {
                                     </div>
                                     <div class="fin fin-left"></div>
                                     <div class="fin fin-right"></div>
-                                    <div class="window"></div>
+                                    <div class="window" onClick={chipClick}>
+                                        <div class='shoot' id="right">
+                                            {/* {Playing ? Chips[myIndex] : null}
+                                            {Playing && (curTurn==myIndex)
+                                                ? Dragable ? <Chip  />: <FixedChip />
+                                            : null} */}
+                                            <Chip ref={chipRef} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class='shoot' id="right">
-                                    {/* {Playing ? Chips[myIndex] : null}
-                                    {Playing && (curTurn==myIndex)
-                                        ? Dragable ? <Chip  />: <FixedChip />
-                                    : null} */}
-                                    <div>Chips[myIndex]</div>
-                                    <Chip ref={chipRef} />
-                                </div>
+                                
                             </div>
                             : <div class="rocket-right" >
                                 <div class={"rocket-body"} id="myTurn">

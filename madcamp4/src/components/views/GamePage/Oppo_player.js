@@ -27,12 +27,6 @@ function Oppo_player(props) {
         ? <div class="rocketTextLeft" >
             <span style={{fontFamily: "futura", fontSize: 20}}>
                 {
-                  host?._id == player._id ?
-                    <StarIcon style={{color: 'blue'}}/>
-                  :
-                  null
-                }
-                {
                   player?.name == null ?
                     "Player "
                     : "Player " + player?.name
@@ -58,12 +52,6 @@ function Oppo_player(props) {
           </div>
         : <div class="rocketTextRight" >
             <span style={{fontFamily: "futura", fontSize: 20}}>
-                {
-                  host?._id == player._id ?
-                    <StarIcon style={{color: 'blue'}}/>
-                  :
-                  null
-                }
                 {
                   player?.name == null ?
                     "Player "
