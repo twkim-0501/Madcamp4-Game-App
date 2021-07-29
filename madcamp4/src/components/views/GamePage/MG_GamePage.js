@@ -14,7 +14,21 @@ import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, green, yellow, indigo } from '@material-ui/core/colors';
 import { Canvas } from "@react-three/fiber";
 import { Stars, Html } from "@react-three/drei";
+import Modal from '@material-ui/core/Modal';
+import { Score } from '@material-ui/icons';
 // import './spaceship.scss'
+
+function getModalStyle() {
+    const top = 50 
+    const left = 50
+  
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+     
+    };
+  }
 
 function Alert(props) {
     return <MuiAlert elevation={3} variant="filled" {...props} />;
@@ -37,6 +51,15 @@ const useStyles = makeStyles((theme) => ({
       color: '#fff',
       backgroundColor: green[500],
     },
+    paper: {
+        position: 'absolute',
+        width: 610,
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: "20px",
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        zIndex: 200
+      },
   }));
 
 
@@ -69,10 +92,12 @@ function MG_GamePage() {
     const [isMyturn, setIsMyturn] = useState("notmyTurn")
     const [startCondition, setStartCondition] = useState(false);
     const [startAlert, setStartAlert] = useState(false);
-
-    const [isStart, set] = useState(false)
+    const [isResult, setResult] = useState(false);
+    const [Result, setPlayResult] = useState([]);
     
     const waiting = [0, 1, 2, 3, 4, 5];
+    const Grade = ["st", "nd", "th", "th", "th", "th"];
+
 
     useEffect(() => {
         Socket = io('http://192.249.18.179:80')
@@ -103,7 +128,7 @@ function MG_GamePage() {
             setCurTurn(data.curTurn)
             setPlayerBids(data.initBids)
             setBidStatus(data.initTotal)
-            //setStartAlert(true);
+            setStartAlert(true);
         })
         Socket.on('unexpectedLeave', (leaveRoom) => {
             console.log("unexpectedLeave", leaveRoom)
@@ -148,6 +173,8 @@ function MG_GamePage() {
         Socket.on('FinishGame', (finishInfo) => {
             setPlaying(finishInfo.Playing)
             console.log("게임결과", finishInfo.scores, finishInfo.playerName)
+            setPlayResult(finishInfo.scores)
+            setResult(true)
         })
     }, [])
 
@@ -448,13 +475,31 @@ function MG_GamePage() {
         );
       };
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
+    // const handleClose = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
 
-    setStartCondition(false);
-    setStartAlert(false);
+    // setStartCondition(false);
+    // setStartAlert(false);
+    // };
+
+    const [modalStyle] = React.useState(getModalStyle);
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setStartCondition(false);
+    };
+
+    const handleClosealert = () => {
+        setStartAlert(false);
+    };
+    const handleCloseresult = () => {
+        setResult(false);
     };
 
     
@@ -760,7 +805,7 @@ function MG_GamePage() {
                     )}
                 </div>
                 
-                <Snackbar open={startAlert} autoHideDuration={8000} onClose={handleClose}>
+                {/* <Snackbar open={startAlert} autoHideDuration={8000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="info" >
                     <div class="instruction">
                         게임시작!
@@ -779,16 +824,86 @@ function MG_GamePage() {
                     </div>
                     
                 </Alert>
-                </Snackbar>
+                </Snackbar> */}
+
+                {
+                    startCondition ?
+                    <div
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        z
+                        >
+                        <div onClick={handleClose} style={modalStyle} className={classes.paper}>
+                        <h2 class="caution"> CAUTION ⚠️ </h2>
+                        <p class="modaltext">
+                        플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다.
+                        </p>
+                        </div>
+                        </div>
+                        : null
+                }
+
+                {
+                    startAlert ?
+                    <div
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        z
+                        >
+                        <div onClick={handleClosealert} style={modalStyle} className={classes.paper}>
+                        <h2 class="caution"> Game Start 🎮 </h2>
+                        <p class="modaltext">
+                        1. 자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.
+                        <br/><br/>
+                        2. 상품을 낙찰 받고 싶지 않다면 칩을 테이블에 지불하고 턴을 넘기십시오.
+                        <br/><br/>
+                        3. 총 -3부터 -35까지의 경매 상품이 있으며, 한 개의 히든 상품은 끝까지 경매에 오르지 않습니다.
+                        <br/><br/>
+                        4. 마지막에 가지고 있는 칩 수와 상품들의 총 합이 자신의 점수가 되며, 점수가 가장 높은 사람이 승리합니다.
+                        <br/><br/>
+                        5. 연속된 숫자를 보유하고 있는 경우, 절댓값이 낮은 숫자만 점수에 포함됩니다.
+                        (ex. -12,-13, -14를 가지고 있을 때 -13과 -14는 포함되지 않습니다)
+                        </p>
+                        </div>
+                        </div>
+                        : null
+                }
+
+                {
+                    isResult ?
+                    <div
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        z
+                        >
+                        <div onClick={handleCloseresult} style={modalStyle} className={classes.paper}>
+                        <h2 class="caution"> Game Finish 🎉 </h2>
+                        <p class="modaltext">
+                         { Result.map((one, i) => 
+                            <div>
+                             <span className="resultPrize"> {i+1 + Grade[i]} </span>
+                             <span className="resultContent" > {  Players[i].name +" : "+ one }
+                              { i+1==Players.length ? null : <div><br/></div> }
+                             </span> </div>
+                          ) }
+                        </p>
+                        </div>
+                        </div>
+                        : null
+                }
+                
             </div>
-            <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
+
+                
+            {/* <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="warning">
                     플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
                 </Alert>
-            </Snackbar>
+            </Snackbar> */}
         </Html>  
     </Canvas>
     
   );
 }
 export default withRouter(MG_GamePage);
+
