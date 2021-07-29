@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import React, { useState, useEffect } from "react"
 import axios from "axios"
-import ReactCardFlip from 'react-card-flip';
 import { withRouter, useHistory } from "react-router-dom";
 import "./scroll.css"
 import spade from './spade.png'
@@ -12,7 +11,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { OrbitControls, Stars, Html, Center } from "@react-three/drei";
-import Slide from '@material-ui/core/Slide';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {useSelector} from 'react-redux'
 
 const H1 = styled.h1`
@@ -277,9 +276,10 @@ function Carousel({children, joinRoom}) {
 
 const useStyles = makeStyles((theme) => ({
   margin: {
-    margin: theme.spacing(1),
-    width: "300px",
-    height: "50px",
+    margin: theme.spacing(4),
+    borderRadius: "30px",
+    width: "320px",
+    height: "57px",
     color: "white",
     backgroundColor: "indigo",
     fontSize: "20px",
@@ -288,9 +288,20 @@ const useStyles = makeStyles((theme) => ({
   extendedIcon: {
     marginRight: theme.spacing(1),
   },
+  logout: {
+    position: "absolute",
+    bottom: "10%",
+    right: "3%",
+    alignItems: "center",
+    justifyContent: 'center',
+    color: "white",
+    backgroundColor: "gray",
+    fontSize: "15px",
+    fontFamily: "futura",
+  },
 }));
 
-function Scroll() {
+function Scroll(props) {
   let history = useHistory()
   const user = useSelector(state => state.user)
   const [rooms, setRooms] = useState([])
@@ -339,6 +350,16 @@ function Scroll() {
     setTimeout(() => {
       history.push('/gamepage')
     }, 1000);
+  }
+
+  const logout= () => {
+    axios.get('api/user/logout')
+    .then(response => {
+        if (response.data.ok) {
+            alert('로그아웃되었습니다.')
+            props.history.push('/login')
+        }
+    })
   }
 
   const { transform, opacity } = useSpring({
@@ -395,19 +416,40 @@ function Scroll() {
         />
         <Html as='div' className="Container" fullscreen="true" >
           <h1 className="title"> MINUS AUCTION </h1>
+          <div class="animate-container">
+          <div class="spaceship-full">
+            <div class="spaceship-container">
+              <div class="spaceship">
+                <span class="top"></span>
+                <span class="midle"></span>
+                <span class="bottom"></span>
+              </div>
+              <div class="light-perspective">
+                <span class="light"></span>
+              </div>
+            </div>
+          </div>
+        </div>
           <HorizontalCenter style={{zIndex: 0}}>
           {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
             <Carousel joinRoom={joinRoom} rooms={rooms} >{colorsArray}</Carousel>
+            
             {/* <Carousel><colorsArray2 joinRoom={joinRoom} rooms={rooms}/></Carousel> */}
           </HorizontalCenter>
+          
           <div className="plus">
           {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
           <Fab variant="extended" onClick={NewRoom} className={classes.margin} >
             <AddIcon className={classes.extendedIcon}/>
             New room
           </Fab>
-          
           </div> 
+
+          {/* <a href="/gamepage" style={{ textDecoration: 'none', color: "black" }} > */}
+          <Fab aria-label="add" onClick={logout} className={classes.logout} >
+              <ExitToAppIcon />
+          </Fab>
+        
       </Html>
     </Canvas>
     

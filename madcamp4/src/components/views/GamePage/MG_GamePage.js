@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle  } from 'react'
 import "./MG_GamePage.css"
 import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +12,9 @@ import MuiAlert from '@material-ui/lab/Alert';
 import axios from "axios";
 import Avatar from '@material-ui/core/Avatar';
 import { deepOrange, green, yellow, indigo } from '@material-ui/core/colors';
+import { Canvas } from "@react-three/fiber";
+import { Stars, Html } from "@react-three/drei";
+// import './spaceship.scss'
 
 function Alert(props) {
     return <MuiAlert elevation={3} variant="filled" {...props} />;
@@ -69,8 +72,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        Socket = io('http://192.249.18.179:80')
-        //Socket = io('http://192.249.18.171:80')
+        // Socket = io('http://192.249.18.179:80')
+        Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -289,64 +292,82 @@ function MG_GamePage() {
     //     )
     // }
 
-    const Chip = (props) => {
-        const init = (chip) => {
-            chipYRef.current.style.top=`${chip.originY}px`;
-            chipYRef.current.style.left=`${chip.originX}px`;
-            if(chip.originY > chip.terminalY){
-                chipYRef.current.style.transition = "all .4s cubic-bezier(0,.3,.55,1.62)"
-            }
-            console.log("dasdasd", chip.id);
-            setTimeout(()=>{
-                fall(chip)
-            },0)
-        };
-
-        const fall = (chip) => {
-            console.log("fallfallfall")
-            chipYRef.current.style.transform=`translateY(${chip.terminalY - chip.originY}px)`;
-            chipXRef.current.style.transform=`translateX(${chip.terminalX - chip.originX}px)`;
-            setTimeout(()=>{
-                Chips.splice(myIndex, 1, Chips[myIndex] - 1);
-                    
-                console.log(Chips)
-                setChips(Chips)
-                setBet(Bet + 1)
-                if(curTurn == (Players.length - 1)){
-                    setCurTurn(0)
-                    Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: 0})
+    const Chip = forwardRef((props, ref) => {
+        useImperativeHandle(ref, () => ({
+            fall(chip) {
+                console.log("fallfallfall")
+                chipYRef.current.style.transform=`translateY(${chip.terminalY - chip.originY}px)`;
+                chipXRef.current.style.transform=`translateX(${chip.terminalX - chip.originX}px)`;
+                setTimeout(()=>{
+                    Chips.splice(myIndex, 1, Chips[myIndex] - 1);
+                        
+                    console.log(Chips)
+                    setChips(Chips)
+                    setBet(Bet + 1)
+                    if(curTurn == (Players.length - 1)){
+                        setCurTurn(0)
+                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: 0})
+                    }
+                    else{
+                        setCurTurn(curTurn+1)
+                        Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1})
+                    }
+                }, 600)
+            }, 
+            init(chip) {
+                chipYRef.current.style.top=`${chip.originY}px`;
+                chipYRef.current.style.left=`${chip.originX}px`;
+                if(chip.originY > chip.terminalY){
+                    chipYRef.current.style.transition = "all .4s cubic-bezier(0,.3,.55,1.62)"
                 }
-                else{
-                    setCurTurn(curTurn+1)
-                    Socket.emit('turnInfo', {Chips: Chips, Bet: Bet+1, curTurn: curTurn+1})
-                }
-            }, 500)
+                console.log("dasdasd", chip.id);
+                setTimeout(()=>{
+                    this.fall(chip)
+                },0)
+            },
+    
             
-        };
+        }))
+        
 
-        const chipClick = (e) => {
-            // e.preventDefault()
-            console.log('chip click')
-            let chip = {
-                id: `${e.timeStamp}`,
-                terminalX:tableRef.current.offsetLeft + 50,
-                terminalY:tableRef.current.offsetTop,
-                originX:e.pageX,
-                originY:e.pageY
-            };
-            setClickChip(chip)
-            init(chip)
-        }
+        // const chipClick = (e) => {
+        //     // e.preventDefault()
+        //     console.log('chip click')
+        //     let chip = {
+        //         id: `${e.timeStamp}`,
+        //         terminalX:tableRef.current.offsetLeft + 40,
+        //         terminalY:tableRef.current.offsetTop + 40,
+        //         originX:e.pageX,
+        //         originY:e.pageY
+        //         // originX:chipYRef.current.offsetLeft + 20,
+        //         // originY:chipYRef.current.offsetTop + 20
+        //     };
+        //     setClickChip(chip)
+        //     init(chip)
+        // }
 
         return (
-            <div onClick={chipClick} className='chip-y' ref={chipYRef}>
+            <div  className='chip-y' ref={chipYRef}>
                 <div className='chip-x' ref={chipXRef}>
-                    베팅
                 </div>
-             {/* <div className='chip' ref={drag} style={{ opacity }}>
-                 이거 칩임 */}
             </div>
         )
+    })
+
+    const chipClick = (e) => {
+        // e.preventDefault()
+        console.log('chip click')
+        let chip = {
+            id: `${e.timeStamp}`,
+            terminalX:tableRef.current.offsetLeft + 40,
+            terminalY:tableRef.current.offsetTop + 40,
+            originX:e.pageX,
+            originY:e.pageY
+            // originX:chipYRef.current.offsetLeft + 20,
+            // originY:chipYRef.current.offsetTop + 20
+        };
+        setClickChip(chip)
+        chipRef.current.init(chip)
     }
 
 
@@ -417,15 +438,6 @@ function MG_GamePage() {
     // const whoIsWinner
 
     const Table = () => {
-        const [{ canDrop, isOver }, drop] = useDrop({
-          accept: "chip",
-          drop: () => ({ name: "table" }),
-          collect: (monitor) => ({
-            isOver: monitor.isOver(),
-            canDrop: monitor.canDrop(),
-          }),
-        });
-    
         return (
           <div class="cardShow" >
             {
@@ -450,179 +462,268 @@ function MG_GamePage() {
       };
 
     const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
-    }
+        if (reason === 'clickaway') {
+            return;
+        }
 
     setStartCondition(false);
     setStartAlert(false);
     };
 
-
-    
-  
     
   return (
-    <div class="mainbox">
-      <DndProvider backend={HTML5Backend}>
-        <div class="leftbox">
-          {waiting.map((index) =>
-            index % 2 == 0 ? (
-              Players[index] != null ? 
-              (
-                (index != curTurn) ?
-                <div class={"opo-player-left"} id="notmyTurn">
-                  <Oppo_player 
-                        player={Players[index]} host= {host} playerBids={playerBids}
-                            BidStatus={BidStatus} Playing={Playing}
-                            Index = {index} myIndex = {myIndex}
-                    />
-                    {
-                        (Players[index]?._id == playerId)
-                            ? <div>
-                                {Playing ? Chips[myIndex] : null}
-                                {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <Chip  />: <FixedChip />
-                                    : null}
-                            </div>
-                            : null
-                    }
-                </div> :
-                <div class={"opo-player-left"} id="myTurn">
-                  <Oppo_player 
-                        player={Players[index]} host= {host} playerBids={playerBids}
-                            BidStatus={BidStatus} Playing={Playing}
-                            Index = {index} myIndex = {myIndex}
-                    />
-                    {
-                        (Players[index]?._id == playerId)
-                            ? <div class="myChips">
-                                {Playing ? <span class="myChipsNum">{Chips[myIndex]}</span> : null}
-                                {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <span class="ChipForBet"><Chip /></span> :<span class="ChipForBet"><FixedChip /></span>
-                                    : null}
-                            </div>
-                            : null
-                    }
-                </div>
-              ) : 
-              (
-                <div class="opo-player-left">waiting</div>
-              )
-            ) : null
-          )}
-        </div>
+    <Canvas>
+        <Stars
+            radius={100}
+            depth={50}
+            count={5000}
+            factor={4}
+            saturation={0}
+            fade
+          />
 
-        <div class="middlebox">
-            <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 
-            {
-                Playing ?
-                    (33-Items.length)!=32 ?
-                        <div class="Round"> {"Round: " + (33-Items.length)} </div> :
-                        <div class="Round"> Final Round </div>
-                    :
-                    null
-            }
-            {
-                myIndex==0 ?
-                <button class="startBtn" onClick={startClick}>Game Start</button> :
-                null
-            }
-            
-            {/*
-                Playing ?
-                <div>
+        <Html as='div' fullscreen="true" >
+            <div class="mainbox">
+                <div class="leftbox">
+                    {waiting.map((index) =>
+                    index % 2 == 0 ? (
+                        Players[index] != null ? 
+                        (
+                            (index != curTurn) ?
+                                <div class="rocket-left" >
+                                    <div class={"rocket-body"} id="notmyTurn">
+                                        <div class="body"></div>
+                                        <div class="fin fin-left"></div>
+                                        <div class="fin fin-right"></div>
+                                        <div class="window"></div>
+                                    </div>
+                                </div>
+                                    
+                            
+                            // <div class={"opo-player-left"} id="notmyTurn">
+                                // {/* <Oppo_player 
+                                //     player={Players[index]} host= {host} playerBids={playerBids}
+                                //         BidStatus={BidStatus} Playing={Playing}
+                                //         Index = {index} myIndex = {myIndex}
+                                // />
+                                // {
+                                //     (Players[index]?._id == playerId)
+                                //         ? <div>
+                                //             {Playing ? Chips[myIndex] : null}
+                                //             {Playing && (curTurn==myIndex)
+                                //                 ? Dragable ? <Chip  />: <FixedChip />
+                                //                 : null}
+                                //         </div>
+                                //         : null
+                                // } */}
+                            // </div> 
+                            :
+                            <div class="rocket-left" >
+                                <div class={"rocket-body"} id="myTurn" onClick={chipClick}>
+                                    <div class="body"></div>
+                                    <div class="fin fin-left"></div>
+                                    <div class="fin fin-right"></div>
+                                    <div class="window"></div>
+                                </div>
+                                    {
+                                        (Players[index]?._id == playerId)
+                                            ? <div class='shoot' id="left">
+                                                {/* {Playing ? Chips[myIndex] : null}
+                                                {Playing && (curTurn==myIndex)
+                                                    ? Dragable ? <Chip  />: <FixedChip />
+                                                    : null} */}
+                                                <div>Chips[myIndex]</div>
+                                                <Chip ref={chipRef} />
+                                            </div>
+                                            : null
+                                    }
+                            </div>
+                            // <div class={"opo-player-left"} id="myTurn">
+                            //     {/* <Oppo_player 
+                            //         player={Players[index]} host= {host} playerBids={playerBids}
+                            //             BidStatus={BidStatus} Playing={Playing}
+                            //             Index = {index} myIndex = {myIndex}
+                            //     />
+                            //     {
+                            //         (Players[index]?._id == playerId)
+                            //             ? <div class="myChips">
+                            //                 {Playing ? <span class="myChipsNum">{Chips[myIndex]}</span> : null}
+                            //                 {Playing && (curTurn==myIndex)
+                            //                     ? Dragable ? <span class="ChipForBet"><Chip /></span> :<span class="ChipForBet"><FixedChip /></span>
+                            //                     : null}
+                            //             </div>
+                            //             : null
+                            //     } */}
+                            // </div>
+                        ) : 
+                        (
+                            <div class="rocket-left" >
+                                <div class="rocket-body" id="nowon">
+                                    <div class="body"></div>
+                                    <div class="fin fin-left"></div>
+                                    <div class="fin fin-right"></div>
+                                    <div class="window"></div>
+                                </div>
+                            </div>
+                        )
+                    ) : null
+                    )}
+                </div>
+        
+                <div class="middlebox">
+                    <div class='outer-circle' ref={tableRef}>
+                        <div class='inner-circle'>
+                        </div>
+                        <span className="q"></span>
+                        <span className="w"></span>
+                        <span className="e"></span>
+                        <span className="r"></span>
+                    </div>
+                    <button class="startBtn" onClick={startClick}>Game Start</button>
+                    <a href='/'>
+                        <button class="exitBtn">나가기</button>
+                    </a>
+                    {/* <div class="roomTitle"> {"방 번호: " + roomInfo?.roomIndex} </div> 
                     {
-                        curTurn==myIndex ?
-                        <button class="nackchalBtn" onClick={NackChalClick}>NackChalHagy</button> :
+                        Playing ?
+                            (33-Items.length)!=32 ?
+                                <div class="Round"> {"Round: " + (33-Items.length)} </div> :
+                                <div class="Round"> Final Round </div>
+                            :
+                            null
+                    }
+                    {
+                        myIndex==0 ?
+                        <button class="startBtn" onClick={startClick}>Game Start</button> :
                         null
                     }
-                </div> :
-                null*/
-            }
-            <Table />
-            <a href='/scroll'>
-                <button class="exitBtn">나가기</button>
-            </a>
-            {/*
-                Playing ?
-                <div>{"Current Turn: "+ Players[curTurn]?.name}</div> :
-                null*/
-            }
-        </div>
-
-        <div class="rightbox">
-          {waiting.map((index) =>
-            index % 2 == 1 ? (
-              Players[index] != null ? (
-                (index != curTurn) ?
-                <div class={"opo-player-right"} id="notmyTurn">
-                  <Oppo_player 
-                        player={Players[index]} host= {host} playerBids={playerBids}
-                            BidStatus={BidStatus} Playing={Playing}
-                            Index = {index} myIndex = {myIndex}
-                    />
-                    {
-                        (Players[index]?._id == playerId)
-                            ? <div>
-                                {Playing ? Chips[myIndex] : null}
-                                {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <Chip /> : <FixedChip />
-                                    : null}
-                            </div>
-                            : null
-                    }
-                </div> :
-                <div class={"opo-player-right"} id="myTurn">
-                  <Oppo_player 
-                        player={Players[index]} host= {host} playerBids={playerBids}
-                            BidStatus={BidStatus} Playing={Playing}
-                            Index = {index} myIndex = {myIndex}
-                    />
-                    {
-                        (Players[index]?._id == playerId)
-                            ? <div>
-                                {Playing ? Chips[myIndex] : null}
-                                {Playing && (curTurn==myIndex)
-                                    ? Dragable ? <Chip /> : <FixedChip />
-                                    : null}
-                            </div>
-                            : null
-                    }
+                    
+                    <Table />
+                    <a href='/'>
+                        <button class="exitBtn">나가기</button>
+                    </a>
+                    {/*
+                        Playing ?
+                        <div>{"Current Turn: "+ Players[curTurn]?.name}</div> :
+                        null
+                    } */}
                 </div>
-              ) : (
-                <div class="opo-player-right">waiting</div>
-              )
-            ) : null
-          )}
-        </div>
-      </DndProvider>
-      <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="warning">
-          플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
-        </Alert>
-      </Snackbar>
-      <Snackbar open={startAlert} autoHideDuration={8000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="info" >
-            <div class="instruction">
-                게임시작!
-                <br/>
-                자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.
-                <br/>
-                상품을 낙찰 받고 싶지 않다면 칩을 테이블에 지불하고 턴을 넘기십시오.
-                <br/>
-                총 -3부터 -35까지의 경매 상품이 있으며, 한 개의 히든 상품은 끝까지 경매에 오르지 않습니다
-                <br/>
-                마지막에 가지고 있는 칩 수와 상품들의 총 합이 자신의 점수가 되며, 점수가 가장 높은 사람이 승리합니다
-                <br/>
-                연속된 숫자를 보유하고 있는 경우, 절댓값이 낮은 숫자만 점수에 포함됩니다
-                <br/> 
-                (ex. -12,-13, -14를 가지고 있을 때 -13과 -14는 포함되지 않습니다)
+        
+                <div class="rightbox">
+                {waiting.map((index) =>
+                    index % 2 == 1 ? (
+                        Players[index] != null ? 
+                        (
+                            (index != curTurn) ?
+                                <div class="rocket-right" >
+                                    <div class={"rocket-body"} id="notmyTurn">
+                                        <div class="body"></div>
+                                        <div class="fin fin-left"></div>
+                                        <div class="fin fin-right"></div>
+                                        <div class="window"></div>
+                                    </div>
+                                    
+                                </div>
+                                
+                            
+                            // <div class={"opo-player-left"} id="notmyTurn">
+                                // {/* <Oppo_player 
+                                //     player={Players[index]} host= {host} playerBids={playerBids}
+                                //         BidStatus={BidStatus} Playing={Playing}
+                                //         Index = {index} myIndex = {myIndex}
+                                // />
+                                // {
+                                //     (Players[index]?._id == playerId)
+                                //         ? <div>
+                                //             {Playing ? Chips[myIndex] : null}
+                                //             {Playing && (curTurn==myIndex)
+                                //                 ? Dragable ? <Chip  />: <FixedChip />
+                                //                 : null}
+                                //         </div>
+                                //         : null
+                                // } */}
+                            // </div> 
+                            :
+                            <div class="rocket-right" >
+                                <div class={"rocket-body"} id="myTurn" onClick={chipClick}>
+                                    <div class="body"></div>
+                                    <div class="fin fin-left"></div>
+                                    <div class="fin fin-right"></div>
+                                    <div class="window"></div>
+                                </div>
+                                {
+                                        (Players[index]?._id == playerId)
+                                            ? <div class='shoot' id="right">
+                                                {/* {Playing ? Chips[myIndex] : null}
+                                                {Playing && (curTurn==myIndex)
+                                                    ? Dragable ? <Chip  />: <FixedChip />
+                                                    : null} */}
+                                                <div>Chips[myIndex]</div>
+                                                <Chip ref={chipRef}/>
+                                            </div>
+                                            : null
+                                    }
+                            </div>
+                            // <div class={"opo-player-left"} id="myTurn">
+                            //     {/* <Oppo_player 
+                            //         player={Players[index]} host= {host} playerBids={playerBids}
+                            //             BidStatus={BidStatus} Playing={Playing}
+                            //             Index = {index} myIndex = {myIndex}
+                            //     />
+                            //     {
+                            //         (Players[index]?._id == playerId)
+                            //             ? <div class="myChips">
+                            //                 {Playing ? <span class="myChipsNum">{Chips[myIndex]}</span> : null}
+                            //                 {Playing && (curTurn==myIndex)
+                            //                     ? Dragable ? <span class="ChipForBet"><Chip /></span> :<span class="ChipForBet"><FixedChip /></span>
+                            //                     : null}
+                            //             </div>
+                            //             : null
+                            //     } */}
+                            // </div>
+                        ) : 
+                        (
+                            <div class="rocket-right" >
+                                <div class="rocket-body" id="nowon">
+                                    <div class="body"></div>
+                                    <div class="fin fin-left"></div>
+                                    <div class="fin fin-right"></div>
+                                    <div class="window"></div>
+                                </div>
+                            </div>
+                        )
+                    ) : null
+                    )}
+                </div>
+                <Snackbar open={startCondition} autoHideDuration={3000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="warning">
+                    플레이어가 두 명 이상일 때 게임을 시작할 수 있습니다
+                </Alert>
+                </Snackbar>
+                <Snackbar open={startAlert} autoHideDuration={8000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="info" >
+                    <div class="instruction">
+                        게임시작!
+                        <br/>
+                        자기 차례에 가운데 입찰 상품을 누르면 낙찰할 수 있습니다.
+                        <br/>
+                        상품을 낙찰 받고 싶지 않다면 칩을 테이블에 지불하고 턴을 넘기십시오.
+                        <br/>
+                        총 -3부터 -35까지의 경매 상품이 있으며, 한 개의 히든 상품은 끝까지 경매에 오르지 않습니다
+                        <br/>
+                        마지막에 가지고 있는 칩 수와 상품들의 총 합이 자신의 점수가 되며, 점수가 가장 높은 사람이 승리합니다
+                        <br/>
+                        연속된 숫자를 보유하고 있는 경우, 절댓값이 낮은 숫자만 점수에 포함됩니다
+                        <br/> 
+                        (ex. -12,-13, -14를 가지고 있을 때 -13과 -14는 포함되지 않습니다)
+                    </div>
+                    
+                </Alert>
+                </Snackbar>
             </div>
-            
-        </Alert>
-      </Snackbar>
-    </div>
+        </Html>  
+    </Canvas>
+    
   );
 }
 export default withRouter(MG_GamePage);
