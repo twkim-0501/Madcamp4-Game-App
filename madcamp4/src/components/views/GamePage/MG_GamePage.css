@@ -335,17 +335,17 @@ div.opo-player-right,#notmyTurn {
 }
 
 .playerNameLeft {
-  font-family: 'futura';
+  font-family: 'game';
   color: white;
   transform: rotate(-90deg);
   position: absolute;
-  top: 52%;
-  left: -25%;
+  top: 60%;
+  left: -30%;
   font-size: 20px;
   font-weight: 500;
 }
 .playerNameLeftMy {
-  font-family: 'futura';
+  font-family: 'game';
   color: yellow;
   transform: rotate(-90deg);
   position: absolute;

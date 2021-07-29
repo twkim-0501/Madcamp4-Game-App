@@ -602,7 +602,7 @@ function MG_GamePage() {
         
                 <div class="space">
                     <Table/>
-                    <div class="moon">
+                    <div class="moon" ref={tableRef}>
                         <div class="crater"></div>
                         <div class="crater"></div>
                         <div class="crater"></div>
