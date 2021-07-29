@@ -30,20 +30,20 @@ function getAllrooms(callback){
     GameroomModel.find({}, (err,res) => {
         var roomsInfo = res;
         var roomsView = []
-        roomsInfo.map( (room, index) =>  {
+        roomsInfo.map( async (room, index) =>  {
             var randomNum = Math.floor(Math.random()*13)
             //console.log("getAllroomsTest",room)
             //var playersInfo = await GameroomModel.findOne({_id: room._id}).populate('players')
-            GameroomModel.findOne({_id: room._id}, (err,res) => {
+            await GameroomModel.findOne({_id: room._id}, (err,res) => {
                 //var playersInfo = res.populate('players')
                 var playersInfo = res
-                console.log("getAllroomsTest2",playersInfo.players)
+                //console.log("getAllroomsTest2",playersInfo.players)
                 UserModel.findOne({_id: playersInfo.players[0]}, (err,res) => {
                     
                     if(playersInfo.players.length == 0){
                         roomsView.push({name: "-Empty-", people: playersInfo.players.length, id: numArr[randomNum], _id: room._id})
                         if(roomsInfo.length-1 == index){
-                            console.log("roomsView",roomsView)
+                            //console.log("roomsView",roomsView)
                             callback(roomsView)
                         }
                     }
@@ -51,7 +51,7 @@ function getAllrooms(callback){
                         var hostname = res.name
                         roomsView.push({name: hostname, people: playersInfo.players.length, id: numArr[randomNum], _id: room._id})
                         if(roomsInfo.length-1 == index){
-                            console.log("roomsView",roomsView)
+                            //console.log("roomsView",roomsView)
                             callback(roomsView)
                         }
                     }
@@ -60,7 +60,7 @@ function getAllrooms(callback){
             })
             setTimeout(() => {
                 
-            }, 500);
+            }, 1000);
         })
         
     })
@@ -91,7 +91,7 @@ function findCurrentRoom(playerId, callback){
     if(playerId){
         GameroomModel.find({}, (err,res) => {
             var currentRoom = res.filter(room => room.players.includes(playerId));
-            console.log("aaaaa", currentRoom);
+            console.log("currentRoom", currentRoom);
             callback(currentRoom[0]);
         })
     }
@@ -105,12 +105,12 @@ function exitRoom(exitInfo, callback){
     if(roomId == null){
         callback();
     }
-    GameroomModel.findOne({_id: roomId._id}, (err, res) => {
+    GameroomModel.findOne({_id: roomId}, (err, res) => {
         if(res == null){
             callback()
         }
         var afterplayers = res.players.filter((player) => (player != playerId));
-        //console.log(afterplayers);
+        console.log("afterplayers",afterplayers);
         if(res.players.includes(playerId)){
             GameroomModel.findOneAndUpdate({_id: roomId}, {
                 players: afterplayers
