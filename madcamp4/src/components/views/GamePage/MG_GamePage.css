@@ -235,9 +235,14 @@ div.opo-player-right,#notmyTurn {
 }
 
 .Round {
-  margin-top: 10px;
-  border: 2px solid navy;
-  font-weight: bold;
+  position: absolute;
+  top: 10%;
+  display:block;
+  font-family: "futura";
+  font-size: 3em;
+  color:#ced4da;
+  font-weight:800;
+  transition:0.4s;
 }
 
 .closeicon {

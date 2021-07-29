@@ -626,7 +626,9 @@ function MG_GamePage() {
                     
                     {
                         Playing ? 
-                        null
+                            (33-Items.length)!=32 ?
+                                <div class="Round"> {"Round: " + (33-Items.length)} </div> :
+                                <div class="Round"> Final Round </div>
                         : 
                             (host?._id == playerId) ?
                             <text class="startBtn" onClick={startClick}>Press to Start</text> :
