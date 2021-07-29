@@ -52,7 +52,7 @@
   width: 9rem;
   height: 9rem;
   margin-bottom: 200px;
-  margin-left: 140px
+  margin-left: 70px
 }
 
 .oponent-status {
@@ -288,7 +288,12 @@ div.opo-player-right,#notmyTurn {
 .chipBox {
   width: 100px;
   height: 50px;
-  background: #00b7ff;
+  margin-left: 20px;
+  font-family: "futura";
+  font-size: 25px;
+  font-weight: bold;
+  margin-left: 30px;
+  color:rgb(230, 105, 22);
 }
 
 .Bids {

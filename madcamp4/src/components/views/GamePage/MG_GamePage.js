@@ -77,7 +77,7 @@ function MG_GamePage() {
     useEffect(() => {
 
         Socket = io('http://192.249.18.179:80')
-        //Socket = io('http://192.249.18.171:80')
+        // Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -438,13 +438,14 @@ function MG_GamePage() {
                         </span>
                     </div> :
                     <div class="nackchalItem_notmyTurn">
-                        <Avatar className={classes.square}>
+                        <span className={classes.square} >
                             {curBid}
-                        </Avatar>
+                        </span>
                     </div>
                 : null
             }
-        
+            <br />  
+            <span className="chipBox">{Bet}</span>
           </div>
         );
       };
@@ -601,7 +602,7 @@ function MG_GamePage() {
         
                 <div class="space">
                     <Table/>
-                    <div class="moon" ref={tableRef}>
+                    <div class="moon">
                         <div class="crater"></div>
                         <div class="crater"></div>
                         <div class="crater"></div>
