@@ -102,7 +102,7 @@ function MG_GamePage() {
             setCurTurn(data.curTurn)
             setPlayerBids(data.initBids)
             setBidStatus(data.initTotal)
-            setStartAlert(true);
+            //setStartAlert(true);
         })
         Socket.on('unexpectedLeave', (leaveRoom) => {
             console.log("unexpectedLeave", leaveRoom)
@@ -234,7 +234,7 @@ function MG_GamePage() {
             setStartCondition(true);
             return;
         }
-        set(true)
+        setPlaying(true)
         var initChips = Players.map(player => 10)
         var initBids = Players.map(player => [])
         var temp = {totalBids: 0, activeIndex: []}
@@ -625,8 +625,12 @@ function MG_GamePage() {
                     
                     
                     {
-                        isStart ? <text>Game Start</text>
-                        : <text class="startBtn" onClick={startClick}>Press to Start</text>
+                        Playing ? 
+                        null
+                        : 
+                            (host?._id == playerId) ?
+                            <text class="startBtn" onClick={startClick}>Press to Start</text> :
+                            null
                     }
                     
                     <a href='/scroll' class="exitBtn"  style={{ textDecorationLine : 'none'}}>

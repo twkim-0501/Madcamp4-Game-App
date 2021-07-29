@@ -225,7 +225,7 @@ div.opo-player-right,#notmyTurn {
   font-size: 3em;
   color:#ced4da;
   font-weight:800;
- 
+  cursor: pointer;
   transition:0.4s;
 }
 
