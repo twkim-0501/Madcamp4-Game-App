@@ -75,7 +75,6 @@ function MG_GamePage() {
     const waiting = [0, 1, 2, 3, 4, 5];
 
     useEffect(() => {
-
         Socket = io('http://192.249.18.179:80')
         // Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
