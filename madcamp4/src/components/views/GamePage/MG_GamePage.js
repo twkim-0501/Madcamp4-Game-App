@@ -378,7 +378,7 @@ function MG_GamePage() {
             setDragable(true)
         }
         setCurTurn(myIndex)
-        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex}, roomInfo )
+        Socket.emit('turnInfo', {Chips: Chips, Bet: 0, curTurn: myIndex}, roomInfo)
         //낙찰 아이템 가져오기
         playerBids[myIndex].push(curBid)
         //array 정렬
@@ -438,13 +438,14 @@ function MG_GamePage() {
                         </span>
                     </div> :
                     <div class="nackchalItem_notmyTurn">
-                        <Avatar className={classes.square}>
+                        <span className={classes.square} >
                             {curBid}
-                        </Avatar>
+                        </span>
                     </div>
                 : null
             }
-        
+            <br />  
+            <span className="chipBox">{Bet}</span>
           </div>
         );
       };
