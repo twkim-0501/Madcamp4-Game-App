@@ -27,9 +27,10 @@ module.exports = function(io) {
             }
             playerIdnSocket.push({"player": playerId, "socket": socket.id})
             console.log("thisissocketidarray",playerIdnSocket);
-            console.log('enterRoom')
+            console.log('enterRoom', roomInfo._id)
             socket.join(roomInfo._id)
-            socket.broadcast.emit('playerCome', usersInfo)
+            console.log('socket room', socket.rooms)
+            socket.to(roomInfo._id).emit('playerCome', usersInfo)
         });
     
         socket.on('startClick', (roomInfo,initChips,firstTurn, initBids,initTotal) => {
@@ -42,7 +43,7 @@ module.exports = function(io) {
                 initBids: initBids,
                 initTotal: initTotal
             })
-            socket.broadcast.emit('startGame', {
+            socket.to(roomInfo._id).emit('startGame', {
                 items: randomBid,
                 Chips: initChips,
                 curTurn: firstTurn,
@@ -51,19 +52,19 @@ module.exports = function(io) {
             })
         });
 
-        socket.on('turnInfo', (turnInfo) => {
+        socket.on('turnInfo', (turnInfo, roomInfo) => {
             console.log("turnInfo", turnInfo)
-            socket.broadcast.emit('turnInfo', turnInfo)
+            socket.to(roomInfo._id).emit('turnInfo', turnInfo)
         })
 
-        socket.on('nackchal', (nackchalInfo) => {
+        socket.on('nackchal', (nackchalInfo, roomInfo) => {
             console.log("nackchalInfo", nackchalInfo)
-            socket.broadcast.emit('nackchal', nackchalInfo)
+            socket.to(roomInfo._id).emit('nackchal', nackchalInfo)
             socket.emit('nackchal', nackchalInfo)
         })
 
-        socket.on('FinishGame', (Playing, scores, playerName) => {
-            socket.broadcast.emit('FinishGame', {
+        socket.on('FinishGame', (Playing, scores, playerName, roomInfo) => {
+            socket.to(roomInfo._id).emit('FinishGame', {
                 Playing: Playing,
                 scores: scores,
                 playerName: playerName
@@ -93,7 +94,7 @@ module.exports = function(io) {
                     var leaveRoom = currentRoom[0];
                     if(leaveRoom.players.length<=1){
                         GameroomModel.deleteOne({_id: leaveRoom._id}, (err,res) => {
-
+                            socket.leave(leaveRoom._id)
                         })
                     }
                     else{
@@ -106,7 +107,8 @@ module.exports = function(io) {
                                 players: afterplayers
                             },(err,res) => {
                                 console.log("updateresult",afterplayers, res)
-                                socket.broadcast.emit('unexpectedLeave', leaveRoom);
+                                socket.to(leaveRoom._id).emit('unexpectedLeave', leaveRoom);
+                                socket.leave(leaveRoom._id)
                             })
                         })
                         console.log("where is leaveRoom", leaveRoom)
