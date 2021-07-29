@@ -15,6 +15,7 @@ import ace from './src/ace.jpeg'
 import ten from './src/10.png'
 import blue from './src/cardback.png'
 import red from './src/redcard.png'
+import { withStyles } from '@material-ui/styles';
 
 const cards = [
   blue,
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     input: {
       color: "white",
       fontFamily: "futura",
-      fontSize: "1rem"
+      fontSize: "1.3rem"
     },
   
     text : {
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   
     or : {
         ...theme.typography.caption,
-        margin: theme.spacing(1),
+        margin: theme.spacing(3),
         fontSize: "1rem",
         color: 'white',
         fontFamily: "futura",
@@ -74,6 +75,28 @@ const useStyles = makeStyles((theme) => ({
       width: '20ch',
     }
   }));
+
+  const CssTextField = withStyles({
+    root: {
+      '& label.Mui-focused': {
+        color: 'white',
+      },
+      '& .MuiInput-underline:after': {
+        borderBottomColor: 'white',
+      },
+      '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+          borderColor: 'white',
+        },
+        '&:hover fieldset': {
+          borderColor: 'white',
+        },
+        '&.Mui-focused fieldset': {
+          borderColor: 'white',
+        }, 
+      },
+    },
+  })(TextField);
 
 const Deck = ()=> {
   const [gone] = useState(() => new Set()) // The set flags all the cards that are flicked out
@@ -126,7 +149,7 @@ function App(props) {
         dispatch(loginUser(body))
         .then(response => {
             if (response.payload.ok) {
-                props.history.push('/choose')
+                props.history.push('/')
             } else {
                 alert('이메일과 비밀번호를 확인해주세요.')
             }
@@ -153,14 +176,14 @@ function App(props) {
             <form style={{display:'flex', flexDirection: 'column', alignItems: 'center', fontFamily: "cardfont"}}
                 > 
             <form  noValidate autoComplete="off">
-            <TextField className={classes.text} id="outlined-basic" label="Email" 
+            <CssTextField className={classes.text} id="outlined-basic" label="Email" 
             variant="outlined" InputProps={{className:classes.input}} InputLabelProps={{
                 style: { color: 'white', fontFamily: "cardfont"},
             }}
             type="email" value={Email} onChange={onEmailHandler}/></form>
 
             <form  noValidate autoComplete="off">
-            <TextField  className={classes.text} id="outlined-basic" label="Password" 
+            <CssTextField  className={classes.text} id="outlined-basic" label="Password" 
             variant="outlined" InputProps={{className:classes.input}} InputLabelProps={{
                 style: { color: 'white', fontFamily: "cardfont", },
             }}

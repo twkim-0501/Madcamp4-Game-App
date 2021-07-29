@@ -21,6 +21,7 @@
 
   body {
     position: fixed;
+    height: 100%;
     overflow: hidden;
     overscroll-behavior-y: none;
     font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
@@ -52,8 +53,7 @@
 
 .mainbox{
   height: stretch;
-    width: 100%;
-    
+  width: 100%;
 }
 
 .loginform{
