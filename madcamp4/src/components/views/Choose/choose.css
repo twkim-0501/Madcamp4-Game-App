@@ -1,4 +1,20 @@
 .canvas {
-    background: black;
-    position: fixed;
-  }
+  background: black;
+  position: fixed;
+}
+
+
+.logout {
+  height: stretch;
+  width: 100%;
+  margin-top: 260px;
+  margin-left: 520px;
+  /* background-image: url("./table.jpeg");
+  background-size: contain; */
+}
+
+.a{
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}

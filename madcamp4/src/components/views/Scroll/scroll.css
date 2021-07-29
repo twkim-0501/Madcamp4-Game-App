@@ -2,7 +2,7 @@
 .Container {
     height: stretch;
     width: 100%;
-   margin-top: 40px;
+  
     /* background-image: url("./table.jpeg");
     background-size: contain; */
 }
@@ -96,3 +96,225 @@
     font-family: "futura";
     font-size: 40px;
 }
+.animate-container {
+    position: absolute;
+    top: 5vw;
+    width: 700px;
+    height: 400px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.animate-container .spaceship-full {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.animate-container .spaceship-full .spaceship-container {
+    position: absolute;
+    width: 250px;
+    height: 300px;
+    top: 50px;
+    transform: rotate(-10deg);
+    animation: vrum 15s ease infinite;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship {
+    position: relative;
+    margin: auto;
+    width: 140px;
+    height: 78px;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .top {
+    position: absolute;
+    border-top-left-radius: 90px;
+    border-top-right-radius: 90px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    height: 40px;
+    width: 90px;
+    background: #0ebeff;
+    left: 25px;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .top::before {
+    content: "";
+    position: absolute;
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    height: 32px;
+    width: 72px;
+    background: #76daff;
+    top: 7px;
+    left: 10px;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .top::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px 10px 5px 10px;
+    background: #fff;
+    left: 60px;
+    top: 8px;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .midle {
+    position: absolute;
+    width: 90px;
+    height: 20px;
+    top: 20px;
+    left: 10px;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .midle::before {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 20px;
+    background-image: radial-gradient(#fcd36a 1px, #fcd36a 3px, transparent 3px);
+    background-position: 0px 0px;
+    background-size: 30px 30px;
+    top: 15px;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .bottom {
+    position: absolute;
+    width: 140px;
+    height: 10px;
+    background: #f77e79;
+    top: 58px;
+    border-radius: 10px;
+}
+.animate-container .spaceship-full .spaceship-container .spaceship .bottom::before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    top: 10px;
+    left: 10px;
+    border-top: 10px solid #fcc239;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+.animate-container .spaceship-full .spaceship-container .light-perspective {
+    position: absolute;
+    width: 110px;
+    height: 200px;
+    top: 25px;
+    left: 70px;
+    perspective: 150px;
+    -webkit-perspective: 150px;
+    animation: pisca 15s infinite;
+}
+.animate-container .spaceship-full .spaceship-container .light-perspective .light {
+    position: absolute;
+    -webkit-transform: rotateX(45deg);
+    transform: rotateX(45deg);
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(to bottom, #fff, transparent);
+    background-size: 150px 200px;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+@keyframes vrum {
+    0% {
+        transform: rotate(-10deg);
+        left: 0;
+        top: 40px;
+   }
+    5% {
+        transform: rotate(0deg);
+        top: 40px;
+   }
+    10% {
+        transform: rotate(-5deg);
+        top: 40px;
+   }
+    15% {
+        transform: rotate(10deg);
+        top: 40px;
+   }
+    20% {
+        transform: rotate(5deg);
+        left: 400px;
+        top: 10px;
+   }
+    25% {
+        transform: rotate(0deg);
+        left: 400px;
+        top: 200px;
+   }
+    30% {
+        transform: rotate(-5deg);
+        left: 200px;
+        top: 100px;
+   }
+    35% {
+        transform: rotate(-15deg);
+        left: 200px;
+        top: 100px;
+   }
+    45% {
+        transform: rotate(15deg);
+        left: 200px;
+        top: 100px;
+   }
+    60% {
+        transform: rotate(15deg);
+        left: 200px;
+        top: 100px;
+   }
+    70% {
+        transform: rotate(10deg);
+        left: 350px;
+        top: 70px;
+   }
+    80% {
+        transform: rotate(0deg);
+        left: 20px;
+        top: 200px;
+   }
+    90% {
+        transform: rotate(10deg);
+        left: 400px;
+        top: 100px;
+   }
+    100% {
+        transform: rotate(-10deg);
+        left: 0;
+        top: 40px;
+   }
+}
+@keyframes pisca {
+    0% {
+        opacity: 0.5;
+   }
+    45% {
+        opacity: 0.5;
+   }
+    47% {
+        opacity: 0;
+   }
+    49% {
+        opacity: 0.8;
+   }
+    51% {
+        opacity: 0;
+   }
+    53% {
+        opacity: 0.3;
+   }
+    55% {
+        opacity: 0;
+   }
+    57% {
+        opacity: 0.8;
+   }
+    60% {
+        opacity: 0.5;
+   }
+    100% {
+        opacity: 0.5;
+   }
+}
+
