@@ -645,6 +645,7 @@ function MG_GamePage() {
                             <div class="rocket-right" >
                                 <div class={"rocket-body"} id="notmyTurn">
                                     <div class="body">
+                                    <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}
@@ -660,6 +661,7 @@ function MG_GamePage() {
                             <div class="rocket-right" >
                                 <div class={"rocket-body"} id="notmyTurn">
                                     <div class="body">
+                                        <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}
@@ -694,6 +696,7 @@ function MG_GamePage() {
                             ? <div class="rocket-right" >
                                 <div class={"rocket-body"} id="myTurn" >
                                     <div class="body">
+                                        <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}
@@ -717,6 +720,7 @@ function MG_GamePage() {
                             : <div class="rocket-right" >
                                 <div class={"rocket-body"} id="myTurn">
                                     <div class="body">
+                                        <div class='playerNameRight'>{Players[index].name}</div>
                                         <Oppo_player 
                                             player={Players[index]} host= {host} playerBids={playerBids}
                                                 BidStatus={BidStatus} Playing={Playing}

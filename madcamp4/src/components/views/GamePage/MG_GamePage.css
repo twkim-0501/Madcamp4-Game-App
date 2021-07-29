@@ -339,6 +339,16 @@ div.opo-player-right,#notmyTurn {
   font-size: 20px;
   font-weight: 500;
 }
+.playerNameRight {
+  font-family: 'futura';
+  color: white;
+  transform: rotate(90deg);
+  position: absolute;
+  top: 52%;
+  right: -25%;
+  font-size: 20px;
+  font-weight: 500;
+}
 
 div.shoot,
 #left {
@@ -369,10 +379,15 @@ div.shoot,
   padding: 14px;
 }
 .rocketTextRight {
+  background-color: #444444aa;
+  width: 180px;
+  height: 140px;
   transform: rotate(90deg);
   position: absolute;
-  right: 15%;
-  top: 60%;
+  bottom: 16%;
+  right: -10px;
+  border-radius: 25%;
+  padding: 14px;
 }
 
 
