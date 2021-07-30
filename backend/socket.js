@@ -63,17 +63,19 @@ module.exports = function(io) {
             socket.emit('nackchal', nackchalInfo)
         })
 
-        socket.on('FinishGame', (Playing, scores, playerName, roomInfo) => {
+        socket.on('FinishGame', (Playing, scores, playerName, roomInfo, Players) => {
             socket.to(roomInfo._id).emit('FinishGame', {
                 Playing: Playing,
                 scores: scores,
-                playerName: playerName
+                playerName: playerName,
+                Players: Players
             })
             socket.emit(
                 'FinishGame', {
                     Playing: Playing,
                     scores: scores,
-                    playerName: playerName
+                    playerName: playerName,
+                    Players: Players
                 }
             )
         })

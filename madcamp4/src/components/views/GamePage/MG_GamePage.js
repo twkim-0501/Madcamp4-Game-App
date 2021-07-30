@@ -94,7 +94,7 @@ function MG_GamePage() {
     const [startAlert, setStartAlert] = useState(false);
     const [isResult, setResult] = useState(false);
     const [Result, setPlayResult] = useState([]);
-    
+    const [Result2, setResult2] = useState([]);
     const waiting = [0, 1, 2, 3, 4, 5];
     const Grade = ["st", "nd", "th", "th", "th", "th"];
 
@@ -171,8 +171,18 @@ function MG_GamePage() {
         })
 
         Socket.on('FinishGame', (finishInfo) => {
+            if(finishInfo.Players == undefined){
+                return;
+            }
             setPlaying(finishInfo.Playing)
             console.log("게임결과", finishInfo.scores, finishInfo.playerName)
+            console.log("게임결과 뒤에 Players", finishInfo.Players)
+            var tempResult = finishInfo.scores.map((score,index) => ({score: score, username: finishInfo.Players[index].name}))
+            tempResult.sort(function(a,b) {
+                return (b.score - a.score);
+            })
+            console.log("tempResult",tempResult);
+            setResult2(tempResult)
             setPlayResult(finishInfo.scores)
             setResult(true)
         })
@@ -251,7 +261,7 @@ function MG_GamePage() {
             setPlaying(false)
             //alert("게임 종료")
             var scores= whoIsWinner()
-            Socket.emit('FinishGame', false, scores, playerName, roomInfo )
+            Socket.emit('FinishGame', false, scores, playerName, roomInfo, Players )
             return;
         }
         
@@ -879,10 +889,10 @@ function MG_GamePage() {
                         <div onClick={handleCloseresult} style={modalStyle} className={classes.paper}>
                         <h2 class="caution"> Game Finish 🎉 </h2>
                         <p class="modaltext">
-                         { Result.map((one, i) => 
+                         { Result2.map((one, i) => 
                             <div>
                              <span className="resultPrize"> {i+1 + Grade[i]} </span>
-                             <span className="resultContent" > {  Players[i].name +" : "+ one }
+                             <span className="resultContent" > {  one.username +" : "+ one.score }
                               { i+1==Players.length ? null : <div><br/></div> }
                              </span> </div>
                           ) }
