@@ -9,11 +9,8 @@ import { useSpring, a } from '@react-spring/web'
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
-import { Canvas, useLoader, useFrame } from "@react-three/fiber";
-import { OrbitControls, Stars, Html, Center } from "@react-three/drei";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import UndoIcon from '@material-ui/icons/Undo';
-import RefreshIcon from '@material-ui/icons/Refresh';
+import { Canvas } from "@react-three/fiber";
+import { Stars, Html } from "@react-three/drei";
 import {useSelector} from 'react-redux'
 import vert from "./vert.png"
 import menu from "./menu.png"
