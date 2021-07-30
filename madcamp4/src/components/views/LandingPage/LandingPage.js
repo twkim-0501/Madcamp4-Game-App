@@ -3,15 +3,11 @@ import axios from 'axios'
 import {withRouter} from 'react-router-dom'
 import "./LandingPage.css"
 import {useSelector} from 'react-redux'
-import io from "socket.io-client";
-import {useHistory} from "react-router";
-
 
 function LandingPage(props) {
     const user = useSelector(state => state.user)
     const [roomName, setRoomName] = useState('')
     const [rooms, setRooms] = useState([])
-    const history = useHistory();
 
     useEffect(() => {
         axios.get('/api/gameroom/getAll')

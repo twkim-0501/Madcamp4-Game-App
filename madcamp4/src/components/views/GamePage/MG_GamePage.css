@@ -349,8 +349,8 @@ div.opo-player-right,#notmyTurn {
   color: white;
   transform: rotate(-90deg);
   position: absolute;
-  top: 160px;
-  left: -80px;
+  top: 190px;
+  left: -50px;
   font-size: 20px;
   font-weight: 500;
 }
@@ -369,8 +369,8 @@ div.opo-player-right,#notmyTurn {
   color: white;
   transform: rotate(90deg);
   position: absolute;
-  top: 170px;
-  right:  -60px;
+  top: 190px;
+  right:  -40px;
   font-size: 20px;
   font-weight: 500;
 }

@@ -4,19 +4,12 @@ import { withRouter } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Oppo_player from './Oppo_player';
 import io from "socket.io-client";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { useSelector } from "react-redux";
-import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import axios from "axios";
-import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, green, yellow, indigo } from '@material-ui/core/colors';
+import { green } from '@material-ui/core/colors';
 import { Canvas } from "@react-three/fiber";
 import { Stars, Html } from "@react-three/drei";
-import Modal from '@material-ui/core/Modal';
-import { Score } from '@material-ui/icons';
-// import './spaceship.scss'
 
 function getModalStyle() {
     const top = 50 
@@ -94,6 +87,7 @@ function MG_GamePage() {
     const [startAlert, setStartAlert] = useState(false);
     const [isResult, setResult] = useState(false);
     const [Result, setPlayResult] = useState([]);
+    const [Force, setForce] = useState(false);
     
     const waiting = [0, 1, 2, 3, 4, 5];
     const Grade = ["st", "nd", "th", "th", "th", "th"];
@@ -101,8 +95,8 @@ function MG_GamePage() {
 
     useEffect(() => {
 
-        //Socket = io('http://192.249.18.179:80')
-        Socket = io('http://192.249.18.171:80')
+        Socket = io('http://192.249.18.179:80')
+        // Socket = io('http://192.249.18.171:80')
         Socket.on('playerCome', (newPlayers) => {
             console.log('new player come')
             if(newPlayers){
@@ -229,14 +223,14 @@ function MG_GamePage() {
 
     useEffect(() => {
         console.log("my chip???", Chips[myIndex])
-        if(curTurn == myIndex && Chips[myIndex]==0 ){
-            alert("칩이 없어 강제 낙찰 하세요")
+        if(curTurn == myIndex && Chips[myIndex]<=0 ){
+            setForce(true)
         }
     }, [curTurn])
 
     useEffect(() => {
-        if(curTurn == myIndex && Chips[myIndex]==0 ){
-            alert("칩이 없어서 낙찰하셔야 합니다!")
+        if(curTurn == myIndex && Chips[myIndex]<=0 ){
+            setForce(true)
         }
         if(curTurn == myIndex){
             setIsMyturn("myTurn")
@@ -501,6 +495,9 @@ function MG_GamePage() {
     };
     const handleCloseresult = () => {
         setResult(false);
+    };
+    const handleCloseForce = () => {
+        setForce(false);
     };
 
     
@@ -892,6 +889,25 @@ function MG_GamePage() {
                         </div>
                         : null
                 }
+
+                {
+                    Force ?
+                    <div
+                        aria-labelledby="simple-modal-title"
+                        aria-describedby="simple-modal-description"
+                        z
+                        >
+                        <div onClick={handleCloseForce} style={modalStyle} className={classes.paper}>
+                        <h2 class="caution"> CAUTION ⚠️ </h2>
+                        <p class="modaltext">
+                        칩이 부족하여 낙찰을 하셔야 합니다.
+                        </p>
+                        </div>
+                        </div>
+                        : null
+                }               
+
+                
                 
             </div>
 

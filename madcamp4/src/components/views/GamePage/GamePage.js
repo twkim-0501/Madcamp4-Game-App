@@ -13,16 +13,12 @@ import Text from "./Text"
 import pingSound from "./resources/ping.mp3"
 import earthImg from "./resources/white.jpeg"
 import { withRouter } from "react-router-dom"
-import Fab from '@material-ui/core/Fab';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios"
 import vert from "../Scroll/vert.png"
 import menu from "../Scroll/menu.png"
 import exit from "../Scroll/exit.png"
 import prev from "../Scroll/leftarrow.png"
-import re from "../Scroll/refresh.png"
-
 
 // Create a store ...
 var clamp = require('lodash.clamp');
