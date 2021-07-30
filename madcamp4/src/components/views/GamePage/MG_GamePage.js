@@ -238,13 +238,13 @@ function MG_GamePage() {
 
     useEffect(() => {
         console.log("my chip???", Chips[myIndex])
-        if(curTurn == myIndex && Chips[myIndex]==0 ){
+        if(curTurn == myIndex && Chips[myIndex]<=0 ){
             alert("칩이 없어 강제 낙찰 하세요")
         }
     }, [curTurn])
 
     useEffect(() => {
-        if(curTurn == myIndex && Chips[myIndex]==0 ){
+        if(curTurn == myIndex && Chips[myIndex]<=0 ){
             alert("칩이 없어서 낙찰하셔야 합니다!")
         }
         if(curTurn == myIndex){
@@ -381,6 +381,10 @@ function MG_GamePage() {
 
     const chipClick = (e) => {
         // e.preventDefault()
+        if(!Dragable){
+            console.log("욕심쟁이!")
+            return;
+        }
         console.log('chip click')
         
         let chip = {
