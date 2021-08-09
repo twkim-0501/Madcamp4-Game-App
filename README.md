@@ -30,7 +30,7 @@
 게임 진행 화면 설명
 
 
-## 
+## Implementation
 
 ### DB
 
