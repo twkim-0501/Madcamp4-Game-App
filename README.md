@@ -17,7 +17,7 @@
 
 ### Main
 
-<img src="./source/main.gif" height="300">
+<img src="./source/main.gif" height="300"> <img src="./source/logout.gif" height="300">
 
 + 탁구와 마이너스 경매 두 개의 게임 중 하나를 선택할 수 있다.
 + 글자를 클릭하면 해당 게임 페이지로 넘어간다.
@@ -73,6 +73,9 @@
 + 달 위의 숫자를 클릭하면 상품을 낙찰할 수 있다. 
 + 달 옆의 작은 원에는 쌓인 칩이 표시되고, 낙찰 받을 경우 쌓인 칩을 상품과 함께 가져온다.
 
+<img src="./source/chip_zero.gif" height="300"> <img src="./source/game_finish.gif" height="300">
+
+<img src="./source/exit.gif" height="300"> <img src="./source/lobby_back.gif" height="300">
 
 ## Implementation
 
