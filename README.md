@@ -1,6 +1,8 @@
 # Mad-Game-Center
 두 가지 게임을 즐길 수 있는 웹을 구현했다.
 
+(여기 소개도 가능하면 길게 늘려줘...)
+
 > 개발자: 김찬영, 김태우, 최종윤
 >
 > Skill : React.js, three.js / Node.js, MongoDB, socket.io
@@ -95,3 +97,4 @@
 ### DB
 
 ### Game Playing
+
