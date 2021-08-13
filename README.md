@@ -90,9 +90,44 @@
 
 ## Implementation
 
-
-
 ### DB
 
+> 사용한 Schema는 User와 Gameroom으로 두 개이다. 
+> User Schema는 회원 별로 고유한 정보들을 담고 있고, 정보를 표시하거나 유저를 구별할 때 사용되었다.
+> Gameroom Schema는 게임을 플레이하는 각각의 방의 정보를 담고 있고, 게임의 진행을 관리하는 역할을 한다.
+
+#### User Schema
++ 구성: name, email, password, lastname, role, token, nowSocket 등
++ 회원가입
+  - email은 고유한 값이므로, email로 중복여부를 체크한 후에 비밀번호를 hash하고 salt화를 한다(bcrypt). 그리고 유저 정보를 DB에 저장한다.
++ 로그인
+  - email과 password를 통해 hash된 비밀번호를 비교해서 확인한다.
+  - 정보가 맞다면 JWT를 생성해서 쿠키에 저장한다.
++ 로그아웃
+  - 유저정보를 DB에서 찾아 해당 유저의 JWT를 삭제한다.
+
+#### Gameroom Schema
++ 구성: roomTitle, players 등
++ roomTitle
+  - 유저들이 방에 접속할 수 있는 로비 화면에서 방 제목을 표시할 때 필요한 정보이다.
++ players
+  - 현재 방에 접속하고 있는 유저들의 User ID의 배열이다.
+  - 게임 방 내에서 유저들을 표시해주는 역할을 한다.
+
 ### Game Playing
+
+> 게임이 진행될 때는 방에 존재하는 모든 유저들에게 실시간으로 변화 정보를 제공해야하므로 Socket.IO API를 활용했다.
+
++ 새로운 유저가 방을 만들면 DB에 새로운 Gameroom 데이타가 생성된다.
++ 항상 Gameroom Schema의 players 배열의 첫번째 User가 방장이 되고, 방장만이 Play Start를 누를 수 있다.
++ 새로운 유저가 방에 들어오거나 방을 나가게 된다면, Socket을 통해 실시간으로 Gameroom 데이타의 players 배열이 갱신된다. 그리고 그 정보가 socket room의 모두에게 전달된다.
++ 게임을 진행할 때 게임 시작, 턴 넘김, 낙찰, 게임 종료 등의 변화가 일어날 때마다 Socket으로 Socket room에 속하는 모든 유저들에게 변화를 알리고, 변화한 데이타를 전달해서 방의 모든 유저가 실시간으로 변화가 갱신되도록 구현했다.
++ 게임 나가기를 통해 방을 나가는 것과, 창을 닫았을 때, 그리고 게임이 튕겼을 때 등의 모든 Socket disconnect 상황에 대해 남아있는 유저들에게 변화를 알릴 수 있도록 처리했다.
+
+
+## Contacts
+Contributors
+- 김찬영, itnoj15@kaist.ac.kr
+- 김태우, rlaxodntttt@kaist.ac.kr
+- 최종윤, joyo10@kaist.ac.kr
 
